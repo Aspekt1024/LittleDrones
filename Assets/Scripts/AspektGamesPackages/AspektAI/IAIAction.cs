@@ -1,15 +1,17 @@
+using System.Collections.Generic;
 using Aspekt.AI.Core;
 
 namespace Aspekt.AI
 {
     /// <summary>
-    /// A sensor gives an agent the ability to perceive the world around it, or reflect upon itself.
-    /// Sensors typically modify the agent's memory based on what they perceive.
+    /// An action gives the agent the ability to carry out a specific task.
+    /// Actions will have at least one Outcome, and usually have one or more Prerequisites
+    /// that need to be fulfilled before the action can be performed.
     /// </summary>
-    public interface ISensor<T, R>
+    public interface IAIAction<T, R>
     {
         /// <summary>
-        /// Initialises the sensor
+        /// Initialises the action
         /// </summary>
         /// <param name="agent">The parent AI agent</param>
         /// <param name="memory">The memory module</param>
@@ -22,17 +24,26 @@ namespace Aspekt.AI
         void Tick(float deltaTime);
 
         /// <summary>
-        /// Enables the sensor
+        /// Starts the action
+        /// </summary>
+        void Begin();
+
+        Dictionary<T, R> GetPrerequisites();
+        
+        Dictionary<T, R> GetOutcomes();
+
+        /// <summary>
+        /// Enables the action
         /// </summary>
         void Enable();
         
         /// <summary>
-        /// Disables the sensor
+        /// Disables the action
         /// </summary>
         void Disable();
         
         /// <summary>
-        /// Used to clean up if the sensor affects memory
+        /// Used to clean up the action upon removal
         /// </summary>
         void Remove();
     }

@@ -1,9 +1,9 @@
 namespace Aspekt.AI.Core
 {
     // Manages the operation of the agent's actions
-    public class StateMachine : IStateMachine
+    public class StateMachine<T, R> : IStateMachine<T, R>
     {
-        private IAIAgent agent;
+        private IAIAgent<T, R> agent;
         
         private enum States
         {
@@ -11,21 +11,19 @@ namespace Aspekt.AI.Core
         }
         private States state = States.Stopped;
 
-        public void Init(IAIAgent agent)
+        public void Init(IAIAgent<T, R> agent)
         {
             this.agent = agent;
         }
         
         public void Start()
         {
-            if (state == States.Running) return;
             state = States.Running;
             // TODO begin operation
         }
 
         public void Stop()
         {
-            if (state == States.Stopped) return;
             state = States.Stopped;
         }
 

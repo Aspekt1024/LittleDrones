@@ -4,7 +4,7 @@ using UnityEditor;
 
 namespace Aspekt.Items
 {
-    [CustomEditor(typeof(Inventory))]
+    [CustomEditor(typeof(Inventory), true)]
     public class InventoryInspector : Editor
     {
         private Inventory inv;

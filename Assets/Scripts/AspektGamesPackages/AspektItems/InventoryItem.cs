@@ -4,8 +4,8 @@ namespace Aspekt.Items
 {
     public abstract class InventoryItem : ScriptableObject
     {
-        public string description;
         public string itemName;
+        public string description;
         public Sprite icon;
 
         private Slot currentSlot;

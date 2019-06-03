@@ -4,11 +4,12 @@ using UnityEngine;
 namespace Aspekt.AI
 {
     // Attached to a game object to give it the power of thought
-    public class AIAgent : MonoBehaviour, IAIAgent
+    public abstract class AIAgent<T, R> : MonoBehaviour, IAIAgent<T, R>
     {
-        public readonly ISensorController Sensors = new SensorController();
-        public readonly IMemory Memory = new Memory();
-        public readonly IStateMachine StateMachine = new StateMachine();
+        public readonly IActionController<T, R> Actions = new ActionController<T, R>();
+        public readonly ISensorController<T, R> Sensors = new SensorController<T, R>();
+        public readonly IStateMachine<T, R> StateMachine = new StateMachine<T, R>();
+        public readonly IMemory<T, R> Memory = new Memory<T, R>();
 
         private enum States
         {
@@ -21,9 +22,10 @@ namespace Aspekt.AI
         {
             state = States.Stopped;
             
-            Memory.Init(this);
+            Actions.Init(this, Memory);
             Sensors.Init(this, Memory);
             StateMachine.Init(this);
+            Memory.Init(this);
         }
         
         private void Start()
@@ -38,6 +40,7 @@ namespace Aspekt.AI
         {
             if (state == States.Running)
             {
+                Actions.Tick(Time.deltaTime);
                 Sensors.Tick(Time.deltaTime);
                 StateMachine.Tick(Time.deltaTime);
             }

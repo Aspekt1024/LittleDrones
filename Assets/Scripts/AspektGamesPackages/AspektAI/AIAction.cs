@@ -1,9 +1,9 @@
+using System.Collections.Generic;
 using Aspekt.AI.Core;
-using UnityEngine;
 
 namespace Aspekt.AI
 {
-    public abstract class Sensor<T, R> : ISensor<T, R>
+    public abstract class AIAction<T, R> : IAIAction<T, R>
     {
         protected IAIAgent<T, R> agent;
         protected IMemory<T, R> memory;
@@ -13,7 +13,7 @@ namespace Aspekt.AI
             NotInitialised, Enabled, Disabled
         }
         private States state = States.NotInitialised;
-
+        
         public void Init(IAIAgent<T, R> agent, IMemory<T, R> memory)
         {
             this.agent = agent;
@@ -32,6 +32,21 @@ namespace Aspekt.AI
             }
         }
 
+        public void Begin()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Dictionary<T, R> GetPrerequisites()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Dictionary<T, R> GetOutcomes()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Enable()
         {
             state = States.Enabled;
@@ -43,13 +58,11 @@ namespace Aspekt.AI
             state = States.Disabled;
             OnDisable();
         }
-        
+
         public void Remove()
         {
             OnRemove();
         }
-        
-        public abstract void Sense();
         
         protected abstract void OnTick(float deltaTime);
         
@@ -59,7 +72,7 @@ namespace Aspekt.AI
         protected virtual void OnInit() {}
 
         /// <summary>
-        /// Called when the sensor is removed to allow cleanup (e.g. removing memory objects)
+        /// Called when the action is removed to allow cleanup (e.g. exiting co-routines safely)
         /// </summary>
         protected abstract void OnRemove();
 

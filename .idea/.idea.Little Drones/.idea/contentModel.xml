@@ -216,6 +216,8 @@
           <e p="AspektGamesPackages" t="Include">
             <e p="AspektAI" t="Include">
               <e p="AgentCoreComponents" t="Include">
+                <e p="ActionController.cs" t="Include" />
+                <e p="IActionController.cs" t="Include" />
                 <e p="IMemory.cs" t="Include" />
                 <e p="ISensorController.cs" t="Include" />
                 <e p="IStateMachine.cs" t="Include" />
@@ -223,7 +225,9 @@
                 <e p="SensorController.cs" t="Include" />
                 <e p="StateMachine.cs" t="Include" />
               </e>
+              <e p="AIAction.cs" t="Include" />
               <e p="AIAgent.cs" t="Include" />
+              <e p="IAIAction.cs" t="Include" />
               <e p="IAIAgent.cs" t="Include" />
               <e p="ISensor.cs" t="Include" />
               <e p="Sensor.cs" t="Include" />
@@ -248,10 +252,9 @@
           </e>
           <e p="Items" t="Include">
             <e p="Modules" t="Include">
+              <e p="ActionModule.cs" t="Include" />
               <e p="IDroneModule.cs" t="Include" />
-              <e p="Sensors" t="Include">
-                <e p="SensorModule.cs" t="Include" />
-              </e>
+              <e p="SensorModule.cs" t="Include" />
             </e>
           </e>
           <e p="Management" t="Include">
@@ -272,12 +275,18 @@
           </e>
           <e p="Units" t="Include">
             <e p="AI" t="Include">
+              <e p="Actions" t="Include">
+                <e p="GatherResourceAction.cs" t="Include" />
+              </e>
               <e p="Sensors" t="Include">
                 <e p="ResourceSensor.cs" t="Include" />
               </e>
             </e>
             <e p="Drone" t="Include">
+              <e p="ActionInventory.cs" t="Include" />
+              <e p="AIAttributes.cs" t="Include" />
               <e p="Drone.cs" t="Include" />
+              <e p="DroneAIAgent.cs" t="Include" />
               <e p="MainInventory.cs" t="Include" />
               <e p="SensorInventory.cs" t="Include" />
             </e>

@@ -4,7 +4,7 @@ namespace Aspekt.Drones
 {
     public interface IDroneModule
     {
-        void AttachTo(AIAgent agent);
-        void RemoveFrom(AIAgent agent);
+        void AttachTo(DroneAIAgent agent);
+        void RemoveFrom(DroneAIAgent agent);
     }
 }

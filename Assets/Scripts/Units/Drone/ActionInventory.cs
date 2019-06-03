@@ -1,4 +1,3 @@
-using Aspekt.AI;
 using Aspekt.Items;
 using TMPro;
 using UnityEngine;
@@ -6,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace Aspekt.Drones
 {
-    public class SensorInventory : Inventory
+    public class ActionInventory : Inventory
     {
 #pragma warning disable 649
         [SerializeField] private TextMeshProUGUI moduleText;
@@ -21,13 +20,13 @@ namespace Aspekt.Drones
         
         public override ItemAddResult CanItemBeAdded(InventoryItem item)
         {
-            if (!(item is SensorModule module)) return ItemAddResult.InvalidType;
+            if (!(item is ActionModule module)) return ItemAddResult.InvalidType;
             
             foreach (var slot in slots)
             {
                 if (slot.IsEmpty || slot == item.GetCurrentSlot()) continue;
-                var existingModule = (SensorModule)slot.GetItem();
-                if (existingModule.sensorType == module.sensorType) return ItemAddResult.DuplicateType;
+                var existingModule = (ActionModule)slot.GetItem();
+                if (existingModule.actionType == module.actionType) return ItemAddResult.DuplicateType;
             }
 
             return ItemAddResult.Success;
@@ -35,13 +34,13 @@ namespace Aspekt.Drones
 
         public override void OnItemAddedToSlot(InventoryItem item, Slot slot)
         {
-            if (!(item is SensorModule module)) return;
+            if (!(item is ActionModule module)) return;
             module.AttachTo(ai);
         }
 
         public override void OnItemRemovedFromSlot(InventoryItem item, Slot slot)
         {
-            if (item is SensorModule module)
+            if (item is ActionModule module)
             {
                 module.RemoveFrom(ai);
             }
@@ -55,7 +54,7 @@ namespace Aspekt.Drones
             {
                 slot.Select();
                 // TODO show details for selecting a slot
-                moduleText.text = "put a sensor module here";
+                moduleText.text = "put an action module here";
             }
             else
             {

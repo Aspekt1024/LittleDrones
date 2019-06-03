@@ -16,7 +16,7 @@ namespace Aspekt.Drones
     {
         public SensorModules sensorType;
 
-        public void AttachTo(AIAgent agent)
+        public void AttachTo(DroneAIAgent agent)
         {
             switch (sensorType)
             {
@@ -29,7 +29,7 @@ namespace Aspekt.Drones
             }
         }
 
-        public void RemoveFrom(AIAgent agent)
+        public void RemoveFrom(DroneAIAgent agent)
         {
             switch (sensorType)
             {

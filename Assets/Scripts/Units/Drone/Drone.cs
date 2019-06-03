@@ -7,15 +7,17 @@ namespace Aspekt.Drones
     public class Drone : UnitBase
     {
 #pragma warning disable 649
-        [SerializeField] private AIAgent ai;
+        [SerializeField] private DroneAIAgent ai;
         [SerializeField] private MainInventory inventory;
         [SerializeField] private SensorInventory sensorSlots;
+        [SerializeField] private ActionInventory actionSlots;
 #pragma warning restore 649
 
         private void Awake()
         {
             ai.Init();
             sensorSlots.Init(ai);
+            actionSlots.Init(ai);
         }
 
         private void Start()
@@ -25,16 +27,6 @@ namespace Aspekt.Drones
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                ai.Sensors.AddSensor<ResourceSensor>();
-            }
-
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                ai.Sensors.RemoveSensor<ResourceSensor>();
-            }
-
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 var unitUI = GameManager.UI.Get<UnitUI>();
@@ -56,6 +48,13 @@ namespace Aspekt.Drones
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
                 var modulePrefab = Resources.Load<SensorModule>("DroneModules/Sensors/ResourceScanner");
+                var module = Instantiate(modulePrefab);
+                inventory.AddItem(module);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                var modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/GatherResource");
                 var module = Instantiate(modulePrefab);
                 inventory.AddItem(module);
             }

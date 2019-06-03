@@ -1,11 +1,11 @@
 namespace Aspekt.AI.Core
 {
-    public interface IStateMachine
+    public interface IStateMachine<T, R>
     {
         /// <summary>
         /// Initialises the state machine
         /// </summary>
-        void Init(IAIAgent agent);
+        void Init(IAIAgent<T, R> agent);
         
         /// <summary>
         /// Starts the state machine

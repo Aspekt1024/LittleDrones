@@ -1,17 +1,18 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Aspekt.AI.Core
 {
     // Memory holds everything the agent currently knows about the world and itself.
     // It is typically modified by a sensor, performing an action, or being acted upon.
     // Memory is the storage of state and does not perform any actions or observations.
-    public class Memory : IMemory
+    public class Memory<T, R> : IMemory<T, R>
     {
-        private IAIAgent agent;
+        private IAIAgent<T, R> agent;
         
         private readonly Dictionary<object, object> memory = new Dictionary<object, object>();
         
-        public void Init(IAIAgent agent)
+        public void Init(IAIAgent<T, R> agent)
         {
             this.agent = agent;
         }
@@ -45,14 +46,12 @@ namespace Aspekt.AI.Core
         /// </summary>
         /// <param name="key">The memory key</param>
         /// <param name="value">The memory value</param>
-        /// <typeparam name="K">The memory key type</typeparam>
-        /// <typeparam name="V">The memory value type</typeparam>
         /// <returns>success</returns>
-        public bool TryGet<K, V>(K key, out V value)
+        public bool TryGet(T key, out R value)
         {
             if (memory.ContainsKey(key))
             {
-                value = (V)memory[key];
+                value = (R)memory[key];
                 return true;
             }
 

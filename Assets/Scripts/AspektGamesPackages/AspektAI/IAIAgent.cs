@@ -1,6 +1,6 @@
 namespace Aspekt.AI
 {
-    public interface IAIAgent
+    public interface IAIAgent<T, R>
     {
         /// <summary>
         /// Initialises the agent

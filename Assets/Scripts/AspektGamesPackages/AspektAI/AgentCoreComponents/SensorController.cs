@@ -6,12 +6,12 @@ using UnityEngine;
 namespace Aspekt.AI.Core
 {
     // Manages the agent's sensors
-    public class SensorController : ISensorController
+    public class SensorController<T, R> : ISensorController<T, R>
     {
-        private IAIAgent agent;
-        private IMemory memory;
+        private IAIAgent<T, R> agent;
+        private IMemory<T, R> memory;
         
-        private List<ISensor> sensors = new List<ISensor>();
+        private List<ISensor<T, R>> sensors = new List<ISensor<T, R>>();
 
         private enum States
         {
@@ -21,7 +21,7 @@ namespace Aspekt.AI.Core
 
         private States state = States.NotInitialised;
 
-        public void Init(IAIAgent agent, IMemory memory)
+        public void Init(IAIAgent<T, R> agent, IMemory<T, R> memory)
         {
             this.agent = agent;
             this.memory = memory;
@@ -30,7 +30,7 @@ namespace Aspekt.AI.Core
 
             if (agent is MonoBehaviour mb)
             {
-                sensors = mb.GetComponentsInChildren<ISensor>().ToList();
+                sensors = mb.GetComponentsInChildren<ISensor<T, R>>().ToList();
             }
             else
             {
@@ -73,27 +73,27 @@ namespace Aspekt.AI.Core
             }
         }
 
-        public List<ISensor> GetSensors() => new List<ISensor>(sensors);
+        public List<ISensor<T, R>> GetSensors() => new List<ISensor<T, R>>(sensors);
 
-        public void AddSensor<T>() where T : ISensor, new()
+        public void AddSensor<TSensor>() where TSensor : ISensor<T, R>, new()
         {
             if (sensors.Any(s => s is T)) return;
             
-            var sensor = new T();
+            var sensor = new TSensor();
             sensor.Init(agent, memory);
             sensors.Add(sensor);
         }
 
-        public void RemoveSensor<T>() where T : ISensor
+        public void RemoveSensor<TSensor>() where TSensor : ISensor<T, R>
         {
-            sensors.RemoveAll(s => s is T);
+            sensors.RemoveAll(s => s is TSensor);
         }
         
         private bool CanTick()
         {
             if (state == States.NotInitialised)
             {
-                Debug.LogError($"{nameof(SensorController)}.{nameof(Init)}() has not been called.");
+                Debug.LogError($"{nameof(SensorController<T, R>)}.{nameof(Init)}() has not been called.");
                 state = States.NotInitialisedAlerted;
             }
 

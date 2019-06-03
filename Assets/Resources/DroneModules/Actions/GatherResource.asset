@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5202841f377b6ca439b571b26efbda90, type: 3}
+  m_Name: GatherResource
+  m_EditorClassIdentifier: 
+  itemName: Gather Resource Action
+  description: An action that gathers a specified resource
+  icon: {fileID: 21300000, guid: c6b828ebf1d12ab448fc5b321c852c04, type: 3}
+  actionType: 0
