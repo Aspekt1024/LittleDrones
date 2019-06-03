@@ -10,6 +10,9 @@ namespace Aspekt.UI
         [SerializeField] private CanvasGroup canvasGroup;
 #pragma warning restore 649
 
+        private bool blocksRaycasts;
+        private bool interactable;
+
         private IUIAnimator uiAnimator;
         
         private enum States
@@ -28,6 +31,8 @@ namespace Aspekt.UI
         public void Init()
         {
             uiAnimator = CreateAnimator();
+            blocksRaycasts = canvasGroup.blocksRaycasts;
+            interactable = canvasGroup.interactable;
             
             if (visibleOnStartup)
             {
@@ -38,39 +43,37 @@ namespace Aspekt.UI
                 CloseImmediate();
             }
         }
-        
-        public void Open()
+
+        public void Open(float delay = 0f)
         {
             if (IsOpen) return;
-            if (openRoutine != null) StopCoroutine(openRoutine);
-            openRoutine = StartCoroutine(OpenRoutine());
+            StopRoutines();
+            openRoutine = StartCoroutine(OpenRoutine(delay));
         }
 
-        public void Close()
+        public void Close(float delay = 0f)
         {
             if (IsClosed) return;
-            if (closeRoutine != null) StopCoroutine(closeRoutine);
-            closeRoutine = StartCoroutine(CloseRoutine());
+            StopRoutines();
+            closeRoutine = StartCoroutine(CloseRoutine(delay));
         }
 
-        public IEnumerator OpenRoutine()
+        public IEnumerator OpenRoutine(float delay = 0f)
         {
             if (IsOpen) yield break;
             state = States.Opening;
             
-            if (openRoutine != null) StopCoroutine(openRoutine);
-            yield return StartCoroutine(uiAnimator.AnimateIn());;
+            yield return StartCoroutine(uiAnimator.AnimateIn(delay));;
             
             OpenImmediate();
         }
 
-        public IEnumerator CloseRoutine()
+        public IEnumerator CloseRoutine(float delay = 0f)
         {
             if (IsClosed) yield break;
             state = States.Closing;
             
-            if (closeRoutine != null) StopCoroutine(closeRoutine);
-            yield return StartCoroutine(uiAnimator.AnimateOut());
+            yield return StartCoroutine(uiAnimator.AnimateOut(delay));
             
             CloseImmediate();
         }
@@ -78,8 +81,8 @@ namespace Aspekt.UI
         public void OpenImmediate()
         {
             canvasGroup.alpha = 1f;
-            canvasGroup.blocksRaycasts = true;
-            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = blocksRaycasts;
+            canvasGroup.interactable = interactable;
             state = States.Open;
         }
 
@@ -94,6 +97,12 @@ namespace Aspekt.UI
         protected virtual IUIAnimator CreateAnimator()
         {
             return new UIFadeAnimator(canvasGroup);
+        }
+
+        private void StopRoutines()
+        {
+            if (openRoutine != null) StopCoroutine(openRoutine);
+            if (closeRoutine != null) StopCoroutine(closeRoutine);
         }
     }
 }

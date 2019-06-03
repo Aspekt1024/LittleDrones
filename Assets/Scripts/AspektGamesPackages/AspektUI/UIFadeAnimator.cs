@@ -13,22 +13,32 @@ namespace Aspekt.UI
             this.canvasGroup = canvasGroup;
         }
         
-        public IEnumerator AnimateIn()
+        public IEnumerator AnimateIn(float delay = 0f)
         {
+            yield return new WaitForSecondsRealtime(delay);
+            
+            float startAlpha = canvasGroup.alpha;
+            float fadeTime = FadeTime * (1f - startAlpha) / 1f;
+            
             float animStartTime = Time.unscaledTime;
-            while (Time.unscaledTime < animStartTime + FadeTime)
+            while (Time.unscaledTime < animStartTime + fadeTime)
             {
-                canvasGroup.alpha = Mathf.Lerp(0f, 1f, (Time.unscaledTime - animStartTime) / FadeTime);;
+                canvasGroup.alpha = Mathf.Lerp(startAlpha, 1f, (Time.unscaledTime - animStartTime) / fadeTime);;
                 yield return null;
             }
         }
 
-        public IEnumerator AnimateOut()
+        public IEnumerator AnimateOut(float delay = 0f)
         {
+            yield return new WaitForSecondsRealtime(delay);
+            
+            float startAlpha = canvasGroup.alpha;
+            float fadeTime = FadeTime * startAlpha;
+            
             float animStartTime = Time.unscaledTime;
-            while (Time.unscaledTime < animStartTime + FadeTime)
+            while (Time.unscaledTime < animStartTime + fadeTime)
             {
-                canvasGroup.alpha = Mathf.Lerp(1f, 0f, (Time.unscaledTime - animStartTime) / FadeTime);;
+                canvasGroup.alpha = Mathf.Lerp(startAlpha, 0f, (Time.unscaledTime - animStartTime) / fadeTime);;
                 yield return null;
             }
         }

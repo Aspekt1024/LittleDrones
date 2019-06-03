@@ -4,7 +4,7 @@ namespace Aspekt.UI
 {
     public interface IUIAnimator
     {
-        IEnumerator AnimateIn();
-        IEnumerator AnimateOut();
+        IEnumerator AnimateIn(float delay = 0f);
+        IEnumerator AnimateOut(float delay = 0f);
     }
 }

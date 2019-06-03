@@ -1,11 +1,12 @@
 using Aspekt.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 namespace Aspekt.Items
 {
-    public class Slot : MonoBehaviour, ISlot, IPointerClickHandler
+    public class Slot : MonoBehaviour, ISlot, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         [HideInInspector] public Canvas topCanvas;
         
@@ -110,7 +111,17 @@ namespace Aspekt.Items
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            inventory.OnSlotClicked(this);
+            inventory.OnSlotClicked(this, eventData);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            inventory.OnPointerEnter(this, eventData);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            inventory.OnPointerExit(this, eventData);
         }
     }
 }

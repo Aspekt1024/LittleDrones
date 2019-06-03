@@ -2,6 +2,7 @@ using Aspekt.AI;
 using Aspekt.Items;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Aspekt.Drones
 {
@@ -46,9 +47,9 @@ namespace Aspekt.Drones
             }
         }
         
-        public override void OnSlotClicked(Slot slot)
+        public override void OnSlotClicked(Slot slot, PointerEventData eventData)
         {
-            base.OnSlotClicked(slot);
+            base.OnSlotClicked(slot, eventData);
 
             if (slot.IsEmpty)
             {

@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Aspekt.Items
 {
@@ -15,8 +16,6 @@ namespace Aspekt.Items
         protected Slot selectedSlot;
 
         public abstract ItemAddResult CanItemBeAdded(InventoryItem item);
-        public abstract void OnItemAddedToSlot(InventoryItem item, Slot slot);
-        public abstract void OnItemRemovedFromSlot(InventoryItem item, Slot slot);
         public abstract void OnAddItemFailure(Slot slot, ItemAddResult result);
 
         private void Awake()
@@ -46,7 +45,7 @@ namespace Aspekt.Items
             throw new NotImplementedException();
         }
 
-        public virtual void OnSlotClicked(Slot slot)
+        public virtual void OnSlotClicked(Slot slot, PointerEventData eventData)
         {
             if (selectedSlot != null)
             {
@@ -59,5 +58,10 @@ namespace Aspekt.Items
                 slot.Select();
             }
         }
+        
+        public virtual void OnPointerEnter(Slot slot, PointerEventData eventData) { }
+        public virtual void OnPointerExit(Slot slot, PointerEventData eventData) { }
+        public virtual void OnItemAddedToSlot(InventoryItem item, Slot slot) { }
+        public virtual void OnItemRemovedFromSlot(InventoryItem item, Slot slot) { }
     }
 }
