@@ -49,8 +49,6 @@ namespace Aspekt.AI
             OnRemove();
         }
         
-        public abstract void Sense();
-        
         protected abstract void OnTick(float deltaTime);
         
         /// <summary>

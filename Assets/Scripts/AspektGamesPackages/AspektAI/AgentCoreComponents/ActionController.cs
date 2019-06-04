@@ -39,20 +39,10 @@ namespace Aspekt.AI.Core
                 action.Init(agent, memory);
             }
         }
-
-        public void Tick(float deltaTime)
-        {
-            if (!CanTick()) return;
-            
-            foreach (var action in actions)
-            {
-                action.Tick(deltaTime);
-            }
-        }
-
+        
         public List<IAIAction<T, R>> GetActions()
         {
-            throw new System.NotImplementedException();
+            return actions;
         }
 
         public void DisableActions()
@@ -77,17 +67,6 @@ namespace Aspekt.AI.Core
         public void RemoveAction<TAction>() where TAction : IAIAction<T, R>
         {
             actions.RemoveAll(s => s is TAction);
-        }
-        
-        private bool CanTick()
-        {
-            if (state == States.NotInitialised)
-            {
-                Debug.LogError($"{nameof(ActionController<T, R>)}.{nameof(Init)}() has not been called.");
-                state = States.NotInitialisedAlerted;
-            }
-
-            return state == States.Enabled;
         }
     }
 }

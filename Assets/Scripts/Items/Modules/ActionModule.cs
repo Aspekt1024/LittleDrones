@@ -18,7 +18,7 @@ namespace Aspekt.Drones
             switch (actionType)
             {
                 case ActionModules.GatherResource:
-                    agent.Actions.AddAction<GatherResourceAction>();
+                    agent.Actions.AddAction<GatherIronAction>();
                     break;
                 default:
                     Debug.LogError("invalid AI action type: " + actionType);
@@ -31,7 +31,7 @@ namespace Aspekt.Drones
             switch (actionType)
             {
                 case ActionModules.GatherResource:
-                    agent.Actions.RemoveAction<GatherResourceAction>();
+                    agent.Actions.RemoveAction<GatherIronAction>();
                     break;
                 default:
                     Debug.LogError("invalid AI action type: " + actionType);

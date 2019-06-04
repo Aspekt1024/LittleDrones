@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Aspekt.AI
 {
     public interface IAIAgent<T, R>
@@ -26,5 +28,19 @@ namespace Aspekt.AI
         /// Stops the agent's AI completely.
         /// </summary>
         void Stop();
+
+        /// <summary>
+        /// Retrieves a sensor for the sensor module existing on the agent
+        /// </summary>
+        /// <typeparam name="TSensor">The sensor type</typeparam>
+        /// <returns>The sensor module</returns>
+        TSensor GetSensor<TSensor>();
+
+        /// <summary>
+        /// Returns the transform of the agent
+        /// </summary>
+        /// <returns>The agent's transform</returns>
+        Transform GetTransform();
+
     }
 }

@@ -26,7 +26,8 @@ namespace Aspekt.AI
         /// <summary>
         /// Starts the action
         /// </summary>
-        void Begin();
+        /// <returns>true if the action was started successfully (i.e. if startup prerequisites were met)</returns>
+        bool Begin();
 
         Dictionary<T, R> GetPrerequisites();
         
@@ -46,5 +47,10 @@ namespace Aspekt.AI
         /// Used to clean up the action upon removal
         /// </summary>
         void Remove();
+
+        /// <summary>
+        /// Determines if the action has been completed
+        /// </summary>
+        bool IsComplete();
     }
 }

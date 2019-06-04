@@ -15,12 +15,6 @@ namespace Aspekt.AI.Core
         void Init(IAIAgent<T, R> agent, IMemory<T, R> memory);
         
         /// <summary>
-        /// Tick is called once per frame via the AI agent
-        /// </summary>
-        /// <param name="deltaTime">The time since the last frame</param>
-        void Tick(float deltaTime);
-        
-        /// <summary>
         /// Returns a copy of the list of actions in the action controller
         /// </summary>
         List<IAIAction<T, R>> GetActions();

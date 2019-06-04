@@ -1,4 +1,7 @@
-﻿using Aspekt.AI.Core;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Aspekt.AI.Core;
+using Aspekt.Drones;
 using UnityEngine;
 
 namespace Aspekt.AI
@@ -40,22 +43,34 @@ namespace Aspekt.AI
         {
             if (state == States.Running)
             {
-                Actions.Tick(Time.deltaTime);
                 Sensors.Tick(Time.deltaTime);
                 StateMachine.Tick(Time.deltaTime);
             }
         }
-
-        public void RefreshActions()
-        {
-            
-        }
         
         public void Run()
         {
+            if (state == States.NotInitialised)
+            {
+                Debug.LogError("Agent.Init() has not been called. This agent will not function.");
+            }
+            
             state = States.Running;
-            // TODO get action list
+            RefreshActions();
         }
+
+        public void RefreshActions()
+        {
+            var actions = Actions.GetActions().Where(a => a is GatherIronAction).ToArray();
+            if (actions.Any())
+            {
+                var queue = new Queue<IAIAction<T, R>>();
+                queue.Enqueue(actions[0]);
+                StateMachine.SetQueue(queue);
+                StateMachine.Start();
+            }
+        }
+
 
         public void Resume()
         {
@@ -80,5 +95,16 @@ namespace Aspekt.AI
             StateMachine.Stop();
             Memory.Reset();
         }
+
+        public TSensor GetSensor<TSensor>()
+        {
+            foreach (var sensor in Sensors.GetSensors())
+            {
+                if (sensor is TSensor s) return s;
+            }
+            return default;
+        }
+
+        public Transform GetTransform() => transform;
     }
 }

@@ -32,10 +32,7 @@ namespace Aspekt.AI
             }
         }
 
-        public void Begin()
-        {
-            throw new System.NotImplementedException();
-        }
+        public abstract bool Begin();
 
         public Dictionary<T, R> GetPrerequisites()
         {
@@ -63,7 +60,9 @@ namespace Aspekt.AI
         {
             OnRemove();
         }
-        
+
+        public abstract bool IsComplete();
+
         protected abstract void OnTick(float deltaTime);
         
         /// <summary>

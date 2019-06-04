@@ -256,6 +256,10 @@
               <e p="IDroneModule.cs" t="Include" />
               <e p="SensorModule.cs" t="Include" />
             </e>
+            <e p="Resource" t="Include">
+              <e p="IronResource.cs" t="Include" />
+              <e p="ResourceBase.cs" t="Include" />
+            </e>
           </e>
           <e p="Management" t="Include">
             <e p="GameManager.cs" t="Include" />
@@ -276,7 +280,7 @@
           <e p="Units" t="Include">
             <e p="AI" t="Include">
               <e p="Actions" t="Include">
-                <e p="GatherResourceAction.cs" t="Include" />
+                <e p="GatherIronAction.cs" t="Include" />
               </e>
               <e p="Sensors" t="Include">
                 <e p="ResourceSensor.cs" t="Include" />

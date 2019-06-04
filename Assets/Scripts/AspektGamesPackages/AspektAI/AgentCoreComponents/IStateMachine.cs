@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Aspekt.AI.Core
 {
     public interface IStateMachine<T, R>
@@ -10,7 +12,7 @@ namespace Aspekt.AI.Core
         /// <summary>
         /// Starts the state machine
         /// </summary>
-        void Start();
+        bool Start();
         
         /// <summary>
         /// Stops the state machine and all running states
@@ -27,5 +29,10 @@ namespace Aspekt.AI.Core
         /// </summary>
         /// <param name="deltaTime">Time since the last frame update</param>
         void Tick(float deltaTime);
+
+        /// <summary>
+        /// Sets the action queue
+        /// </summary>
+        void SetQueue(Queue<IAIAction<T, R>> queue);
     }
 }

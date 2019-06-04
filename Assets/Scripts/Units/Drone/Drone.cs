@@ -20,9 +20,13 @@ namespace Aspekt.Drones
             actionSlots.Init(ai);
         }
 
-        private void Start()
+        public void StartAI()
         {
             ai.Run();
+        }
+
+        private void Start()
+        {
         }
 
         private void Update()
