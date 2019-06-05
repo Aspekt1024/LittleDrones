@@ -282,19 +282,26 @@
               <e p="Actions" t="Include">
                 <e p="GatherIronAction.cs" t="Include" />
               </e>
+              <e p="AIAttributes.cs" t="Include" />
+              <e p="DroneAIAgent.cs" t="Include" />
               <e p="Sensors" t="Include">
                 <e p="ResourceSensor.cs" t="Include" />
               </e>
             </e>
             <e p="Drone" t="Include">
-              <e p="ActionInventory.cs" t="Include" />
-              <e p="AIAttributes.cs" t="Include" />
               <e p="Drone.cs" t="Include" />
-              <e p="DroneAIAgent.cs" t="Include" />
-              <e p="MainInventory.cs" t="Include" />
-              <e p="SensorInventory.cs" t="Include" />
+              <e p="Inventory" t="Include">
+                <e p="ActionInventory.cs" t="Include" />
+                <e p="MainInventory.cs" t="Include" />
+                <e p="SensorInventory.cs" t="Include" />
+              </e>
             </e>
             <e p="IUnit.cs" t="Include" />
+            <e p="Movement" t="Include">
+              <e p="BasicMovement.cs" t="Include" />
+              <e p="IMoveable.cs" t="Include" />
+              <e p="IMovement.cs" t="Include" />
+            </e>
             <e p="UnitBase.cs" t="Include" />
           </e>
         </e>

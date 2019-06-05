@@ -40,7 +40,7 @@ namespace Aspekt.Drones
             var mask = 1 << LayerMask.NameToLayer("Resource");
             var colliders = Physics.OverlapSphere(agent.GetTransform().position, DetectionRadius, mask);
             
-            Debug.Log("collider count: " + colliders.Length);
+            Debug.Log("resource collider count: " + colliders.Length);
             // TODO line of sight
 
             return colliders.Select(c => c.GetComponent<ResourceBase>()).Where(r => r.resourceType == type).ToArray();

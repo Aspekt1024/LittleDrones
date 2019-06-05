@@ -7,7 +7,7 @@ namespace Aspekt.AI
         /// <summary>
         /// Initialises the agent
         /// </summary>
-        void Init();
+        void Init(GameObject owner);
         
         /// <summary>
         /// Forces recalculation of the action path for the allocated goals
@@ -41,6 +41,12 @@ namespace Aspekt.AI
         /// </summary>
         /// <returns>The agent's transform</returns>
         Transform GetTransform();
+
+        /// <summary>
+        /// Returns the owner of the agent
+        /// </summary>
+        /// <returns></returns>
+        GameObject GetOwner();
 
     }
 }

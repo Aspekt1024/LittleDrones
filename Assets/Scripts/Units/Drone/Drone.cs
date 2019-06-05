@@ -4,20 +4,26 @@ using Aspekt.Items;
 
 namespace Aspekt.Drones
 {
-    public class Drone : UnitBase
+    public class Drone : UnitBase, IMoveable
     {
 #pragma warning disable 649
         [SerializeField] private DroneAIAgent ai;
+        
+        // TODO move inventory to inventory manager
         [SerializeField] private MainInventory inventory;
         [SerializeField] private SensorInventory sensorSlots;
         [SerializeField] private ActionInventory actionSlots;
 #pragma warning restore 649
 
+        private IMovement movement;
+
         private void Awake()
         {
-            ai.Init();
+            ai.Init(gameObject);
             sensorSlots.Init(ai);
             actionSlots.Init(ai);
+            
+            movement = new BasicMovement(GetComponent<Rigidbody>());
         }
 
         public void StartAI()
@@ -25,12 +31,12 @@ namespace Aspekt.Drones
             ai.Run();
         }
 
-        private void Start()
-        {
-        }
+        public IMovement GetMovement() => movement;
 
         private void Update()
         {
+            movement.Tick(Time.deltaTime);
+            
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 var unitUI = GameManager.UI.Get<UnitUI>();
@@ -46,6 +52,19 @@ namespace Aspekt.Drones
                     };
                     unitUI.Populate(details);
                     unitUI.Open();
+                }
+            }
+
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                var inv = GameManager.UI.Get<InventoryUI>();
+                if (inv.IsOpen)
+                {
+                    inv.Close();
+                }
+                else
+                {
+                    inv.Open();
                 }
             }
 

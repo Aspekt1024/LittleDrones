@@ -9,6 +9,7 @@ namespace Aspekt.Drones
         private const ResourceTypes ResourceType = ResourceTypes.Iron;
 
         private ResourceBase resource;
+        private IMovement movement; //TODO delegate to State in StateMachine
         
         public override bool Begin()
         {
@@ -25,6 +26,20 @@ namespace Aspekt.Drones
                 Debug.Log("no resources found");
                 return false;
             }
+
+            var moveable = agent.GetOwner().GetComponent<Drone>(); // TODO movement not handled here
+            if (moveable == null)
+            {
+                Debug.Log("no movable component on agent");
+                return false;
+            }
+            
+            movement = moveable.GetMovement();
+            if (movement == null)
+            {
+                Debug.Log("movable has no movement component");
+                return false;
+            }
             
             float distance = float.MaxValue;
             foreach (var iron in ironSources)
@@ -36,6 +51,9 @@ namespace Aspekt.Drones
                     resource = iron;
                 }
             }
+            
+            movement.MoveTo(resource.transform, true);
+            
             return true;
         }
 
@@ -48,7 +66,11 @@ namespace Aspekt.Drones
         protected override void OnTick(float deltaTime)
         {
             if (resource == null) return;
-            Debug.Log("tracking resource: " + resource.name);
+            if (movement.TargetReached())
+            {
+                Debug.Log("reached target!");
+            }
+            
         }
 
         protected override void OnRemove()

@@ -47,6 +47,7 @@ namespace Aspekt.UI
         public void Open(float delay = 0f)
         {
             if (IsOpen) return;
+            gameObject.SetActive(true);
             StopRoutines();
             openRoutine = StartCoroutine(OpenRoutine(delay));
         }
@@ -62,6 +63,7 @@ namespace Aspekt.UI
         {
             if (IsOpen) yield break;
             state = States.Opening;
+            gameObject.SetActive(true);
             
             yield return StartCoroutine(uiAnimator.AnimateIn(delay));;
             
@@ -80,6 +82,7 @@ namespace Aspekt.UI
 
         public void OpenImmediate()
         {
+            gameObject.SetActive(true);
             canvasGroup.alpha = 1f;
             canvasGroup.blocksRaycasts = blocksRaycasts;
             canvasGroup.interactable = interactable;
@@ -92,6 +95,7 @@ namespace Aspekt.UI
             canvasGroup.blocksRaycasts = false;
             canvasGroup.interactable = false;
             state = States.Closed;
+            gameObject.SetActive(false);
         }
 
         protected virtual IUIAnimator CreateAnimator()

@@ -14,6 +14,9 @@ namespace Aspekt.AI
         public readonly IStateMachine<T, R> StateMachine = new StateMachine<T, R>();
         public readonly IMemory<T, R> Memory = new Memory<T, R>();
 
+        private GameObject owner;
+        public GameObject GetOwner() => owner;
+
         private enum States
         {
             NotInitialised, Running, Stopped, Paused
@@ -21,10 +24,11 @@ namespace Aspekt.AI
 
         private States state = States.NotInitialised;
 
-        public void Init()
+        public void Init(GameObject owner)
         {
             state = States.Stopped;
             
+            this.owner = owner;
             Actions.Init(this, Memory);
             Sensors.Init(this, Memory);
             StateMachine.Init(this);
