@@ -1,4 +1,3 @@
-using Aspekt.AI.Core;
 
 namespace Aspekt.AI
 {
@@ -6,14 +5,14 @@ namespace Aspekt.AI
     /// A sensor gives an agent the ability to perceive the world around it, or reflect upon itself.
     /// Sensors typically modify the agent's memory based on what they perceive.
     /// </summary>
-    public interface ISensor<T, R>
+    public interface ISensor<L, V>
     {
         /// <summary>
         /// Initialises the sensor
         /// </summary>
         /// <param name="agent">The parent AI agent</param>
         /// <param name="memory">The memory module</param>
-        void Init(IAIAgent<T, R> agent, IMemory<T, R> memory);
+        void Init(IAIAgent<L, V> agent, IMemory<L, V> memory);
         
         /// <summary>
         /// Tick is called once per frame, similar to MonoBehaviour.Update()

@@ -1,23 +1,23 @@
 using System.Collections.Generic;
 
-namespace Aspekt.AI.Core
+namespace Aspekt.AI
 {
     /// <summary>
     /// Manages the AI agent's actions
     /// </summary>
-    public interface IActionController<T, R>
+    public interface IActionController<L, V>
     {
         /// <summary>
         /// Initialises the action controller
         /// </summary>
         /// <param name="agent">The parent AI agent</param>
         /// <param name="memory">the AI's memory module</param>
-        void Init(IAIAgent<T, R> agent, IMemory<T, R> memory);
+        void Init(IAIAgent<L, V> agent, IMemory<L, V> memory);
         
         /// <summary>
         /// Returns a copy of the list of actions in the action controller
         /// </summary>
-        List<IAIAction<T, R>> GetActions();
+        List<IAIAction<L, V>> GetActions();
         
         /// <summary>
         /// Disables all the actions on the agent
@@ -33,12 +33,12 @@ namespace Aspekt.AI.Core
         /// Adds an action of the given type to the agent
         /// </summary>
         /// <typeparam name="TAction">The sensor type to add</typeparam>
-        void AddAction<TAction>() where TAction : IAIAction<T, R>, new();
+        void AddAction<TAction>() where TAction : IAIAction<L, V>, new();
         
         /// <summary>
         /// Removes an action of the given type, if it exists on the agent
         /// </summary>
         /// <typeparam name="TAction">The sensor type to remove</typeparam>
-        void RemoveAction<TAction>() where TAction : IAIAction<T, R>;
+        void RemoveAction<TAction>() where TAction : IAIAction<L, V>;
     }
 }

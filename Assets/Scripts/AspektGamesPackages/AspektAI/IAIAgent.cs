@@ -2,17 +2,42 @@ using UnityEngine;
 
 namespace Aspekt.AI
 {
-    public interface IAIAgent<T, R>
+    public interface IAIAgent<L, V>
     {
+        /// <summary>
+        /// The memory component of the AI agent
+        /// </summary>
+        IMemory<L, V> Memory { get; }
+        
+        /// <summary>
+        /// The Transform of the AI agent
+        /// </summary>
+        Transform Transform { get; }
+        
+        /// <summary>
+        /// The Owner of the AI agent
+        /// </summary>
+        GameObject Owner { get; }
+        
+        /// <summary>
+        /// The action controller of the AI agent
+        /// </summary>
+        IActionController<L, V> Actions { get; }
+        
+        /// <summary>
+        /// The sensor controller of the AI agent
+        /// </summary>
+        ISensorController<L, V> Sensors { get; }
+        
+        /// <summary>
+        /// The goals controller of the AI agent
+        /// </summary>
+        IGoalController<L, V> Goals { get; }
+        
         /// <summary>
         /// Initialises the agent
         /// </summary>
         void Init(GameObject owner);
-        
-        /// <summary>
-        /// Forces recalculation of the action path for the allocated goals
-        /// </summary>
-        void RefreshActions();
 
         /// <summary>
         /// Tells the agent to start operation, or resume if in paused state
@@ -20,7 +45,7 @@ namespace Aspekt.AI
         void Run();
 
         /// <summary>
-        /// Pauses operation of the agent.
+        /// Pauses operation of the AI agent.
         /// </summary>
         void Pause();
 
@@ -28,25 +53,5 @@ namespace Aspekt.AI
         /// Stops the agent's AI completely.
         /// </summary>
         void Stop();
-
-        /// <summary>
-        /// Retrieves a sensor for the sensor module existing on the agent
-        /// </summary>
-        /// <typeparam name="TSensor">The sensor type</typeparam>
-        /// <returns>The sensor module</returns>
-        TSensor GetSensor<TSensor>();
-
-        /// <summary>
-        /// Returns the transform of the agent
-        /// </summary>
-        /// <returns>The agent's transform</returns>
-        Transform GetTransform();
-
-        /// <summary>
-        /// Returns the owner of the agent
-        /// </summary>
-        /// <returns></returns>
-        GameObject GetOwner();
-
     }
 }

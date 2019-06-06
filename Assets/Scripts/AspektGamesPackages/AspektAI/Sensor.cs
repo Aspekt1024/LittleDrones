@@ -1,12 +1,10 @@
-using Aspekt.AI.Core;
-using UnityEngine;
 
 namespace Aspekt.AI
 {
-    public abstract class Sensor<T, R> : ISensor<T, R>
+    public abstract class Sensor<L, V> : ISensor<L, V>
     {
-        protected IAIAgent<T, R> agent;
-        protected IMemory<T, R> memory;
+        protected IAIAgent<L, V> agent;
+        protected IMemory<L, V> memory;
         
         private enum States
         {
@@ -14,7 +12,7 @@ namespace Aspekt.AI
         }
         private States state = States.NotInitialised;
 
-        public void Init(IAIAgent<T, R> agent, IMemory<T, R> memory)
+        public void Init(IAIAgent<L, V> agent, IMemory<L, V> memory)
         {
             this.agent = agent;
             this.memory = memory;

@@ -3,15 +3,15 @@ using System.Linq;
 using System.Threading;
 using UnityEngine;
 
-namespace Aspekt.AI.Core
+namespace Aspekt.AI
 {
     // Manages the agent's sensors
-    public class SensorController<T, R> : ISensorController<T, R>
+    public class SensorController<L, V> : ISensorController<L, V>
     {
-        private IAIAgent<T, R> agent;
-        private IMemory<T, R> memory;
+        private IAIAgent<L, V> agent;
+        private IMemory<L, V> memory;
         
-        private List<ISensor<T, R>> sensors = new List<ISensor<T, R>>();
+        private readonly List<ISensor<L, V>> sensors = new List<ISensor<L, V>>();
 
         private enum States
         {
@@ -21,26 +21,12 @@ namespace Aspekt.AI.Core
 
         private States state = States.NotInitialised;
 
-        public void Init(IAIAgent<T, R> agent, IMemory<T, R> memory)
+        public void Init(IAIAgent<L, V> agent, IMemory<L, V> memory)
         {
             this.agent = agent;
             this.memory = memory;
 
             state = States.Enabled;
-
-            if (agent is MonoBehaviour mb)
-            {
-                sensors = mb.GetComponentsInChildren<ISensor<T, R>>().ToList();
-            }
-            else
-            {
-                Debug.LogError("AI Agents must inherit from MonoBehaviour.");
-            }
-            
-            foreach (var sensor in sensors)
-            {
-                sensor.Init(agent, memory);
-            }
         }
 
         public void Tick(float deltaTime)
@@ -73,27 +59,36 @@ namespace Aspekt.AI.Core
             }
         }
 
-        public List<ISensor<T, R>> GetSensors() => new List<ISensor<T, R>>(sensors);
+        public List<ISensor<L, V>> GetSensors() => new List<ISensor<L, V>>(sensors);
 
-        public void AddSensor<TSensor>() where TSensor : ISensor<T, R>, new()
+        public void AddSensor<TSensor>() where TSensor : ISensor<L, V>, new()
         {
-            if (sensors.Any(s => s is T)) return;
+            if (sensors.Any(s => s is L)) return;
             
             var sensor = new TSensor();
             sensor.Init(agent, memory);
             sensors.Add(sensor);
         }
 
-        public void RemoveSensor<TSensor>() where TSensor : ISensor<T, R>
+        public void RemoveSensor<TSensor>() where TSensor : ISensor<L, V>
         {
             sensors.RemoveAll(s => s is TSensor);
+        }
+
+        public TSensor Get<TSensor>()
+        {
+            foreach (var sensor in sensors)
+            {
+                if (sensor is TSensor s) return s;
+            }
+            return default;
         }
         
         private bool CanTick()
         {
             if (state == States.NotInitialised)
             {
-                Debug.LogError($"{nameof(SensorController<T, R>)}.{nameof(Init)}() has not been called.");
+                Debug.LogError($"{nameof(SensorController<L, V>)}.{nameof(Init)}() has not been called.");
                 state = States.NotInitialisedAlerted;
             }
 

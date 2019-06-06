@@ -1,19 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Aspekt.AI.Core
+namespace Aspekt.AI
 {
     /// <summary>
     /// Manages the AI agent's sensors
     /// </summary>
-    public interface ISensorController<T, R>
+    public interface ISensorController<L, V>
     {
         /// <summary>
         /// Initialises the sensor controller
         /// </summary>
         /// <param name="agent">The parent AI agent</param>
         /// <param name="memory">the AI's memory module</param>
-        void Init(IAIAgent<T, R> agent, IMemory<T, R> memory);
+        void Init(IAIAgent<L, V> agent, IMemory<L, V> memory);
         
         /// <summary>
         /// Tick is called once per frame via the AI agent
@@ -24,28 +24,35 @@ namespace Aspekt.AI.Core
         /// <summary>
         /// Returns a copy of the list of sensors in the sensor controller
         /// </summary>
-        List<ISensor<T, R>> GetSensors();
+        List<ISensor<L, V>> GetSensors();
         
         /// <summary>
-        /// Disables all the sensors on the agent
+        /// Disables all the sensors on the AI agent
         /// </summary>
         void DisableSensors();
         
         /// <summary>
-        /// Enables all the sensors on the agent
+        /// Enables all the sensors on the AI agent
         /// </summary>
         void EnableSensors();
         
         /// <summary>
-        /// Adds a sensor of the given type to the agent
+        /// Adds a sensor of the given type to the AI agent
         /// </summary>
         /// <typeparam name="TSensor">The sensor type to add</typeparam>
-        void AddSensor<TSensor>() where TSensor : ISensor<T, R>, new();
+        void AddSensor<TSensor>() where TSensor : ISensor<L, V>, new();
         
         /// <summary>
-        /// Removes a sensor of the given type, if it exists on the agent
+        /// Removes a sensor of the given type, if it exists on the AI agent
         /// </summary>
         /// <typeparam name="TSensor">The sensor type to remove</typeparam>
-        void RemoveSensor<TSensor>() where TSensor : ISensor<T, R>;
+        void RemoveSensor<TSensor>() where TSensor : ISensor<L, V>;
+
+        /// <summary>
+        /// Retrieves a sensor of the given type if it exists on the AI agent
+        /// </summary>
+        /// <typeparam name="TSensor"></typeparam>
+        /// <returns></returns>
+        TSensor Get<TSensor>();
     }
 }

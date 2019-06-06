@@ -1,18 +1,23 @@
-using System.Collections.Generic;
-
-namespace Aspekt.AI.Core
+namespace Aspekt.AI
 {
-    public interface IStateMachine<T, R>
+    public interface IStateMachine<L, V>
     {
         /// <summary>
-        /// Initialises the state machine
+        /// Adds the state to the queue
         /// </summary>
-        void Init(IAIAgent<T, R> agent);
+        void Enqueue(IMachineState<L, V> state);
+        
+        /// <summary>
+        /// Creates a new instance of a state of the given type and adds it to the queue
+        /// </summary>
+        /// <typeparam name="T">The type of the machine state to add to the queue</typeparam>
+        /// <returns>The new machine state instance</returns>
+        T AddState<T>() where T : IMachineState<L, V>, new();
         
         /// <summary>
         /// Starts the state machine
         /// </summary>
-        bool Start();
+        void Start();
         
         /// <summary>
         /// Stops the state machine and all running states
@@ -29,10 +34,5 @@ namespace Aspekt.AI.Core
         /// </summary>
         /// <param name="deltaTime">Time since the last frame update</param>
         void Tick(float deltaTime);
-
-        /// <summary>
-        /// Sets the action queue
-        /// </summary>
-        void SetQueue(Queue<IAIAction<T, R>> queue);
     }
 }

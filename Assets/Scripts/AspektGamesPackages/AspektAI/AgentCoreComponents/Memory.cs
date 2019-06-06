@@ -1,79 +1,64 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Aspekt.AI.Core
+namespace Aspekt.AI
 {
     // Memory holds everything the agent currently knows about the world and itself.
     // It is typically modified by a sensor, performing an action, or being acted upon.
     // Memory is the storage of state and does not perform any actions or observations.
-    public class Memory<T, R> : IMemory<T, R>
+    public class Memory<L, V> : IMemory<L, V>
     {
-        private IAIAgent<T, R> agent;
+        private IAIAgent<L, V> agent;
         
-        private readonly Dictionary<object, object> memory = new Dictionary<object, object>();
+        private readonly Dictionary<L, V> state = new Dictionary<L, V>();
         
-        public void Init(IAIAgent<T, R> agent)
+        public void Init(IAIAgent<L, V> agent)
         {
             this.agent = agent;
         }
 
         public void Reset()
         {
-            memory.Clear();
+            state.Clear();
         }
 
-        public object Get(object key)
+        public bool IsMatch(L label, V value)
         {
-            if (memory.ContainsKey(key))
+            if (state.ContainsKey(label))
             {
-                return memory[key];
-            }
-            return null;
-        }
-
-        public V Get<K, V>(K key)
-        {
-            if (memory.ContainsKey(key))
-            {
-                return (V)memory[key];
-            }
-            return default;
-        }
-
-        /// <summary>
-        /// Retrieves the memory value and returns true if the memory key exists.
-        /// If the memory key doesn't exist, this returns false and the default value is given.
-        /// </summary>
-        /// <param name="key">The memory key</param>
-        /// <param name="value">The memory value</param>
-        /// <returns>success</returns>
-        public bool TryGet(T key, out R value)
-        {
-            if (memory.ContainsKey(key))
-            {
-                value = (R)memory[key];
-                return true;
+                return state[label].Equals(value);
             }
 
-            value = default;
+            // Agents are conservative and a "don't know" results in a failed condition check.
+            // It's a prerequisite that a memory state is set in order to pass a condition.
             return false;
         }
 
-        public void Set(object key, object value)
+        public void Set(L label, V value)
         {
-            if (memory.ContainsKey(key))
+            if (state.ContainsKey(label))
             {
-                memory[key] = value;
+                state[label] = value;
             }
             else
             {
-                memory.Add(key, value);
+                state.Add(label, value);
             }
         }
 
-        public void Remove(object key)
+        public void Remove(L label)
         {
-            memory.Remove(key);
+            state.Remove(label);
+        }
+
+        public Dictionary<L, V> GetState()
+        {
+            return state;
+        }
+
+        public Dictionary<L, V> CloneState()
+        {
+            return new Dictionary<L, V>(state);
         }
     }
 }

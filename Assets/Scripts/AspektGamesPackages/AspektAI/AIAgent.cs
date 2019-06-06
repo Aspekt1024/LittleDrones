@@ -1,21 +1,18 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using Aspekt.AI.Core;
 using Aspekt.Drones;
 using UnityEngine;
 
 namespace Aspekt.AI
 {
     // Attached to a game object to give it the power of thought
-    public abstract class AIAgent<T, R> : MonoBehaviour, IAIAgent<T, R>
+    public abstract class AIAgent<L, V> : MonoBehaviour, IAIAgent<L, V>
     {
-        public readonly IActionController<T, R> Actions = new ActionController<T, R>();
-        public readonly ISensorController<T, R> Sensors = new SensorController<T, R>();
-        public readonly IStateMachine<T, R> StateMachine = new StateMachine<T, R>();
-        public readonly IMemory<T, R> Memory = new Memory<T, R>();
-
-        private GameObject owner;
-        public GameObject GetOwner() => owner;
+        public GameObject Owner { get; private set; }
+        public Transform Transform => transform;
+        public IMemory<L, V> Memory { get; } = new Memory<L, V>();
+        public IActionController<L, V> Actions { get; } = new ActionController<L, V>();
+        public ISensorController<L, V> Sensors { get; } = new SensorController<L, V>();
+        public IGoalController<L, V> Goals { get; } = new GoalController<L, V>();
 
         private enum States
         {
@@ -24,15 +21,20 @@ namespace Aspekt.AI
 
         private States state = States.NotInitialised;
 
+        private IExecutor<L, V> executor;
+        private IPlanner<L, V> planner;
+
         public void Init(GameObject owner)
         {
             state = States.Stopped;
             
-            this.owner = owner;
+            Owner = owner;
+            Memory.Init(this);
             Actions.Init(this, Memory);
             Sensors.Init(this, Memory);
-            StateMachine.Init(this);
-            Memory.Init(this);
+            
+            executor = new Executor<L, V>(this);
+            planner = new Planner<L, V>(this);
         }
         
         private void Start()
@@ -48,7 +50,6 @@ namespace Aspekt.AI
             if (state == States.Running)
             {
                 Sensors.Tick(Time.deltaTime);
-                StateMachine.Tick(Time.deltaTime);
             }
         }
         
@@ -60,21 +61,8 @@ namespace Aspekt.AI
             }
             
             state = States.Running;
-            RefreshActions();
+            planner.CalculateNewGoal();
         }
-
-        public void RefreshActions()
-        {
-            var actions = Actions.GetActions().Where(a => a is GatherIronAction).ToArray();
-            if (actions.Any())
-            {
-                var queue = new Queue<IAIAction<T, R>>();
-                queue.Enqueue(actions[0]);
-                StateMachine.SetQueue(queue);
-                StateMachine.Start();
-            }
-        }
-
 
         public void Resume()
         {
@@ -90,25 +78,12 @@ namespace Aspekt.AI
         public void Pause()
         {
             Sensors.DisableSensors();
-            StateMachine.Pause();
         }
 
         public void Stop()
         {
             Sensors.DisableSensors();
-            StateMachine.Stop();
             Memory.Reset();
         }
-
-        public TSensor GetSensor<TSensor>()
-        {
-            foreach (var sensor in Sensors.GetSensors())
-            {
-                if (sensor is TSensor s) return s;
-            }
-            return default;
-        }
-
-        public Transform GetTransform() => transform;
     }
 }

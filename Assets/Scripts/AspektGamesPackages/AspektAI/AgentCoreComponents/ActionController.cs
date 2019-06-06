@@ -2,69 +2,52 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Aspekt.AI.Core
+namespace Aspekt.AI
 {
-    public class ActionController<T, R> : IActionController<T, R>
+    public class ActionController<L, V> : IActionController<L, V>
     {
-        private IAIAgent<T, R> agent;
-        private IMemory<T, R> memory;
+        private IAIAgent<L, V> agent;
+        private IMemory<L, V> memory;
         
-        private enum States
-        {
-            NotInitialised, NotInitialisedAlerted,
-            Enabled, Disabled
-        }
-        private States state = States.NotInitialised;
+        private readonly List<IAIAction<L, V>> actions = new List<IAIAction<L, V>>();
         
-        private List<IAIAction<T, R>> actions = new List<IAIAction<T, R>>();
-        
-        public void Init(IAIAgent<T, R> agent, IMemory<T, R> memory)
+        public void Init(IAIAgent<L, V> agent, IMemory<L, V> memory)
         {
             this.agent = agent;
             this.memory = memory;
-
-            state = States.Enabled;
-
-            if (agent is MonoBehaviour mb)
-            {
-                actions = mb.GetComponentsInChildren<IAIAction<T, R>>().ToList();
-            }
-            else
-            {
-                Debug.LogError("AI Agents must inherit from MonoBehaviour.");
-            }
-            
-            foreach (var action in actions)
-            {
-                action.Init(agent, memory);
-            }
         }
         
-        public List<IAIAction<T, R>> GetActions()
+        public List<IAIAction<L, V>> GetActions()
         {
             return actions;
         }
 
         public void DisableActions()
         {
-            throw new System.NotImplementedException();
+            foreach (var action in actions)
+            {
+                action.Disable();
+            }
         }
 
         public void EnableActions()
         {
-            throw new System.NotImplementedException();
+            foreach (var action in actions)
+            {
+                action.Enable();
+            }
         }
 
-        public void AddAction<TAction>() where TAction : IAIAction<T, R>, new()
+        public void AddAction<TAction>() where TAction : IAIAction<L, V>, new()
         {
-            if (actions.Any(s => s is T)) return;
+            if (actions.Any(s => s is L)) return;
             
             var action = new TAction();
             action.Init(agent, memory);
             actions.Add(action);
         }
 
-        public void RemoveAction<TAction>() where TAction : IAIAction<T, R>
+        public void RemoveAction<TAction>() where TAction : IAIAction<L, V>
         {
             actions.RemoveAll(s => s is TAction);
         }

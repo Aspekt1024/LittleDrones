@@ -33,6 +33,10 @@ namespace Aspekt.Drones
 
         public IMovement GetMovement() => movement;
 
+        private void OnTriggerEnter(Collider other)
+        {
+        }
+
         private void Update()
         {
             movement.Tick(Time.deltaTime);

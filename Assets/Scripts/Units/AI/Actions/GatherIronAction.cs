@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Aspekt.AI;
 using UnityEngine;
@@ -11,9 +12,9 @@ namespace Aspekt.Drones
         private ResourceBase resource;
         private IMovement movement; //TODO delegate to State in StateMachine
         
-        public override bool Begin()
+        public override bool Begin(IStateMachine<AIAttributes, object> stateMachine, Action onSuccessCallback, Action onFailureCallback)
         {
-            var sensor = agent.GetSensor<ResourceSensor>();
+            var sensor = agent.Sensors.Get<ResourceSensor>();
             if (sensor == null)
             {
                 Debug.Log("sensor doesn't exist");
@@ -27,7 +28,7 @@ namespace Aspekt.Drones
                 return false;
             }
 
-            var moveable = agent.GetOwner().GetComponent<Drone>(); // TODO movement not handled here
+            var moveable = agent.Owner.GetComponent<Drone>(); // TODO movement not handled here
             if (moveable == null)
             {
                 Debug.Log("no movable component on agent");
@@ -44,7 +45,7 @@ namespace Aspekt.Drones
             float distance = float.MaxValue;
             foreach (var iron in ironSources)
             {
-                float dist = Vector3.Distance(agent.GetTransform().position, iron.transform.position);
+                float dist = Vector3.Distance(agent.Transform.position, iron.transform.position);
                 if (dist < distance)
                 {
                     distance = dist;
@@ -60,7 +61,7 @@ namespace Aspekt.Drones
         public override bool IsComplete()
         {
             if (resource == null) return false;
-            return Vector3.Distance(agent.GetTransform().position, resource.transform.position) < 1f;
+            return Vector3.Distance(agent.Transform.position, resource.transform.position) < 1f;
         }
 
         protected override void OnTick(float deltaTime)

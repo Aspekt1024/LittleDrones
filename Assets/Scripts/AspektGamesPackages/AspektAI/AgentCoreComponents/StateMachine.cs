@@ -1,77 +1,95 @@
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-namespace Aspekt.AI.Core
+namespace Aspekt.AI
 {
     // Manages the operation of the agent's actions
-    public class StateMachine<T, R> : IStateMachine<T, R>
+    public class StateMachine<L, V> : IStateMachine<L, V>
     {
-        private IAIAgent<T, R> agent;
+        private readonly IAIAgent<L, V> agent;
 
-        private Queue<IAIAction<T, R>> queue;
-        private IAIAction<T, R> currentAction;
+        private readonly Queue<IMachineState<L, V>> stateQueue = new Queue<IMachineState<L, V>>();
+        private IMachineState<L, V> currentState;
+        
+        public event Action OnComplete = delegate { };
         
         private enum States
         {
-            Paused, Stopped, Running
+            Paused, Stopped, Running, Idle
         }
         private States state = States.Stopped;
 
-        public void Init(IAIAgent<T, R> agent)
+        public StateMachine(IAIAgent<L, V> agent)
         {
             this.agent = agent;
         }
 
-        public void SetQueue(Queue<IAIAction<T, R>> newQueue)
+        public void Enqueue(IMachineState<L, V> state)
         {
-            queue = newQueue;
+            stateQueue.Enqueue(state);
+        }
+
+        public T AddState<T>() where T : IMachineState<L, V>, new()
+        {
+            T newState = new T();
+            newState.Init(agent);
+            Enqueue(newState);
+            return newState;
         }
         
-        public bool Start()
+        public void Start()
         {
             state = States.Running;
-            if (queue == null || queue.Count <= 0)
-            {
-                Debug.Log("cannot start machine with no queue");
-                return false;
-            }
-
-            return true;
         }
 
         public void Stop()
         {
             state = States.Stopped;
+            currentState.Stop();
         }
 
         public void Pause()
         {
             if (state == States.Paused || state == States.Stopped) return;
             state = States.Paused;
-            
+            currentState.Pause();
         }
 
         public void Tick(float deltaTime)
         {
             if (state == States.Paused || state == States.Stopped) return;
 
-            if (currentAction == null || currentAction.IsComplete())
+            if (currentState == null)
             {
-                currentAction = queue.Dequeue();
-                var success = currentAction.Begin();
-                if (!success)
-                {
-                    Debug.Log("failed to begin action");
-                    return;
-                }
+                GotoNextState();
             }
-            
-            currentAction.Tick(deltaTime);
+            else
+            {
+                currentState.Tick(deltaTime);
+            }
+        }
+        
+        private void GotoNextState()
+        {
+            if (currentState != null)
+            {
+                currentState.OnComplete -= OnStateCompleted;
+            }
 
-            if (currentAction.IsComplete())
+            if (stateQueue.Count == 0) return;
+            
+            currentState = stateQueue.Dequeue();
+            currentState.OnComplete += OnStateCompleted;
+        }
+
+        private void OnStateCompleted()
+        {
+            if (state == States.Running && stateQueue.Count == 0)
             {
-                Debug.Log("action complete. now what?");
+                OnComplete?.Invoke();
+                if (currentState != null) currentState.OnComplete -= OnStateCompleted;
             }
+            GotoNextState();
         }
     }
 }

@@ -1,16 +1,43 @@
-namespace Aspekt.AI.Core
+using System.Collections.Generic;
+
+namespace Aspekt.AI
 {
-    public interface IMemory<T, V>
+    public interface IMemory<L, V>
     {
         /// <summary>
         /// Initialises the Memory component of the agent
         /// </summary>
         /// <param name="agent">The agent the memory belongs to</param>
-        void Init(IAIAgent<T, V> agent);
+        void Init(IAIAgent<L, V> agent);
         
         /// <summary>
         /// Wipes the memory of the agent
         /// </summary>
         void Reset();
+
+        /// <summary>
+        /// Returns true if the given label matches the given value
+        /// </summary>
+        bool IsMatch(L label, V value);
+
+        /// <summary>
+        /// Sets the memory state of the given label to the given value
+        /// </summary>
+        void Set(L label, V value);
+
+        /// <summary>
+        /// Removes the memory label from the memory state (IsMatch checks will return false until it's set again)
+        /// </summary>
+        void Remove(L label);
+
+        /// <summary>
+        /// Returns a reference to the memory state
+        /// </summary>
+        Dictionary<L, V> GetState();
+
+        /// <summary>
+        /// Returns a copy of the memory state
+        /// </summary>
+        Dictionary<L, V> CloneState();
     }
 }

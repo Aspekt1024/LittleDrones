@@ -1,21 +1,21 @@
+using System;
 using System.Collections.Generic;
-using Aspekt.AI.Core;
 
 namespace Aspekt.AI
 {
     /// <summary>
     /// An action gives the agent the ability to carry out a specific task.
-    /// Actions will have at least one Outcome, and usually have one or more Prerequisites
+    /// Actions will have at least one Effect, and usually have one or more Precondition
     /// that need to be fulfilled before the action can be performed.
     /// </summary>
-    public interface IAIAction<T, R>
+    public interface IAIAction<L, V>
     {
         /// <summary>
         /// Initialises the action
         /// </summary>
         /// <param name="agent">The parent AI agent</param>
         /// <param name="memory">The memory module</param>
-        void Init(IAIAgent<T, R> agent, IMemory<T, R> memory);
+        void Init(IAIAgent<L, V> agent, IMemory<L, V> memory);
         
         /// <summary>
         /// Tick is called once per frame, similar to MonoBehaviour.Update()
@@ -26,12 +26,18 @@ namespace Aspekt.AI
         /// <summary>
         /// Starts the action
         /// </summary>
-        /// <returns>true if the action was started successfully (i.e. if startup prerequisites were met)</returns>
-        bool Begin();
+        /// <returns>true if the action started successfully (preconditions were met, etc)</returns>
+        bool Begin(IStateMachine<L, V> stateMachine, Action onSuccessCallback, Action onFailureCallback);
 
-        Dictionary<T, R> GetPrerequisites();
+        /// <summary>
+        /// Returns the preconditions required for the action to run
+        /// </summary>
+        Dictionary<L, V> GetPreconditions();
         
-        Dictionary<T, R> GetOutcomes();
+        /// <summary>
+        /// Returns the effects that result from the action being successfully completed
+        /// </summary>
+        Dictionary<L, V> GetEffects();
 
         /// <summary>
         /// Enables the action

@@ -1,12 +1,12 @@
+using System;
 using System.Collections.Generic;
-using Aspekt.AI.Core;
 
 namespace Aspekt.AI
 {
-    public abstract class AIAction<T, R> : IAIAction<T, R>
+    public abstract class AIAction<L, V> : IAIAction<L, V>
     {
-        protected IAIAgent<T, R> agent;
-        protected IMemory<T, R> memory;
+        protected IAIAgent<L, V> agent;
+        protected IMemory<L, V> memory;
         
         private enum States
         {
@@ -14,7 +14,7 @@ namespace Aspekt.AI
         }
         private States state = States.NotInitialised;
         
-        public void Init(IAIAgent<T, R> agent, IMemory<T, R> memory)
+        public void Init(IAIAgent<L, V> agent, IMemory<L, V> memory)
         {
             this.agent = agent;
             this.memory = memory;
@@ -31,15 +31,15 @@ namespace Aspekt.AI
                 OnTick(deltaTime);
             }
         }
+        
+        public abstract bool Begin(IStateMachine<L, V> stateMachine, Action onSuccessCallback, Action onFailureCallback);
 
-        public abstract bool Begin();
-
-        public Dictionary<T, R> GetPrerequisites()
+        public Dictionary<L, V> GetPreconditions()
         {
             throw new System.NotImplementedException();
         }
 
-        public Dictionary<T, R> GetOutcomes()
+        public Dictionary<L, V> GetEffects()
         {
             throw new System.NotImplementedException();
         }
