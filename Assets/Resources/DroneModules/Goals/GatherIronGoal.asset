@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baff0cabaffd45b3961d1b33ecc0f3b5, type: 3}
   m_Name: GatherIronGoal
   m_EditorClassIdentifier: 
-  itemName: 
-  description: 
-  icon: {fileID: 0}
-  resourceType: 0
+  itemName: Gather Iron Goal Module
+  description: The goal of iron gathering
+  icon: {fileID: 21300000, guid: 7c6c8b4baa5364447a19c7dc2fec3fa3, type: 3}
+  resourceType: 1

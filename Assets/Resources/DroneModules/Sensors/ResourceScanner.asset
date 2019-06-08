@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aa71bcdeae145a992bda471897a2f3d, type: 3}
   m_Name: ResourceScanner
   m_EditorClassIdentifier: 
-  description: Allows the drone to scan for resources
   itemName: Resource Scanner
-  icon: {fileID: 21300000, guid: 7c6c8b4baa5364447a19c7dc2fec3fa3, type: 3}
+  description: Allows the drone to scan for resources
+  icon: {fileID: 21300000, guid: 5c27fc79dd2011c4ab50f507f7cfb7af, type: 3}
   sensorType: 0
