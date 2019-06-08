@@ -34,6 +34,11 @@ namespace Aspekt.AI
             return false;
         }
 
+        public bool IsMatch(KeyValuePair<L, V> pair)
+        {
+            return IsMatch(pair.Key, pair.Value);
+        }
+
         public void Set(L label, V value)
         {
             if (state.ContainsKey(label))

@@ -7,14 +7,12 @@ namespace Aspekt.AI
     public class ActionController<L, V> : IActionController<L, V>
     {
         private IAIAgent<L, V> agent;
-        private IMemory<L, V> memory;
         
         private readonly List<IAIAction<L, V>> actions = new List<IAIAction<L, V>>();
         
-        public void Init(IAIAgent<L, V> agent, IMemory<L, V> memory)
+        public void Init(IAIAgent<L, V> agent)
         {
             this.agent = agent;
-            this.memory = memory;
         }
         
         public List<IAIAction<L, V>> GetActions()
@@ -43,7 +41,7 @@ namespace Aspekt.AI
             if (actions.Any(s => s is L)) return;
             
             var action = new TAction();
-            action.Init(agent, memory);
+            action.Init(agent);
             actions.Add(action);
         }
 

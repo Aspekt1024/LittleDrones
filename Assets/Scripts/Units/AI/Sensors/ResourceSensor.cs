@@ -45,6 +45,24 @@ namespace Aspekt.Drones
 
             return colliders.Select(c => c.GetComponent<ResourceBase>()).Where(r => r.resourceType == type).ToArray();
         }
+
+        public ResourceBase GetClosestResource(ResourceTypes type, Vector3 pos)
+        {
+            var resources = ScanResources(type);
+
+            float dist = float.MaxValue;
+            ResourceBase closestResource = null;
+            foreach (var resource in resources)
+            {
+                var d = Vector3.Distance(pos, resource.transform.position);
+                if (d >= dist) continue;
+                
+                closestResource = resource;
+                dist = d;
+            }
+
+            return closestResource;
+        }
         
         protected override void OnInit()
         {

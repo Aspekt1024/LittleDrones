@@ -6,21 +6,19 @@ namespace Aspekt.AI
     public abstract class AIAction<L, V> : IAIAction<L, V>
     {
         protected IAIAgent<L, V> agent;
-        protected IMemory<L, V> memory;
         
         private enum States
         {
             NotInitialised, Enabled, Disabled
         }
         private States state = States.NotInitialised;
-        
-        public void Init(IAIAgent<L, V> agent, IMemory<L, V> memory)
+
+        public abstract float Cost { get; }
+
+        public void Init(IAIAgent<L, V> agent)
         {
             this.agent = agent;
-            this.memory = memory;
-
             state = States.Enabled;
-            
             OnInit();
         }
 
@@ -34,15 +32,14 @@ namespace Aspekt.AI
         
         public abstract bool Begin(IStateMachine<L, V> stateMachine, Action onSuccessCallback, Action onFailureCallback);
 
-        public Dictionary<L, V> GetPreconditions()
-        {
-            throw new System.NotImplementedException();
-        }
+        public abstract Dictionary<L, V> GetPreconditions();
 
-        public Dictionary<L, V> GetEffects()
+        public virtual bool CheckProceduralPreconditions()
         {
-            throw new System.NotImplementedException();
+            return state == States.Enabled;
         }
+        
+        public abstract Dictionary<L, V> GetEffects();
 
         public void Enable()
         {

@@ -11,8 +11,7 @@ namespace Aspekt.AI
         /// Initialises the sensor
         /// </summary>
         /// <param name="agent">The parent AI agent</param>
-        /// <param name="memory">The memory module</param>
-        void Init(IAIAgent<L, V> agent, IMemory<L, V> memory);
+        void Init(IAIAgent<L, V> agent);
         
         /// <summary>
         /// Tick is called once per frame, similar to MonoBehaviour.Update()

@@ -20,6 +20,12 @@ namespace Aspekt.AI
         /// </summary>
         bool IsMatch(L label, V value);
 
+        
+        /// <summary>
+        /// Returns true if the given key value pair matches the memory entry
+        /// </summary>
+        bool IsMatch(KeyValuePair<L, V> pair);
+
         /// <summary>
         /// Sets the memory state of the given label to the given value
         /// </summary>

@@ -11,11 +11,15 @@ namespace Aspekt.AI
     public interface IAIAction<L, V>
     {
         /// <summary>
+        /// The cost of executing the action. A lower cost is more desirable
+        /// </summary>
+        float Cost { get; }
+        
+        /// <summary>
         /// Initialises the action
         /// </summary>
         /// <param name="agent">The parent AI agent</param>
-        /// <param name="memory">The memory module</param>
-        void Init(IAIAgent<L, V> agent, IMemory<L, V> memory);
+        void Init(IAIAgent<L, V> agent);
         
         /// <summary>
         /// Tick is called once per frame, similar to MonoBehaviour.Update()
@@ -33,6 +37,12 @@ namespace Aspekt.AI
         /// Returns the preconditions required for the action to run
         /// </summary>
         Dictionary<L, V> GetPreconditions();
+
+        /// <summary>
+        /// Checks preconditions that update over time.
+        /// This is checked on action planning and for each tick of the AI agent (once per frame)
+        /// </summary>
+        bool CheckProceduralPreconditions();
         
         /// <summary>
         /// Returns the effects that result from the action being successfully completed

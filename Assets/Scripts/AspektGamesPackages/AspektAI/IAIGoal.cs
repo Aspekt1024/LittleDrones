@@ -5,6 +5,11 @@ namespace Aspekt.AI
     public interface IAIGoal<L, V>
     {
         /// <summary>
+        /// The priority of the goal. Higher values have higher priority
+        /// </summary>
+        float Priority { get; }
+
+        /// <summary>
         /// Returns true if the goal is enabled
         /// </summary>
         bool IsEnabled { get; }

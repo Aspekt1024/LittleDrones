@@ -53,5 +53,12 @@ namespace Aspekt.AI
         /// Stops the agent's AI completely.
         /// </summary>
         void Stop();
+
+        /// <summary>
+        /// Logs a standard message relating to the AI agent's behaviour
+        /// </summary>
+        /// <param name="type">The message type/category</param>
+        /// <param name="message">The message to log</param>
+        void Log(AILogType type, string message);
     }
 }

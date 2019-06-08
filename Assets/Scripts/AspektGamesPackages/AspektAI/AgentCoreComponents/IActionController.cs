@@ -11,8 +11,7 @@ namespace Aspekt.AI
         /// Initialises the action controller
         /// </summary>
         /// <param name="agent">The parent AI agent</param>
-        /// <param name="memory">the AI's memory module</param>
-        void Init(IAIAgent<L, V> agent, IMemory<L, V> memory);
+        void Init(IAIAgent<L, V> agent);
         
         /// <summary>
         /// Returns a copy of the list of actions in the action controller

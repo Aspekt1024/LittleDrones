@@ -217,11 +217,9 @@
             <e p="AspektAI" t="Include">
               <e p="AgentCoreComponents" t="Include">
                 <e p="ActionController.cs" t="Include" />
-                <e p="AIAStar.cs" t="Include" />
                 <e p="Executor.cs" t="Include" />
                 <e p="GoalController.cs" t="Include" />
                 <e p="IActionController.cs" t="Include" />
-                <e p="IAIAStar.cs" t="Include" />
                 <e p="IExecutor.cs" t="Include" />
                 <e p="IGoalController.cs" t="Include" />
                 <e p="IMemory.cs" t="Include" />
@@ -236,12 +234,19 @@
               <e p="AIAction.cs" t="Include" />
               <e p="AIAgent.cs" t="Include" />
               <e p="AIGoal.cs" t="Include" />
+              <e p="AILogger.cs" t="Include" />
               <e p="IAIAction.cs" t="Include" />
               <e p="IAIAgent.cs" t="Include" />
               <e p="IAIGoal.cs" t="Include" />
               <e p="IMachineState.cs" t="Include" />
               <e p="ISensor.cs" t="Include" />
               <e p="MachineState.cs" t="Include" />
+              <e p="Planning" t="Include">
+                <e p="AINode.cs" t="Include" />
+                <e p="AIState.cs" t="Include" />
+                <e p="Astar.cs" t="Include" />
+                <e p="IAstar.cs" t="Include" />
+              </e>
               <e p="Sensor.cs" t="Include" />
             </e>
             <e p="AspektItems" t="Include">
@@ -356,7 +361,9 @@
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
       <e p="PackageToolsEditor.csproj" t="IncludeRecursive" />
-      <e p="Temp\bin" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
     </e>
   </component>
 </project>

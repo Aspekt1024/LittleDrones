@@ -9,7 +9,6 @@ namespace Aspekt.AI
     public class SensorController<L, V> : ISensorController<L, V>
     {
         private IAIAgent<L, V> agent;
-        private IMemory<L, V> memory;
         
         private readonly List<ISensor<L, V>> sensors = new List<ISensor<L, V>>();
 
@@ -21,10 +20,9 @@ namespace Aspekt.AI
 
         private States state = States.NotInitialised;
 
-        public void Init(IAIAgent<L, V> agent, IMemory<L, V> memory)
+        public void Init(IAIAgent<L, V> agent)
         {
             this.agent = agent;
-            this.memory = memory;
 
             state = States.Enabled;
         }
@@ -66,7 +64,7 @@ namespace Aspekt.AI
             if (sensors.Any(s => s is L)) return;
             
             var sensor = new TSensor();
-            sensor.Init(agent, memory);
+            sensor.Init(agent);
             sensors.Add(sensor);
         }
 

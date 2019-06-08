@@ -13,6 +13,8 @@ namespace Aspekt.AI
         public IActionController<L, V> Actions { get; } = new ActionController<L, V>();
         public ISensorController<L, V> Sensors { get; } = new SensorController<L, V>();
         public IGoalController<L, V> Goals { get; } = new GoalController<L, V>();
+        
+        private readonly AILogger logger = new AILogger(AILogger.LogLevels.Debug);
 
         private enum States
         {
@@ -30,8 +32,8 @@ namespace Aspekt.AI
             
             Owner = owner;
             Memory.Init(this);
-            Actions.Init(this, Memory);
-            Sensors.Init(this, Memory);
+            Actions.Init(this);
+            Sensors.Init(this);
             
             executor = new Executor<L, V>(this);
             planner = new Planner<L, V>(this);
@@ -85,5 +87,7 @@ namespace Aspekt.AI
             Sensors.DisableSensors();
             Memory.Reset();
         }
+
+        public void Log(AILogType type, string message) => logger.Log(type, message);
     }
 }
