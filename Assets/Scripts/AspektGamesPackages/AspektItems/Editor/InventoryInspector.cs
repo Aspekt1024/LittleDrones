@@ -26,6 +26,8 @@ namespace Aspekt.Items
                 inv.SlotPrefab = slotPrefab;
                 ResetSlots();
             }
+            
+            base.OnInspectorGUI();
         }
 
         private void SetSlotCount()

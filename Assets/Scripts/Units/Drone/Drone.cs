@@ -13,6 +13,7 @@ namespace Aspekt.Drones
         [SerializeField] private MainInventory inventory;
         [SerializeField] private SensorInventory sensorSlots;
         [SerializeField] private ActionInventory actionSlots;
+        [SerializeField] private GoalInventory goalSlots;
 #pragma warning restore 649
 
         private IMovement movement;
@@ -22,6 +23,7 @@ namespace Aspekt.Drones
             ai.Init(gameObject);
             sensorSlots.Init(ai);
             actionSlots.Init(ai);
+            goalSlots.Init(ai);
             
             movement = new BasicMovement(GetComponent<Rigidbody>());
         }
@@ -82,6 +84,13 @@ namespace Aspekt.Drones
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
                 var modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/GatherResource");
+                var module = Instantiate(modulePrefab);
+                inventory.AddItem(module);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                var modulePrefab = Resources.Load<GoalModule>("DroneModules/Goals/GatherIronGoal");
                 var module = Instantiate(modulePrefab);
                 inventory.AddItem(module);
             }

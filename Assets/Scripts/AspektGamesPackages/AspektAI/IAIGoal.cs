@@ -17,7 +17,7 @@ namespace Aspekt.AI
         /// <summary>
         /// Initialises the goal
         /// </summary>
-        void Init();
+        void Init(IAIAgent<L, V> agent);
         
         /// <summary>
         /// Retrieves the conditions that meet the goal
@@ -40,5 +40,10 @@ namespace Aspekt.AI
         /// Disables the goal. The goal will be disregarded when calculating new goals
         /// </summary>
         void Disable();
+
+        /// <summary>
+        /// Resets the AI agent's goal state
+        /// </summary>
+        void ResetGoal();
     }
 }

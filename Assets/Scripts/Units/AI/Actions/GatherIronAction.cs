@@ -12,7 +12,7 @@ namespace Aspekt.Drones
         private ResourceBase resource;
 
         private const ResourceTypes ResourceType = ResourceTypes.Iron;
-
+        
         public override float Cost
         {
             get { return 1f; } // TODO update to return the distance to the closest resource 
@@ -49,6 +49,7 @@ namespace Aspekt.Drones
             if (!base.CheckProceduralPreconditions()) return false;
             if (resource == null)
             {
+                sensor = agent.Sensors.Get<ResourceSensor>();
                 resource = sensor.GetClosestResource(ResourceType, agent.Transform.position);
             }
             

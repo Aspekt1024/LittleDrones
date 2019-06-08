@@ -27,15 +27,26 @@ namespace Aspekt.AI
         void EnableGoals();
         
         /// <summary>
-        /// Adds an action of the given type to the agent
+        /// Adds a goal of the given type to the agent
         /// </summary>
-        /// <typeparam name="TGoal">The sensor type to add</typeparam>
+        /// <typeparam name="TGoal">The goal type to add</typeparam>
         void AddGoal<TGoal>() where TGoal : IAIGoal<L, V>, new();
+
+        /// <summary>
+        /// Adds the given goal to the agent. Checks if a goal of that type exists on the AI agent already
+        /// </summary>
+        void AddGoal(IAIGoal<L, V> goal);
         
         /// <summary>
-        /// Removes an action of the given type, if it exists on the agent
+        /// Removes a goal of the given type, if it exists on the agent
         /// </summary>
-        /// <typeparam name="TGoal">The sensor type to remove</typeparam>
+        /// <typeparam name="TGoal">The goal type to remove</typeparam>
         void RemoveGoal<TGoal>() where TGoal : IAIGoal<L, V>;
+
+        /// <summary>
+        /// Removes the goal of the given type
+        /// </summary>
+        /// <param name="goal"></param>
+        void RemoveGoal(IAIGoal<L, V> goal);
     }
 }

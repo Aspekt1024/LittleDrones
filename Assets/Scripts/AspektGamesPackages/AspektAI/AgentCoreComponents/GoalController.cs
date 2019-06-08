@@ -38,16 +38,32 @@ namespace Aspekt.AI
 
         public void AddGoal<TGoal>() where TGoal : IAIGoal<L, V>, new()
         {
-            if (goals.Any(s => s is L)) return;
+            if (goals.Any(s => s is TGoal)) return;
             
             var goal = new TGoal();
-            goal.Init();
+            goal.Init(agent);
+            goals.Add(goal);
+        }
+
+        public void AddGoal(IAIGoal<L, V> goal)
+        {
+            var matchedGoals = goals.Where(g => g is L).ToArray();
+            foreach (var matchedGoal in matchedGoals)
+            {
+                RemoveGoal(matchedGoal);
+            }
+            goal.Init(agent);
             goals.Add(goal);
         }
 
         public void RemoveGoal<TGoal>() where TGoal : IAIGoal<L, V>
         {
             goals.RemoveAll(g => g is TGoal);
+        }
+
+        public void RemoveGoal(IAIGoal<L, V> goal)
+        {
+            goals.Remove(goal);
         }
     }
 }

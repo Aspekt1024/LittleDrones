@@ -1,4 +1,5 @@
 using Aspekt.AI;
+using UnityEngine;
 
 namespace Aspekt.Drones
 {
@@ -13,6 +14,7 @@ namespace Aspekt.Drones
 
         public override void Start()
         {
+            
         }
 
         public override void Pause()
@@ -29,5 +31,8 @@ namespace Aspekt.Drones
         {
             movement.Tick(deltaTime);
         }
+
+        public void MoveTo(Vector3 position) => movement.MoveTo(position, true);
+        public void MoveTo(Transform tf) => movement.MoveTo(tf, true);
     }
 }

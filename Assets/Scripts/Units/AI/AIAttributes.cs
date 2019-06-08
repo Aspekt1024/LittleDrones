@@ -2,6 +2,11 @@ namespace Aspekt.Drones
 {
     public enum AIAttributes
     {
-        IsAwake
+        Invalid,
+        IsAwake,
+        IsHoldingResource,
+        HasGatheredIron,
+        HasGatheredCopper,
+        HasGatheredCoal,
     }
 }

@@ -270,6 +270,10 @@
           <e p="Items" t="Include">
             <e p="Modules" t="Include">
               <e p="ActionModule.cs" t="Include" />
+              <e p="GoalModule.cs" t="Include" />
+              <e p="GoalModules" t="Include">
+                <e p="GatherResourceGoalModule.cs" t="Include" />
+              </e>
               <e p="IDroneModule.cs" t="Include" />
               <e p="SensorModule.cs" t="Include" />
             </e>
@@ -287,7 +291,11 @@
             <e p="UnitManager.cs" t="Include" />
           </e>
           <e p="Objects" t="Include">
+            <e p="Buildings" t="Include">
+              <e p="BuildingBase.cs" t="Include" />
+            </e>
             <e p="IObject.cs" t="Include" />
+            <e p="ResourceDepot.cs" t="Include" />
           </e>
           <e p="UI" t="Include">
             <e p="InventoryUI.cs" t="Include" />
@@ -301,7 +309,11 @@
               </e>
               <e p="AIAttributes.cs" t="Include" />
               <e p="DroneAIAgent.cs" t="Include" />
+              <e p="Goals" t="Include">
+                <e p="GatherResourceGoal.cs" t="Include" />
+              </e>
               <e p="MachineStates" t="Include">
+                <e p="AnimationState.cs" t="Include" />
                 <e p="MoveState.cs" t="Include" />
               </e>
               <e p="Sensors" t="Include">
@@ -312,6 +324,7 @@
               <e p="Drone.cs" t="Include" />
               <e p="Inventory" t="Include">
                 <e p="ActionInventory.cs" t="Include" />
+                <e p="GoalInventory.cs" t="Include" />
                 <e p="MainInventory.cs" t="Include" />
                 <e p="SensorInventory.cs" t="Include" />
               </e>

@@ -7,7 +7,7 @@ namespace Aspekt.Drones
 
     public class ResourceSensor : Sensor<AIAttributes, object>
     {
-        private const float DetectionRadius = 20f;
+        private const float DetectionRadius = 100f;
         private const float RefreshRate = 1f;
         private const bool RequireLineOfSight = false;
 
@@ -43,7 +43,7 @@ namespace Aspekt.Drones
             Debug.Log("resource collider count: " + colliders.Length);
             // TODO line of sight
 
-            return colliders.Select(c => c.GetComponent<ResourceBase>()).Where(r => r.resourceType == type).ToArray();
+            return colliders.Select(c => c.GetComponentInParent<ResourceBase>()).Where(r => r.resourceType == type).ToArray();
         }
 
         public ResourceBase GetClosestResource(ResourceTypes type, Vector3 pos)
