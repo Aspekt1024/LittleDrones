@@ -104,6 +104,7 @@ namespace Aspekt.AI
         {
             Sensors.DisableSensors();
             Memory.Reset();
+            executor.Stop();
         }
 
         public void LogTrace<T>(T parent, string message) => logger.Log(AILogType.Trace, parent, message);
