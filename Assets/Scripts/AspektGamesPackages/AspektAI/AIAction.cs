@@ -7,8 +7,8 @@ namespace Aspekt.AI
     public abstract class AIAction<L, V> : IAIAction<L, V>
     {
         protected IAIAgent<L, V> Agent;
-        protected Action ActionSuccess;
-        protected Action ActionFailure;
+        public event Action OnActionSucceeded;
+        public event Action OnActionFailed;
         
         private enum States
         {
@@ -38,10 +38,8 @@ namespace Aspekt.AI
             }
         }
 
-        public bool Enter(IStateMachine<L, V> stateMachine, Action onSuccessCallback, Action onFailureCallback)
+        public bool Enter(IStateMachine<L, V> stateMachine)
         {
-            ActionSuccess = onSuccessCallback;
-            ActionFailure = onFailureCallback;
             return Begin(stateMachine);
         }
 
@@ -52,7 +50,6 @@ namespace Aspekt.AI
         {
             return state == States.Enabled;
         }
-        
 
         public void Enable()
         {
@@ -66,9 +63,10 @@ namespace Aspekt.AI
             OnDisable();
         }
 
-        public void Remove()
+        public virtual void OnRemove()
         {
-            OnRemove();
+            OnActionFailed?.Invoke();
+            state = States.Disabled;
         }
 
         protected abstract void SetPreconditions();
@@ -76,12 +74,26 @@ namespace Aspekt.AI
 
         protected void AddPrecondition(L label, V value)
         {
-            preconditions.Add(label, value);
+            if (preconditions.ContainsKey(label))
+            {
+                preconditions[label] = value;
+            }
+            else
+            {
+                preconditions.Add(label, value);
+            }
         }
 
         protected void AddEffect(L label, V value)
         {
-            effects.Add(label, value);
+            if (effects.ContainsKey(label))
+            {
+                effects[label] = value;
+            }
+            else
+            {
+                effects.Add(label, value);
+            }
         }
         
         protected abstract void OnTick(float deltaTime);
@@ -97,13 +109,11 @@ namespace Aspekt.AI
         /// <param name="stateMachine">The AI agent's state machine</param>
         /// <returns>True if the action successfully began</returns>
         protected abstract bool Begin(IStateMachine<L, V> stateMachine);
-        
-        /// <summary>
-        /// Called when the action is removed to allow cleanup (e.g. exiting co-routines safely)
-        /// </summary>
-        protected abstract void OnRemove();
 
         protected virtual void OnEnable() { }
         protected virtual void OnDisable() { }
+
+        protected void ActionFailure() => OnActionFailed?.Invoke();
+        protected void ActionSuccess() => OnActionSucceeded?.Invoke();
     }
 }

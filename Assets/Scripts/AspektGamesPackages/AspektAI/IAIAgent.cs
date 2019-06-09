@@ -45,6 +45,11 @@ namespace Aspekt.AI
         void Run();
 
         /// <summary>
+        /// Flag a new goal calculation to take place
+        /// </summary>
+        void QueueGoalCalculation();
+
+        /// <summary>
         /// Pauses operation of the AI agent.
         /// </summary>
         void Pause();

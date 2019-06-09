@@ -55,7 +55,14 @@ namespace Aspekt.AI
 
         protected void AddCondition(L label, V value)
         {
-            conditions.Add(label, value);
+            if (conditions.ContainsKey(label))
+            {
+                conditions[label] = value;
+            }
+            else
+            {
+                conditions.Add(label, value);
+            }
         }
     }
 }

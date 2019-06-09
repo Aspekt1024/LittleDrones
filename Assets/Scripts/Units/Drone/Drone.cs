@@ -41,6 +41,16 @@ namespace Aspekt.Drones
 
         public IMovement GetMovement() => movement;
         public Animator GetAnimator() => animator;
+
+        public void PowerOn()
+        {
+            ai.Run();
+        }
+
+        public void PowerOff()
+        {
+            ai.Stop();   
+        }
         
         private void Update()
         {

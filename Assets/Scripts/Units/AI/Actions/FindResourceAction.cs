@@ -47,9 +47,5 @@ namespace Aspekt.Drones
             
             return true;
         }
-
-        protected override void OnRemove()
-        {
-        }
     }
 }

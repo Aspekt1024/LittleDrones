@@ -52,7 +52,7 @@ namespace Aspekt.AI
         {
             if (state == States.Paused || state == States.Stopped) return;
             state = States.Paused;
-            currentState.Pause();
+            currentState?.Pause();
         }
 
         public void Tick(float deltaTime)

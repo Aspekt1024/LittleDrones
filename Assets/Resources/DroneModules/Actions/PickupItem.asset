@@ -15,3 +15,5 @@ MonoBehaviour:
   itemName: Pickup Item
   description: Action to pick up an item
   icon: {fileID: 21300000, guid: c6b828ebf1d12ab448fc5b321c852c04, type: 3}
+  pickupAction:
+    GrabDistance: 2

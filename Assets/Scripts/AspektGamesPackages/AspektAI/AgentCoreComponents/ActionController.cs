@@ -49,6 +49,7 @@ namespace Aspekt.AI
 
         public void RemoveAction(IAIAction<L, V> action)
         {
+            action.OnRemove();
             actions.Remove(action);
         }
     }

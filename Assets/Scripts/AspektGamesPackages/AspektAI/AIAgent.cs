@@ -16,12 +16,14 @@ namespace Aspekt.AI
 
         private enum States
         {
-            NotInitialised, Running, Stopped, Paused
+            NotInitialised, AwaitingActionPlan, Running, Stopped, Paused
         }
 
         private States state = States.NotInitialised;
 
-        private IExecutor<L, V> executor;
+        private bool calculateGoalRequested;
+
+        protected IExecutor<L, V> executor;
         private IPlanner<L, V> planner;
 
         public void Init(GameObject owner)
@@ -38,9 +40,10 @@ namespace Aspekt.AI
             planner = new Planner<L, V>(this);
 
             planner.OnActionPlanFound += OnActionPlanFound;
+            executor.OnActionPlanComplete += OnActionPlanComplete;
         }
         
-        private void Start()
+        protected virtual void Start()
         {
             if (state == States.NotInitialised)
             {
@@ -50,11 +53,17 @@ namespace Aspekt.AI
 
         private void Update()
         {
-            if (state == States.Running)
+            if (calculateGoalRequested)
             {
-                Sensors.Tick(Time.deltaTime);
-                executor.Tick(Time.deltaTime);
+                state = States.AwaitingActionPlan;
+                calculateGoalRequested = false;
+                planner.CalculateNewGoal();
             }
+            
+            if (state != States.Running) return;
+            
+            Sensors.Tick(Time.deltaTime);
+            executor.Tick(Time.deltaTime);
         }
         
         public void Run()
@@ -64,9 +73,14 @@ namespace Aspekt.AI
                 Debug.LogError("Agent.Init() has not been called. This agent will not function.");
             }
             
-            LogInfo(this, "AI agent starting up");
             state = States.Running;
-            planner.CalculateNewGoal();
+            QueueGoalCalculation();
+        }
+
+        public void QueueGoalCalculation()
+        {
+            state = States.AwaitingActionPlan;
+            calculateGoalRequested = true;
         }
 
         public void Resume()
@@ -95,9 +109,15 @@ namespace Aspekt.AI
         public void LogInfo<T>(T parent, string message) => logger.Log(AILogType.Info, parent, message);
         public void LogKeyInfo<T>(T parent, string message) => logger.Log(AILogType.KeyInfo, parent, message);
 
+        protected virtual void OnActionPlanComplete() { }
+        
         private void OnActionPlanFound()
         {
             executor.ExecutePlan(planner.GetActionPlan(), planner.GetGoal());
+            if (state == States.AwaitingActionPlan)
+            {
+                state = States.Running;
+            }
         }
     }
 }

@@ -16,14 +16,15 @@ namespace Aspekt.Drones
         public override float Cost => 1f; // TODO update to return the distance to the closest resource 
         
         private IItem item;
-        private IMovement movement;
+        private MoveState moveState;
 
         protected override bool Begin(IStateMachine<AIAttributes, object> stateMachine)
         {
             item = (IItem)Agent.Memory.Get(AIAttributes.ItemToGather);
             if (item == null) return false;
 
-            movement = Agent.Owner.GetComponent<IMoveable>().GetMovement();
+            moveState = stateMachine.AddState<MoveState>();
+            moveState.MoveTo(item.Transform);
             
             return true;
         }
@@ -41,9 +42,6 @@ namespace Aspekt.Drones
                 return;
             }
             
-            movement.MoveTo(item.Transform, true);
-            movement.Tick(deltaTime);
-            
             var dist = Vector3.Distance(item.Transform.position, Agent.Owner.transform.position);
             if (dist > GrabDistance) return;
             
@@ -56,11 +54,6 @@ namespace Aspekt.Drones
             AddPrecondition(AIAttributes.CanMove, true);
             AddPrecondition(AIAttributes.CanPickupItems, true);
             AddPrecondition(AIAttributes.HasItemToGather, true);
-        }
-
-        protected override void OnRemove()
-        {
-            
         }
     }
 }

@@ -1,9 +1,15 @@
+using System;
 using System.Collections.Generic;
 
 namespace Aspekt.AI
 {
     public interface IExecutor<L, V>
     {
+        /// <summary>
+        /// Called when an action plan has finished
+        /// </summary>
+        event Action OnActionPlanComplete;
+        
         /// <summary>
         /// Called once per frame
         /// </summary>
@@ -28,5 +34,10 @@ namespace Aspekt.AI
         /// Resumes the execution of the running action plan
         /// </summary>
         void Resume();
+
+        /// <summary>
+        /// Returns the status of the executor
+        /// </summary>
+        string GetStatus();
     }
 }

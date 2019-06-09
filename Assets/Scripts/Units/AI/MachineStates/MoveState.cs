@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Aspekt.Drones
 {
-    public class MoveState<L, V> : MachineState<L, V>
+    public class MoveState : MachineState<AIAttributes, object>
     {
         private IMovement movement;
         

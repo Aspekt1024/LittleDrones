@@ -260,10 +260,13 @@
               <e p="Slot.cs" t="Include" />
             </e>
             <e p="AspektUI" t="Include">
+              <e p="Animators" t="Include">
+                <e p="UIFadeAnimator.cs" t="Include" />
+                <e p="UISlideAnimator.cs" t="Include" />
+              </e>
               <e p="ItemDragHandler.cs" t="Include" />
               <e p="IUIAnimator.cs" t="Include" />
               <e p="IUIPanel.cs" t="Include" />
-              <e p="UIFadeAnimator.cs" t="Include" />
               <e p="UIPanel.cs" t="Include" />
             </e>
           </e>
@@ -307,7 +310,9 @@
             <e p="ResourceDepot.cs" t="Include" />
           </e>
           <e p="UI" t="Include">
+            <e p="DronePanel.cs" t="Include" />
             <e p="InventoryUI.cs" t="Include" />
+            <e p="PowerButton.cs" t="Include" />
             <e p="TooltipUI.cs" t="Include" />
             <e p="UnitUI.cs" t="Include" />
           </e>

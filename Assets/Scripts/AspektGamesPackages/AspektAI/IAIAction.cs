@@ -11,6 +11,16 @@ namespace Aspekt.AI
     public interface IAIAction<L, V>
     {
         /// <summary>
+        /// Event called when the action was successful
+        /// </summary>
+        event Action OnActionSucceeded;
+
+        /// <summary>
+        /// Event called when the action failed
+        /// </summary>
+        event Action OnActionFailed;
+        
+        /// <summary>
         /// The cost of executing the action. A lower cost is more desirable
         /// </summary>
         float Cost { get; }
@@ -31,7 +41,7 @@ namespace Aspekt.AI
         /// Called by the AI agent's executor to begin execution of the action
         /// </summary>
         /// <returns>true if the action started successfully (preconditions were met, etc)</returns>
-        bool Enter(IStateMachine<L, V> stateMachine, Action onSuccessCallback, Action onFailureCallback);
+        bool Enter(IStateMachine<L, V> stateMachine);
 
         /// <summary>
         /// Returns the preconditions required for the action to run
@@ -48,7 +58,7 @@ namespace Aspekt.AI
         /// Returns the effects that result from the action being successfully completed
         /// </summary>
         Dictionary<L, V> GetEffects();
-
+        
         /// <summary>
         /// Enables the action
         /// </summary>
@@ -58,10 +68,10 @@ namespace Aspekt.AI
         /// Disables the action
         /// </summary>
         void Disable();
-        
+
         /// <summary>
-        /// Used to clean up the action upon removal
+        /// Called when the action was removed from the AI agent
         /// </summary>
-        void Remove();
+        void OnRemove();
     }
 }

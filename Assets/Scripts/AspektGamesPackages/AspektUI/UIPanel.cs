@@ -6,7 +6,8 @@ namespace Aspekt.UI
     public abstract class UIPanel : MonoBehaviour, IUIPanel
     {
 #pragma warning disable 649
-        [SerializeField] private bool visibleOnStartup;
+        [SerializeField] private bool openedOnStartup;
+        [SerializeField] private bool visibleWhenClosed;
         [SerializeField] private CanvasGroup canvasGroup;
 #pragma warning restore 649
 
@@ -27,14 +28,14 @@ namespace Aspekt.UI
 
         public bool IsOpen => state == States.Open || state == States.Opening;
         public bool IsClosed => state == States.Closed || state == States.Closing;
-
+        
         public void Init()
         {
             uiAnimator = CreateAnimator();
             blocksRaycasts = canvasGroup.blocksRaycasts;
             interactable = canvasGroup.interactable;
             
-            if (visibleOnStartup)
+            if (openedOnStartup)
             {
                 OpenImmediate();
             }
@@ -91,11 +92,14 @@ namespace Aspekt.UI
 
         public void CloseImmediate()
         {
-            canvasGroup.alpha = 0f;
-            canvasGroup.blocksRaycasts = false;
-            canvasGroup.interactable = false;
+            if (!visibleWhenClosed)
+            {
+                canvasGroup.alpha = 0f;
+                canvasGroup.blocksRaycasts = false;
+                canvasGroup.interactable = false;
+                gameObject.SetActive(false);
+            }
             state = States.Closed;
-            gameObject.SetActive(false);
         }
 
         protected virtual IUIAnimator CreateAnimator()
