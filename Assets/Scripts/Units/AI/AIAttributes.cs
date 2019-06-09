@@ -14,11 +14,8 @@ namespace Aspekt.Drones
         IsHoldingItem,
         HeldItem,
         
-        IsHoldingCoal,
-        IsHoldingIron,
-        IsHoldingCopper,
-        
         CanMove,
         CanPickupItems,
+        HasResourceSensor
     }
 }

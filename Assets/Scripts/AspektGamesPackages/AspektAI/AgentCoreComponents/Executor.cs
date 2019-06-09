@@ -100,7 +100,26 @@ namespace Aspekt.AI
 
         public string GetStatus()
         {
-            return state.ToString();
+            if (state == States.None)
+            {
+                return "Inactive";
+            }
+            var status = state.ToString();
+            if (currentGoal != null)
+            {
+                status += "\n\n<b>Goal:</b> " + currentGoal;
+            }
+
+            if (actionPlan != null)
+            {
+                status += "\n\n<b>Action Plan:</b>";
+                foreach (var a in actionPlan)
+                {
+                    status += "\n" + a;
+                }
+            }
+            
+            return status;
         }
 
         private void BeginNextAction()

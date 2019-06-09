@@ -28,10 +28,6 @@ namespace Aspekt.Drones
             
             movement = new BasicMovement(GetComponent<Rigidbody>());
             animator = GetComponent<Animator>();
-            
-            // TODO set these through abilities
-            ai.Memory.Set(AIAttributes.CanMove, true);
-            ai.Memory.Set(AIAttributes.CanPickupItems, true);
         }
 
         public void StartAI()

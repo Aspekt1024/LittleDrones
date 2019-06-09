@@ -37,6 +37,8 @@ namespace Aspekt.UI
                 rectTf.anchoredPosition = Vector2.Lerp(startPos, openedPos, (Time.unscaledTime - animStartTime) / animTime);;
                 yield return null;
             }
+            
+            SetOpened();
         }
 
         public IEnumerator AnimateOut(float delay = 0)
@@ -53,6 +55,18 @@ namespace Aspekt.UI
                 rectTf.anchoredPosition = Vector2.Lerp(startPos, closedPos, (Time.unscaledTime - animStartTime) / animTime);;
                 yield return null;
             }
+            
+            SetClosed();
+        }
+
+        public void SetClosed()
+        {
+            rectTf.anchoredPosition = closedPos;
+        }
+
+        public void SetOpened()
+        {
+            rectTf.anchoredPosition = openedPos;
         }
     }
 }

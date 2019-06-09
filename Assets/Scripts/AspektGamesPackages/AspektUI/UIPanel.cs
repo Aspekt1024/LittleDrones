@@ -87,6 +87,7 @@ namespace Aspekt.UI
             canvasGroup.alpha = 1f;
             canvasGroup.blocksRaycasts = blocksRaycasts;
             canvasGroup.interactable = interactable;
+            uiAnimator.SetOpened();
             state = States.Open;
         }
 
@@ -99,6 +100,7 @@ namespace Aspekt.UI
                 canvasGroup.interactable = false;
                 gameObject.SetActive(false);
             }
+            uiAnimator.SetClosed();
             state = States.Closed;
         }
 

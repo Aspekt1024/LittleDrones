@@ -20,7 +20,7 @@ namespace Aspekt.AI
         {
             this.agent = agent;
         }
-
+        
         public void CalculateNewGoal()
         {
             var goals = new List<IAIGoal<L, V>>(agent.Goals.GetGoals());
@@ -63,7 +63,7 @@ namespace Aspekt.AI
 
         private bool IsGoalAchieveableByActions(IAIGoal<L, V> goal)
         {
-            // Checks if a goal is obtainable by any of the available actions on the agent.
+            // Checks if a goal is obtainable by any of the available actions (and sensors) on the agent.
             // If no actions on the agent meet the goal, the goal is deemed not achievable at this point.
             // If the goal is achievable, the actions' preconditions are checked by the AStar algorithm
 

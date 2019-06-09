@@ -16,6 +16,7 @@ namespace Aspekt.Drones
         
         protected override void SetPreconditions()
         {
+            AddPrecondition(AIAttributes.HasResourceSensor, true);
         }
 
         protected override void SetEffects()

@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+
 namespace Aspekt.AI
 {
     /// <summary>
@@ -8,11 +10,16 @@ namespace Aspekt.AI
     public interface ISensor<L, V>
     {
         /// <summary>
+        /// The effect for having this sensor active
+        /// </summary>
+        L[] Effects { get; }
+        
+        /// <summary>
         /// Initialises the sensor
         /// </summary>
         /// <param name="agent">The parent AI agent</param>
         void Init(IAIAgent<L, V> agent);
-        
+
         /// <summary>
         /// Tick is called once per frame, similar to MonoBehaviour.Update()
         /// </summary>

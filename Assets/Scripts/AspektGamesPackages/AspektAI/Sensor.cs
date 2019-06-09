@@ -11,6 +11,8 @@ namespace Aspekt.AI
         }
         private States state = States.NotInitialised;
 
+        public abstract L[] Effects { get; } 
+        
         public void Init(IAIAgent<L, V> agent)
         {
             this.agent = agent;

@@ -74,6 +74,7 @@ namespace Aspekt.AI
             }
             
             state = States.Running;
+            OnRun();
             QueueGoalCalculation();
         }
 
@@ -110,7 +111,12 @@ namespace Aspekt.AI
         public void LogKeyInfo<T>(T parent, string message) => logger.Log(AILogType.KeyInfo, parent, message);
 
         protected virtual void OnActionPlanComplete() { }
-        
+
+        /// <summary>
+        /// Called when Run() is called, and before the planner calculates an action plan
+        /// </summary>
+        protected virtual void OnRun() { }
+
         private void OnActionPlanFound()
         {
             executor.ExecutePlan(planner.GetActionPlan(), planner.GetGoal());

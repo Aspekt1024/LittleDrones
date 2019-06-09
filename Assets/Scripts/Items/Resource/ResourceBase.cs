@@ -12,5 +12,10 @@ namespace Aspekt.Drones
         public ResourceTypes resourceType;
         
         public Transform Transform => transform;
+
+        public override string ToString()
+        {
+            return resourceType.ToString();
+        }
     }
 }

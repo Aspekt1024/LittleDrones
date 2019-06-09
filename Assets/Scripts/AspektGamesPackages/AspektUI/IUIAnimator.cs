@@ -6,5 +6,8 @@ namespace Aspekt.UI
     {
         IEnumerator AnimateIn(float delay = 0f);
         IEnumerator AnimateOut(float delay = 0f);
+
+        void SetClosed();
+        void SetOpened();
     }
 }

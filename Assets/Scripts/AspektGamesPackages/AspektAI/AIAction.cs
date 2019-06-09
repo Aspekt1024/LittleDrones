@@ -69,6 +69,11 @@ namespace Aspekt.AI
             state = States.Disabled;
         }
 
+        public override string ToString()
+        {
+            return GetType().Name;
+        }
+
         protected abstract void SetPreconditions();
         protected abstract void SetEffects();
 

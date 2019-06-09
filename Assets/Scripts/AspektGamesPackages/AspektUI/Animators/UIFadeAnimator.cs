@@ -42,5 +42,15 @@ namespace Aspekt.UI
                 yield return null;
             }
         }
+
+        public void SetClosed()
+        {
+            canvasGroup.alpha = 0f;
+        }
+
+        public void SetOpened()
+        {
+            canvasGroup.alpha = 1f;
+        }
     }
 }

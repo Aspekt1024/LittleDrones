@@ -8,21 +8,23 @@ namespace Aspekt.Drones
     [Serializable]
     public class ResourceSensor : Sensor<AIAttributes, object>
     {
-        [Range(1f, 200f)]
-        public float DetectionRadius = 100f;
-        
+        [Range(1f, 200f)] public float DetectionRadius = 100f;
+
         public float RefreshRate = 1f;
 
         private ResourceTypes resourceType = ResourceTypes.None;
-        
+
         public enum Modes
         {
-            PeriodicUpdate, OnDemand,
+            PeriodicUpdate,
+            OnDemand,
         }
-        
+
         private Modes mode = Modes.OnDemand;
         private float timeLastSensed;
 
+        public override AIAttributes[] Effects => new [] { AIAttributes.HasResourceSensor };
+        
         public void SetUpdateMode(Modes newMode)
         {
             mode = newMode;
