@@ -31,7 +31,7 @@ namespace Aspekt.AI
 
         public T AddState<T>() where T : IMachineState<L, V>, new()
         {
-            T newState = new T();
+            var newState = new T();
             newState.Init(agent);
             Enqueue(newState);
             return newState;
@@ -45,7 +45,7 @@ namespace Aspekt.AI
         public void Stop()
         {
             state = States.Stopped;
-            currentState.Stop();
+            currentState?.Stop();
         }
 
         public void Pause()

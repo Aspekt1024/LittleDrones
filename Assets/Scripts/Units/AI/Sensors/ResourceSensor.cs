@@ -1,22 +1,19 @@
+using System;
 using System.Linq;
 using Aspekt.AI;
 using UnityEngine;
 
 namespace Aspekt.Drones
 {
-
+    [Serializable]
     public class ResourceSensor : Sensor<AIAttributes, object>
     {
-        private const float DetectionRadius = 100f;
-        private const float RefreshRate = 1f;
-        private const bool RequireLineOfSight = false;
+        [Range(1f, 200f)]
+        public float DetectionRadius = 100f;
+        
+        public float RefreshRate = 1f;
 
         private ResourceTypes resourceType = ResourceTypes.None;
-        
-        public void SetResourceType(ResourceTypes type)
-        {
-            resourceType = type;
-        }
         
         public enum Modes
         {
@@ -29,10 +26,11 @@ namespace Aspekt.Drones
         public void SetUpdateMode(Modes newMode)
         {
             mode = newMode;
-            if (mode == Modes.PeriodicUpdate && resourceType == ResourceTypes.None)
-            {
-                Debug.LogError("periodic update set, but no resource type to scan");
-            }
+        }
+        
+        public void SetResourceType(ResourceTypes type)
+        {
+            resourceType = type;
         }
 
         public ResourceBase[] ScanResources(ResourceTypes type)
@@ -40,8 +38,7 @@ namespace Aspekt.Drones
             var mask = 1 << LayerMask.NameToLayer("Resource");
             var colliders = Physics.OverlapSphere(agent.Transform.position, DetectionRadius, mask);
             
-            Debug.Log("resource collider count: " + colliders.Length);
-            // TODO line of sight
+            agent.LogInfo(this, $"found {colliders.Length} {type} resources");
 
             return colliders.Select(c => c.GetComponentInParent<ResourceBase>()).Where(r => r.resourceType == type).ToArray();
         }
@@ -71,7 +68,7 @@ namespace Aspekt.Drones
 
         protected override void OnTick(float deltaTime)
         {
-            if (mode != Modes.PeriodicUpdate) return;
+            if (mode != Modes.PeriodicUpdate || resourceType == ResourceTypes.None) return;
             
             if (Time.time > timeLastSensed + RefreshRate)
             {
@@ -83,7 +80,6 @@ namespace Aspekt.Drones
 
         protected override void OnRemove()
         {
-            // TODO remove objects from memory
         }
 
         protected override void OnEnable()

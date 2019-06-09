@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Aspekt.Drones;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Aspekt.AI
 {
@@ -34,9 +32,12 @@ namespace Aspekt.AI
             Memory.Init(this);
             Actions.Init(this);
             Sensors.Init(this);
+            Goals.Init(this);
             
             executor = new Executor<L, V>(this);
             planner = new Planner<L, V>(this);
+
+            planner.OnActionPlanFound += OnActionPlanFound;
         }
         
         private void Start()
@@ -52,6 +53,7 @@ namespace Aspekt.AI
             if (state == States.Running)
             {
                 Sensors.Tick(Time.deltaTime);
+                executor.Tick(Time.deltaTime);
             }
         }
         
@@ -62,6 +64,7 @@ namespace Aspekt.AI
                 Debug.LogError("Agent.Init() has not been called. This agent will not function.");
             }
             
+            LogInfo(this, "AI agent starting up");
             state = States.Running;
             planner.CalculateNewGoal();
         }
@@ -88,6 +91,13 @@ namespace Aspekt.AI
             Memory.Reset();
         }
 
-        public void Log(AILogType type, string message) => logger.Log(type, message);
+        public void LogTrace<T>(T parent, string message) => logger.Log(AILogType.Trace, parent, message);
+        public void LogInfo<T>(T parent, string message) => logger.Log(AILogType.Info, parent, message);
+        public void LogKeyInfo<T>(T parent, string message) => logger.Log(AILogType.KeyInfo, parent, message);
+
+        private void OnActionPlanFound()
+        {
+            executor.ExecutePlan(planner.GetActionPlan(), planner.GetGoal());
+        }
     }
 }

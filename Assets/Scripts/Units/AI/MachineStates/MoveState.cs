@@ -5,16 +5,16 @@ namespace Aspekt.Drones
 {
     public class MoveState<L, V> : MachineState<L, V>
     {
-        private readonly IMovement movement;
+        private IMovement movement;
         
-        public MoveState(IMovement moveBehaviour)
+        protected override void OnInit()
         {
-            movement = moveBehaviour;
+            movement = agent.Owner.GetComponent<IMoveable>().GetMovement();
         }
 
         public override void Start()
         {
-            
+            movement.Run();
         }
 
         public override void Pause()

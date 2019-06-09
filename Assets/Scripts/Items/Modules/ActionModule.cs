@@ -1,42 +1,33 @@
+using Aspekt.AI;
 using Aspekt.Items;
 using UnityEngine;
 
 namespace Aspekt.Drones
 {
-    public enum ActionModules
+    public abstract class ActionModule : InventoryItem, IDroneModule
     {
-        GatherResource
-    }
-    
-    [CreateAssetMenu(fileName = "New Module", menuName = "Drone/Action Module")]
-    public class ActionModule : InventoryItem, IDroneModule
-    {
-        public ActionModules actionType;
+        private IAIAction<AIAttributes, object> action;
         
         public void AttachTo(DroneAIAgent agent)
         {
-            switch (actionType)
-            {
-                case ActionModules.GatherResource:
-                    agent.Actions.AddAction<GatherIronAction>();
-                    break;
-                default:
-                    Debug.LogError("invalid AI action type: " + actionType);
-                    break;
-            }
+            agent.Actions.AddAction(action);
         }
 
         public void RemoveFrom(DroneAIAgent agent)
         {
-            switch (actionType)
-            {
-                case ActionModules.GatherResource:
-                    agent.Actions.RemoveAction<GatherIronAction>();
-                    break;
-                default:
-                    Debug.LogError("invalid AI action type: " + actionType);
-                    break;
-            }
+            agent.Actions.AddAction(action);
         }
+
+        public virtual bool IsTypeMatch(ActionModule other)
+        {
+            return other.GetType() == GetType();
+        }
+        
+        private void Awake()
+        {
+            action = CreateAction();
+        }
+
+        protected abstract AIAction<AIAttributes, object> CreateAction();
     }
 }

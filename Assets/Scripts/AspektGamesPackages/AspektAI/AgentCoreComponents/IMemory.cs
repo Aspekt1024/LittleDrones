@@ -19,7 +19,6 @@ namespace Aspekt.AI
         /// Returns true if the given label matches the given value
         /// </summary>
         bool IsMatch(L label, V value);
-
         
         /// <summary>
         /// Returns true if the given key value pair matches the memory entry
@@ -30,6 +29,11 @@ namespace Aspekt.AI
         /// Sets the memory state of the given label to the given value
         /// </summary>
         void Set(L label, V value);
+
+        /// <summary>
+        /// Gets the value of the memory state for the given label. Returns default if the label doesn't exist
+        /// </summary>
+        V Get(L label);
 
         /// <summary>
         /// Removes the memory label from the memory state (IsMatch checks will return false until it's set again)

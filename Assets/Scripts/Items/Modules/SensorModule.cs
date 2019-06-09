@@ -6,40 +6,30 @@ using UnityEngine;
 
 namespace Aspekt.Drones
 {
-    public enum SensorModules
+    public abstract class SensorModule : InventoryItem, IDroneModule
     {
-        ResourceScanner,
-    }
-    
-    [CreateAssetMenu(fileName = "New Module", menuName = "Drone/Sensor Module")]
-    public class SensorModule : InventoryItem, IDroneModule
-    {
-        public SensorModules sensorType;
-
+        private Sensor<AIAttributes, object> sensor;
+        
         public void AttachTo(DroneAIAgent agent)
         {
-            switch (sensorType)
-            {
-                case SensorModules.ResourceScanner:
-                    agent.Sensors.AddSensor<ResourceSensor>();
-                    break;
-                default:
-                    Debug.LogError("invalid sensor type: " + sensorType);
-                    break;
-            }
+            agent.Sensors.AddSensor(sensor);
         }
 
         public void RemoveFrom(DroneAIAgent agent)
         {
-            switch (sensorType)
-            {
-                case SensorModules.ResourceScanner:
-                    agent.Sensors.RemoveSensor<ResourceSensor>();
-                    break;
-                default:
-                    break;
-            }
+            agent.Sensors.RemoveSensor(sensor);
         }
-        
+
+        public virtual bool IsTypeMatch(SensorModule other)
+        {
+            return other.GetType() == GetType();
+        }
+
+        private void Awake()
+        {
+            sensor = CreateSensor();
+        }
+
+        protected abstract Sensor<AIAttributes, object> CreateSensor();
     }
 }

@@ -268,14 +268,23 @@
             </e>
           </e>
           <e p="Items" t="Include">
+            <e p="IItem.cs" t="Include" />
             <e p="Modules" t="Include">
               <e p="ActionModule.cs" t="Include" />
+              <e p="ActionModules" t="Include">
+                <e p="FindResourceActionModule.cs" t="Include" />
+                <e p="PickupItemActionModule.cs" t="Include" />
+              </e>
               <e p="GoalModule.cs" t="Include" />
               <e p="GoalModules" t="Include">
                 <e p="GatherResourceGoalModule.cs" t="Include" />
+                <e p="PickupResourceGoalModule.cs" t="Include" />
               </e>
               <e p="IDroneModule.cs" t="Include" />
               <e p="SensorModule.cs" t="Include" />
+              <e p="SensorModules" t="Include">
+                <e p="ResourceSensorModule.cs" t="Include" />
+              </e>
             </e>
             <e p="Resource" t="Include">
               <e p="IronResource.cs" t="Include" />
@@ -305,12 +314,14 @@
           <e p="Units" t="Include">
             <e p="AI" t="Include">
               <e p="Actions" t="Include">
-                <e p="GatherIronAction.cs" t="Include" />
+                <e p="FindResourceAction.cs" t="Include" />
+                <e p="PickupItemAction.cs" t="Include" />
               </e>
               <e p="AIAttributes.cs" t="Include" />
               <e p="DroneAIAgent.cs" t="Include" />
               <e p="Goals" t="Include">
                 <e p="GatherResourceGoal.cs" t="Include" />
+                <e p="PickUpResourceGoal.cs" t="Include" />
               </e>
               <e p="MachineStates" t="Include">
                 <e p="AnimationState.cs" t="Include" />
@@ -329,6 +340,7 @@
                 <e p="SensorInventory.cs" t="Include" />
               </e>
             </e>
+            <e p="ICanAnimate.cs" t="Include" />
             <e p="IUnit.cs" t="Include" />
             <e p="Movement" t="Include">
               <e p="BasicMovement.cs" t="Include" />

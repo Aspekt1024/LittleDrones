@@ -55,10 +55,24 @@ namespace Aspekt.AI
         void Stop();
 
         /// <summary>
-        /// Logs a standard message relating to the AI agent's behaviour
+        /// Logs an informational message relating to the AI agent's behaviour
         /// </summary>
-        /// <param name="type">The message type/category</param>
+        /// <param name="parent">the parent class (usually 'this')</param>
         /// <param name="message">The message to log</param>
-        void Log(AILogType type, string message);
+        void LogInfo<T>(T parent, string message);
+
+        /// <summary>
+        /// Logs key information relating to the AI agent's behaviour
+        /// </summary>
+        /// <param name="parent">the parent class (usually 'this')</param>
+        /// <param name="message">The message to log</param>
+        void LogKeyInfo<T>(T parent, string message);
+
+        /// <summary>
+        /// Logs debug trace messages relating to the AI agent's behaviour
+        /// </summary>
+        /// <param name="parent">the parent class (usually 'this')</param>
+        /// <param name="message">The message to log</param>
+        void LogTrace<T>(T parent, string message);
     }
 }

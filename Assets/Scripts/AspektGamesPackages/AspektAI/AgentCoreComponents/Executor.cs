@@ -41,6 +41,8 @@ namespace Aspekt.AI
 
         public void ExecutePlan(Queue<IAIAction<L, V>> newActionPlan, IAIGoal<L, V> goal)
         {
+            agent.LogInfo(this, "Executing plan...");
+            
             if (state == States.Paused || state == States.Running)
             {
                 Stop();
@@ -48,6 +50,8 @@ namespace Aspekt.AI
 
             actionPlan = newActionPlan;
             currentGoal = goal;
+
+            goal.SetupGoal();
             
             state = States.Running;
             BeginNextAction();
@@ -59,6 +63,7 @@ namespace Aspekt.AI
             {
                 stateMachine.Stop();
             }
+            state = States.Stopped;
         }
 
         public void Pause()
@@ -79,16 +84,19 @@ namespace Aspekt.AI
 
         private void BeginNextAction()
         {
+            agent.LogTrace(this, "starting next action");
             if (actionPlan.Count == 0)
             {
                 currentAction = null;
                 state = States.Stopped;
                 OnPlanFinished?.Invoke();
+                agent.LogInfo(this, "no more actions. Plan has finished");
                 return;
             }
             
             currentAction = actionPlan.Dequeue();
-            var success = currentAction.Begin(stateMachine, OnActionSuccess, OnActionFailure);
+            agent.LogInfo(this, $"action starting: {currentAction}");
+            var success = currentAction.Enter(stateMachine, OnActionSuccess, OnActionFailure);
             if (!success)
             {
                 OnActionFailure();
@@ -97,6 +105,7 @@ namespace Aspekt.AI
 
         private void OnActionSuccess()
         {
+            agent.LogInfo(this, $"action succeeded: {currentAction}");
             foreach (var effect in currentAction.GetEffects())
             {
                 agent.Memory.Set(effect.Key, effect.Value);
@@ -113,6 +122,7 @@ namespace Aspekt.AI
 
             if (goalAchieved)
             {
+                agent.LogKeyInfo(this, $"{currentGoal} achieved");
                 Stop();
                 OnPlanFinished?.Invoke();
             }
@@ -124,6 +134,7 @@ namespace Aspekt.AI
 
         private void OnActionFailure()
         {
+            agent.LogInfo(this, $"action failed: {currentAction}");
             Stop();
             OnPlanFinished?.Invoke();
         }

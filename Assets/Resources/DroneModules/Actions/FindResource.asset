@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5202841f377b6ca439b571b26efbda90, type: 3}
-  m_Name: GatherResource
+  m_Script: {fileID: 11500000, guid: eb9c0d8c627e4530b7342a9485435e88, type: 3}
+  m_Name: FindResource
   m_EditorClassIdentifier: 
-  itemName: Gather Resource Action
-  description: An action that gathers a specified resource
-  icon: {fileID: 21300000, guid: c6b828ebf1d12ab448fc5b321c852c04, type: 3}
-  actionType: 0
+  itemName: Find Resource Action
+  description: An action that finds a resource
+  icon: {fileID: 21300000, guid: 4800731ef4eae344c85a8e9b24fb7278, type: 3}

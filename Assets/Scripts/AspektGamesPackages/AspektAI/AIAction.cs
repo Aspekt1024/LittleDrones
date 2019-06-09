@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.UIElements;
 
 namespace Aspekt.AI
 {
     public abstract class AIAction<L, V> : IAIAction<L, V>
     {
-        protected IAIAgent<L, V> agent;
+        protected IAIAgent<L, V> Agent;
+        protected Action ActionSuccess;
+        protected Action ActionFailure;
         
         private enum States
         {
@@ -13,12 +16,17 @@ namespace Aspekt.AI
         }
         private States state = States.NotInitialised;
 
+        private readonly Dictionary<L, V> preconditions = new Dictionary<L, V>();
+        private readonly Dictionary<L, V> effects = new Dictionary<L, V>();
+
         public abstract float Cost { get; }
 
         public void Init(IAIAgent<L, V> agent)
         {
-            this.agent = agent;
+            Agent = agent;
             state = States.Enabled;
+            SetPreconditions();
+            SetEffects();
             OnInit();
         }
 
@@ -29,17 +37,22 @@ namespace Aspekt.AI
                 OnTick(deltaTime);
             }
         }
-        
-        public abstract bool Begin(IStateMachine<L, V> stateMachine, Action onSuccessCallback, Action onFailureCallback);
 
-        public abstract Dictionary<L, V> GetPreconditions();
+        public bool Enter(IStateMachine<L, V> stateMachine, Action onSuccessCallback, Action onFailureCallback)
+        {
+            ActionSuccess = onSuccessCallback;
+            ActionFailure = onFailureCallback;
+            return Begin(stateMachine);
+        }
+
+        public Dictionary<L, V> GetPreconditions() => preconditions;
+        public Dictionary<L, V> GetEffects() => effects;
 
         public virtual bool CheckProceduralPreconditions()
         {
             return state == States.Enabled;
         }
         
-        public abstract Dictionary<L, V> GetEffects();
 
         public void Enable()
         {
@@ -58,15 +71,33 @@ namespace Aspekt.AI
             OnRemove();
         }
 
-        public abstract bool IsComplete();
+        protected abstract void SetPreconditions();
+        protected abstract void SetEffects();
 
+        protected void AddPrecondition(L label, V value)
+        {
+            preconditions.Add(label, value);
+        }
+
+        protected void AddEffect(L label, V value)
+        {
+            effects.Add(label, value);
+        }
+        
         protected abstract void OnTick(float deltaTime);
         
         /// <summary>
         /// Called after Init to allow child classes to have custom setup options
         /// </summary>
         protected virtual void OnInit() {}
-
+        
+        /// <summary>
+        /// Called when the action begins operation
+        /// </summary>
+        /// <param name="stateMachine">The AI agent's state machine</param>
+        /// <returns>True if the action successfully began</returns>
+        protected abstract bool Begin(IStateMachine<L, V> stateMachine);
+        
         /// <summary>
         /// Called when the action is removed to allow cleanup (e.g. exiting co-routines safely)
         /// </summary>

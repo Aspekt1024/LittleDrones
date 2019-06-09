@@ -46,10 +46,10 @@ namespace Aspekt.AI
 
         public override string ToString()
         {
-            return GetType().ToString();
+            return GetType().Name;
         }
 
-        public abstract void ResetGoal();
+        public abstract void SetupGoal();
 
         protected abstract void SetConditions();
 

@@ -5,18 +5,15 @@ namespace Aspekt.Drones
 {
     public class AnimationState<L, V> : MachineState<L, V>
     {
-        private readonly Animator animator;
-        private readonly string animation;
+        private Animator animator;
         
-        public AnimationState(Animator animator, string animation)
+        protected override void OnInit()
         {
-            this.animator = animator;
-            this.animation = animation;
+            animator = agent.Owner.GetComponent<ICanAnimate>().GetAnimator();;
         }
 
         public override void Start()
         {
-            animator.Play(animation, 0, 0f);
         }
 
         public override void Pause()
@@ -27,6 +24,11 @@ namespace Aspekt.Drones
         public override void Stop()
         {
             animator.StopPlayback();
+        }
+
+        public void PlayAnimation(string animation)
+        {
+            animator.Play(animation, 0, 0f);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Aspekt.Drones
             resourceType = type;
         }
         
-        public override void ResetGoal()
+        public override void SetupGoal()
         {
             var attribute = GetAttribute();
             if (attribute == AIAttributes.Invalid) return;

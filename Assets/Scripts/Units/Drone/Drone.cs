@@ -4,7 +4,7 @@ using Aspekt.Items;
 
 namespace Aspekt.Drones
 {
-    public class Drone : UnitBase, IMoveable
+    public class Drone : UnitBase, IMoveable, ICanAnimate
     {
 #pragma warning disable 649
         [SerializeField] private DroneAIAgent ai;
@@ -17,6 +17,7 @@ namespace Aspekt.Drones
 #pragma warning restore 649
 
         private IMovement movement;
+        private Animator animator;
 
         private void Awake()
         {
@@ -26,6 +27,11 @@ namespace Aspekt.Drones
             goalSlots.Init(ai);
             
             movement = new BasicMovement(GetComponent<Rigidbody>());
+            animator = GetComponent<Animator>();
+            
+            // TODO set these through abilities
+            ai.Memory.Set(AIAttributes.CanMove, true);
+            ai.Memory.Set(AIAttributes.CanPickupItems, true);
         }
 
         public void StartAI()
@@ -34,15 +40,10 @@ namespace Aspekt.Drones
         }
 
         public IMovement GetMovement() => movement;
-
-        private void OnTriggerEnter(Collider other)
-        {
-        }
-
+        public Animator GetAnimator() => animator;
+        
         private void Update()
         {
-            movement.Tick(Time.deltaTime);
-            
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 var unitUI = GameManager.UI.Get<UnitUI>();
@@ -76,15 +77,19 @@ namespace Aspekt.Drones
 
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                var modulePrefab = Resources.Load<SensorModule>("DroneModules/Sensors/ResourceScanner");
+                var modulePrefab = Resources.Load<SensorModule>("DroneModules/Sensors/ResourceSensor");
                 var module = Instantiate(modulePrefab);
                 inventory.AddItem(module);
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                var modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/GatherResource");
+                var modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/PickupItem");
                 var module = Instantiate(modulePrefab);
+                inventory.AddItem(module);
+
+                modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/FindResource");
+                module = Instantiate(modulePrefab);
                 inventory.AddItem(module);
             }
 
@@ -93,17 +98,11 @@ namespace Aspekt.Drones
                 var modulePrefab = Resources.Load<GoalModule>("DroneModules/Goals/GatherIronGoal");
                 var module = Instantiate(modulePrefab);
                 inventory.AddItem(module);
+                
+                modulePrefab = Resources.Load<GoalModule>("DroneModules/Goals/PickupResource");
+                module = Instantiate(modulePrefab);
+                inventory.AddItem(module);
             }
-        }
-
-        private void OnMainInventoryItemAdded(InventoryItem item)
-        {
-            Debug.Log("item added: " + item.itemName);
-        }
-
-        private void OnMainInventoryItemRemoved(InventoryItem item)
-        {
-            Debug.Log(("item removed: " + item.itemName));
         }
     }
 }

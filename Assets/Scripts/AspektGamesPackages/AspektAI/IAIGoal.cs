@@ -42,8 +42,8 @@ namespace Aspekt.AI
         void Disable();
 
         /// <summary>
-        /// Resets the AI agent's goal state
+        /// Sets the AI agent's goal state
         /// </summary>
-        void ResetGoal();
+        void SetupGoal();
     }
 }

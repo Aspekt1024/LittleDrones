@@ -70,6 +70,11 @@ namespace Aspekt.Drones
             body.velocity = distVector.normalized * speed;
         }
 
+        public void Run()
+        {
+            state = States.Moving;
+        }
+
         public void Stop(bool immediate = false)
         {
             if (immediate)

@@ -51,6 +51,15 @@ namespace Aspekt.AI
             }
         }
 
+        public V Get(L label)
+        {
+            if (state.ContainsKey(label))
+            {
+                return state[label];
+            }
+            return default;
+        }
+
         public void Remove(L label)
         {
             state.Remove(label);

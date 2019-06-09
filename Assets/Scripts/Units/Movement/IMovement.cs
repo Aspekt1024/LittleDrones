@@ -21,6 +21,11 @@ namespace Aspekt.Drones
 	    void Tick(float deltaTime);
 
 	    /// <summary>
+	    /// Starts / Resumes movement
+	    /// </summary>
+	    void Run();
+
+	    /// <summary>
 	    /// Stops any movement
 	    /// </summary>
 	    /// <param name="immediate">Set to true if the unit should stop immediately</param>

@@ -6,6 +6,11 @@ namespace Aspekt.AI
     public enum AILogType
     {
         /// <summary>
+        /// Debug message type
+        /// </summary>
+        Trace,
+        
+        /// <summary>
         /// A minor message type
         /// </summary>
         Info,
@@ -29,40 +34,53 @@ namespace Aspekt.AI
             None,
             
             /// <summary>
-            /// All messages will be logged from the AI agent 
+            /// All messages (except trace messages) will be logged from the AI agent 
             /// </summary>
             Debug,
             
             /// <summary>
             /// Only key messages will be logged from the AI agent
             /// </summary>
-            Standard
+            Standard,
+            
+            /// <summary>
+            /// All messages will be logged from the AI agent
+            /// </summary>
+            Trace
         }
         
-        public LogLevels LogLevel;
+        private readonly LogLevels logLevel;
 
         public AILogger(LogLevels level)
         {
-            LogLevel = level;
+            logLevel = level;
         }
 
-        public void Log(AILogType type, string message)
+        public void Log<T>(AILogType type, T parent, string message)
         {
-            if (LogLevel == LogLevels.None) return;
-            
+            if (logLevel == LogLevels.None) return;
+
+            string prefix = typeof(T).Name;
+
+            bool shouldLog = false;
             switch (type)
             {
+                case AILogType.Trace:
+                    shouldLog = logLevel == LogLevels.Trace;
+                    break;
                 case AILogType.Info:
-                    if (LogLevel == LogLevels.Debug)
-                    {
-                        Debug.Log(message);
-                    }
+                    shouldLog = logLevel == LogLevels.Debug || logLevel == LogLevels.Trace;
                     break;
                 case AILogType.KeyInfo:
-                    Debug.Log(message);
+                    shouldLog = true;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+
+            if (shouldLog)
+            {
+                Debug.Log($"{prefix}: {message}");
             }
         }
     }

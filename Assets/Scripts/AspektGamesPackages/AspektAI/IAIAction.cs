@@ -28,10 +28,10 @@ namespace Aspekt.AI
         void Tick(float deltaTime);
 
         /// <summary>
-        /// Starts the action
+        /// Called by the AI agent's executor to begin execution of the action
         /// </summary>
         /// <returns>true if the action started successfully (preconditions were met, etc)</returns>
-        bool Begin(IStateMachine<L, V> stateMachine, Action onSuccessCallback, Action onFailureCallback);
+        bool Enter(IStateMachine<L, V> stateMachine, Action onSuccessCallback, Action onFailureCallback);
 
         /// <summary>
         /// Returns the preconditions required for the action to run
@@ -63,10 +63,5 @@ namespace Aspekt.AI
         /// Used to clean up the action upon removal
         /// </summary>
         void Remove();
-
-        /// <summary>
-        /// Determines if the action has been completed
-        /// </summary>
-        bool IsComplete();
     }
 }

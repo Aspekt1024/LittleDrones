@@ -34,24 +34,21 @@ namespace Aspekt.AI
         /// Enables all the sensors on the AI agent
         /// </summary>
         void EnableSensors();
-        
+
         /// <summary>
-        /// Adds a sensor of the given type to the AI agent
+        /// Adds the given sensor to the AI agent. Replaces sensors of the same type that exist on the AI agent already
         /// </summary>
-        /// <typeparam name="TSensor">The sensor type to add</typeparam>
-        void AddSensor<TSensor>() where TSensor : ISensor<L, V>, new();
-        
+        void AddSensor(ISensor<L, V> sensor);
+
         /// <summary>
-        /// Removes a sensor of the given type, if it exists on the AI agent
+        /// Removes the sensor from the AI agent
         /// </summary>
-        /// <typeparam name="TSensor">The sensor type to remove</typeparam>
-        void RemoveSensor<TSensor>() where TSensor : ISensor<L, V>;
+        /// <param name="sensor"></param>
+        void RemoveSensor(ISensor<L, V> sensor);
 
         /// <summary>
         /// Retrieves a sensor of the given type if it exists on the AI agent
         /// </summary>
-        /// <typeparam name="TSensor"></typeparam>
-        /// <returns></returns>
         TSensor Get<TSensor>();
     }
 }

@@ -27,7 +27,7 @@ namespace Aspekt.Drones
             {
                 if (slot.IsEmpty || slot == item.GetCurrentSlot()) continue;
                 var existingModule = (SensorModule)slot.GetItem();
-                if (existingModule.sensorType == module.sensorType) return ItemAddResult.DuplicateType;
+                if (existingModule.IsTypeMatch(module)) return ItemAddResult.DuplicateType;
             }
 
             return ItemAddResult.Success;

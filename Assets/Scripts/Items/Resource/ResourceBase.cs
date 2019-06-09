@@ -7,8 +7,10 @@ namespace Aspekt.Drones
         None, Iron, Coal, Copper
     }
     
-    public abstract class ResourceBase : MonoBehaviour
+    public abstract class ResourceBase : MonoBehaviour, IItem
     {
         public ResourceTypes resourceType;
+        
+        public Transform Transform => transform;
     }
 }

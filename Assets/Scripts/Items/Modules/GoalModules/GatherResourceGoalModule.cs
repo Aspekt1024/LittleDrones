@@ -21,6 +21,5 @@ namespace Aspekt.Drones
             }
             return false;
         }
-
     }
 }

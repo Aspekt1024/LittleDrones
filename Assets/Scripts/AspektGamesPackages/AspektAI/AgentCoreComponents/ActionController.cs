@@ -36,18 +36,20 @@ namespace Aspekt.AI
             }
         }
 
-        public void AddAction<TAction>() where TAction : IAIAction<L, V>, new()
+        public void AddAction(IAIAction<L, V> action)
         {
-            if (actions.Any(s => s is L)) return;
-            
-            var action = new TAction();
+            var matchedActions = actions.Where(g => g is L).ToArray();
+            foreach (var matchedAction in matchedActions)
+            {
+                RemoveAction(matchedAction);
+            }
             action.Init(agent);
             actions.Add(action);
         }
 
-        public void RemoveAction<TAction>() where TAction : IAIAction<L, V>
+        public void RemoveAction(IAIAction<L, V> action)
         {
-            actions.RemoveAll(s => s is TAction);
+            actions.Remove(action);
         }
     }
 }

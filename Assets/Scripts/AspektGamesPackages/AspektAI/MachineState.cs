@@ -11,6 +11,7 @@ namespace Aspekt.AI
         public void Init(IAIAgent<L, V> parentAgent)
         {
             agent = parentAgent;
+            OnInit();
         }
 
         public virtual void Tick(float deltaTime)
@@ -23,12 +24,17 @@ namespace Aspekt.AI
 
         public override string ToString()
         {
-            return GetType().ToString();
+            return GetType().Name;
         }
 
         protected void StateComplete()
         {
             OnComplete?.Invoke();
         }
+
+        /// <summary>
+        /// Called at the end of the Init phase for custom state setup
+        /// </summary>
+        protected abstract void OnInit();
     }
 }

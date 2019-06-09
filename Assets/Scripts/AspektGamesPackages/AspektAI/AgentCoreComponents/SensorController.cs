@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Aspekt.AI
 {
-    // Manages the agent's sensors
+    // Manages the AI agent's sensors
     public class SensorController<L, V> : ISensorController<L, V>
     {
         private IAIAgent<L, V> agent;
@@ -37,6 +37,8 @@ namespace Aspekt.AI
             }
         }
 
+        public List<ISensor<L, V>> GetSensors() => sensors;
+
         public void DisableSensors()
         {
             if (state == States.Enabled)
@@ -57,20 +59,20 @@ namespace Aspekt.AI
             }
         }
 
-        public List<ISensor<L, V>> GetSensors() => new List<ISensor<L, V>>(sensors);
-
-        public void AddSensor<TSensor>() where TSensor : ISensor<L, V>, new()
+        public void AddSensor(ISensor<L, V> sensor)
         {
-            if (sensors.Any(s => s is L)) return;
-            
-            var sensor = new TSensor();
+            var matchedSensors = sensors.Where(g => g is L).ToArray();
+            foreach (var matchedSensor in matchedSensors)
+            {
+                RemoveSensor(matchedSensor);
+            }
             sensor.Init(agent);
             sensors.Add(sensor);
         }
 
-        public void RemoveSensor<TSensor>() where TSensor : ISensor<L, V>
+        public void RemoveSensor(ISensor<L, V> sensor)
         {
-            sensors.RemoveAll(s => s is TSensor);
+            sensors.Remove(sensor);
         }
 
         public TSensor Get<TSensor>()

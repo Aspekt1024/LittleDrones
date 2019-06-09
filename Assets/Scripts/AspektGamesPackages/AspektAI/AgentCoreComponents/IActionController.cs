@@ -27,17 +27,16 @@ namespace Aspekt.AI
         /// Enables all the actions on the agent
         /// </summary>
         void EnableActions();
+
+        /// <summary>
+        /// Adds the given action to the AI agent. Replaces actions of the same type that exist on the AI agent already
+        /// </summary>
+        void AddAction(IAIAction<L, V> action);
         
         /// <summary>
-        /// Adds an action of the given type to the agent
+        /// Removes the action from the AI agent
         /// </summary>
-        /// <typeparam name="TAction">The sensor type to add</typeparam>
-        void AddAction<TAction>() where TAction : IAIAction<L, V>, new();
-        
-        /// <summary>
-        /// Removes an action of the given type, if it exists on the agent
-        /// </summary>
-        /// <typeparam name="TAction">The sensor type to remove</typeparam>
-        void RemoveAction<TAction>() where TAction : IAIAction<L, V>;
+        /// <param name="action"></param>
+        void RemoveAction(IAIAction<L, V> action);
     }
 }
