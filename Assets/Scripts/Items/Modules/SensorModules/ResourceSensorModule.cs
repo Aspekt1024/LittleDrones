@@ -1,7 +1,7 @@
 using Aspekt.AI;
 using UnityEngine;
 
-namespace Aspekt.Drones.SensorModules
+namespace Aspekt.Drones
 {
     [CreateAssetMenu(fileName = "New Resource Sensor Module", menuName = "Drone/Sensor Module/Resource Sensor")]
     public class ResourceSensorModule : SensorModule

@@ -271,12 +271,13 @@
             </e>
           </e>
           <e p="Items" t="Include">
-            <e p="IItem.cs" t="Include" />
+            <e p="IGrabbableItem.cs" t="Include" />
             <e p="Modules" t="Include">
               <e p="ActionModule.cs" t="Include" />
               <e p="ActionModules" t="Include">
                 <e p="FindResourceActionModule.cs" t="Include" />
                 <e p="PickupItemActionModule.cs" t="Include" />
+                <e p="StoreItemActionModule.cs" t="Include" />
               </e>
               <e p="GoalModule.cs" t="Include" />
               <e p="GoalModules" t="Include">
@@ -286,6 +287,7 @@
               <e p="IDroneModule.cs" t="Include" />
               <e p="SensorModule.cs" t="Include" />
               <e p="SensorModules" t="Include">
+                <e p="BuildingSensorModule.cs" t="Include" />
                 <e p="ResourceSensorModule.cs" t="Include" />
               </e>
             </e>
@@ -305,9 +307,10 @@
           <e p="Objects" t="Include">
             <e p="Buildings" t="Include">
               <e p="BuildingBase.cs" t="Include" />
+              <e p="IStorage.cs" t="Include" />
+              <e p="ResourceDepot.cs" t="Include" />
             </e>
             <e p="IObject.cs" t="Include" />
-            <e p="ResourceDepot.cs" t="Include" />
           </e>
           <e p="UI" t="Include">
             <e p="DronePanel.cs" t="Include" />
@@ -321,6 +324,7 @@
               <e p="Actions" t="Include">
                 <e p="FindResourceAction.cs" t="Include" />
                 <e p="PickupItemAction.cs" t="Include" />
+                <e p="StoreItemAction.cs" t="Include" />
               </e>
               <e p="AIAttributes.cs" t="Include" />
               <e p="DroneAIAgent.cs" t="Include" />
@@ -333,6 +337,7 @@
                 <e p="MoveState.cs" t="Include" />
               </e>
               <e p="Sensors" t="Include">
+                <e p="BuildingSensor.cs" t="Include" />
                 <e p="ResourceSensor.cs" t="Include" />
               </e>
             </e>
@@ -346,6 +351,10 @@
               </e>
             </e>
             <e p="ICanAnimate.cs" t="Include" />
+            <e p="ItemInteraction" t="Include">
+              <e p="ICanGrab.cs" t="Include" />
+              <e p="IGrabber.cs" t="Include" />
+            </e>
             <e p="IUnit.cs" t="Include" />
             <e p="Movement" t="Include">
               <e p="BasicMovement.cs" t="Include" />

@@ -9,10 +9,13 @@ namespace Aspekt.Drones
     public class FindResourceAction : AIAction<AIAttributes, object>
     {
         public override float Cost => 1f;
+        public float ScanTime = 0.5f;
         
         private ResourceSensor sensor;
-
         private ResourceTypes resourceType;
+
+        // TODO set as animation
+        private float timeStartedScanning;
         
         protected override void SetPreconditions()
         {
@@ -26,6 +29,8 @@ namespace Aspekt.Drones
 
         protected override void OnTick(float deltaTime)
         {
+            if (Time.time < timeStartedScanning + ScanTime) return;
+            
             var item = sensor.GetClosestResource(resourceType, Agent.Transform.position);
             if (item == null)
             {
@@ -45,6 +50,8 @@ namespace Aspekt.Drones
 
             resourceType = (ResourceTypes)Agent.Memory.Get(AIAttributes.ResourceGoalType);
             if (resourceType == ResourceTypes.None) return false;
+
+            timeStartedScanning = Time.time;
             
             return true;
         }

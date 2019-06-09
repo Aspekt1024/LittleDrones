@@ -3,9 +3,6 @@ namespace Aspekt.Drones
     public enum AIAttributes
     {
         Invalid,
-        HasGatheredIron,
-        HasGatheredCopper,
-        HasGatheredCoal,
         
         ResourceGoalType,
         HasItemToGather,
@@ -14,8 +11,13 @@ namespace Aspekt.Drones
         IsHoldingItem,
         HeldItem,
         
+        // Abilities
         CanMove,
         CanPickupItems,
-        HasResourceSensor
+        
+        // Sensors
+        HasResourceSensor,
+        HasBuildingSensor,
+        HasGatheredResource
     }
 }

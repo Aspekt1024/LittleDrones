@@ -7,7 +7,7 @@ namespace Aspekt.Drones
     {
         private const float SqrProximityThreshold = 4f * 4f;    // Slow down at this distance
         private const float SqrTargetReachedThreshold = 0.7f;      // Stop at this distance
-        private const float MaxSpeed = 3f;
+        private const float MaxSpeed = 8f;
         private const float MinSpeed = 1f;
 
         private readonly Rigidbody body;

@@ -10,20 +10,20 @@ namespace Aspekt.AI
         
         private Queue<IAIAction<L, V>> actionPlan;
         private IAIGoal<L, V> currentGoal;
-        private IAIAction<L, V> currentAction;
+        private IAIAction<L, V> _currentAction;
 
         private IAIAction<L, V> CurrentAction
         {
-            get => currentAction;
+            get => _currentAction;
             set
             {
-                if (currentAction != null)
+                if (_currentAction != null)
                 {
-                    currentAction.OnActionFailed -= OnActionFailure;
-                    currentAction.OnActionSucceeded -= OnActionSuccess;
+                    _currentAction.OnActionFailed -= OnActionFailure;
+                    _currentAction.OnActionSucceeded -= OnActionSuccess;
                 }
 
-                currentAction = value;
+                _currentAction = value;
             }
         }
 
@@ -78,7 +78,15 @@ namespace Aspekt.AI
             if (CurrentAction != null)
             {
                 stateMachine.Stop();
+                CurrentAction = null;
             }
+
+            if (currentGoal != null)
+            {
+                currentGoal.ResetGoal();
+                currentGoal = null;
+            }
+            
             state = States.Stopped;
         }
 
@@ -105,18 +113,15 @@ namespace Aspekt.AI
                 return "Inactive";
             }
             var status = state.ToString();
-            if (currentGoal != null)
+            if (currentGoal == null) return status;
+            
+            status += "\n\n<b>Goal:</b> " + currentGoal;
+            if (actionPlan == null || CurrentAction == null) return status;
+            
+            status += "\n\n<b>Action Plan:</b>\n" + _currentAction;;
+            foreach (var a in actionPlan)
             {
-                status += "\n\n<b>Goal:</b> " + currentGoal;
-            }
-
-            if (actionPlan != null)
-            {
-                status += "\n\n<b>Action Plan:</b>";
-                foreach (var a in actionPlan)
-                {
-                    status += "\n" + a;
-                }
+                status += "\n" + a;
             }
             
             return status;

@@ -23,7 +23,7 @@ namespace Aspekt.Drones
         private Modes mode = Modes.OnDemand;
         private float timeLastSensed;
 
-        public override AIAttributes[] Effects => new [] { AIAttributes.HasResourceSensor };
+        public override AIAttributes[] Effects { get; } = { AIAttributes.HasResourceSensor };
         
         public void SetUpdateMode(Modes newMode)
         {

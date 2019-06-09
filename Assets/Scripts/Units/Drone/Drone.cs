@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
-using Aspekt.AI;
-using Aspekt.Items;
 
 namespace Aspekt.Drones
 {
-    public class Drone : UnitBase, IMoveable, ICanAnimate
+    public class Drone : UnitBase, IMoveable, ICanAnimate, ICanGrab
     {
 #pragma warning disable 649
         [SerializeField] private DroneAIAgent ai;
@@ -85,29 +83,37 @@ namespace Aspekt.Drones
             {
                 var modulePrefab = Resources.Load<SensorModule>("DroneModules/Sensors/ResourceSensor");
                 var module = Instantiate(modulePrefab);
-                inventory.AddItem(module);
+                sensorSlots.AddItem(module);
+                
+                modulePrefab = Resources.Load<SensorModule>("DroneModules/Sensors/BuildingSensor");
+                module = Instantiate(modulePrefab);
+                sensorSlots.AddItem(module);
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
                 var modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/PickupItem");
                 var module = Instantiate(modulePrefab);
-                inventory.AddItem(module);
+                actionSlots.AddItem(module);
 
                 modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/FindResource");
                 module = Instantiate(modulePrefab);
-                inventory.AddItem(module);
+                actionSlots.AddItem(module);
+                
+                modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/StoreItem");
+                module = Instantiate(modulePrefab);
+                actionSlots.AddItem(module);
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
                 var modulePrefab = Resources.Load<GoalModule>("DroneModules/Goals/GatherIronGoal");
                 var module = Instantiate(modulePrefab);
-                inventory.AddItem(module);
+                goalSlots.AddItem(module);
                 
                 modulePrefab = Resources.Load<GoalModule>("DroneModules/Goals/PickupResource");
                 module = Instantiate(modulePrefab);
-                inventory.AddItem(module);
+                goalSlots.AddItem(module);
             }
         }
     }

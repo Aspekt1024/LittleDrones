@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Aspekt.Drones
@@ -7,9 +8,22 @@ namespace Aspekt.Drones
     /// </summary>
     public class ObjectManager : IManager
     {
+        public readonly List<BuildingBase> Buildings = new List<BuildingBase>();
+        
         public void Init()
         {
-            Debug.Log("Object manager online");
+            
         }
+
+        public void AddBuilding(BuildingBase building)
+        {
+            Buildings.Add(building);
+        }
+
+        public void RemoveBuilding(BuildingBase building)
+        {
+            Buildings.Remove(building);
+        }
+
     }
 }

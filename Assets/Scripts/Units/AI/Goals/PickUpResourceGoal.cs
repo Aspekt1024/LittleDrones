@@ -17,7 +17,12 @@ namespace Aspekt.Drones
         {
             agent.Memory.Set(AIAttributes.ResourceGoalType, resourceType);
         }
-        
+
+        public override void ResetGoal()
+        {
+            
+        }
+
         protected override void SetConditions()
         {
             AddCondition(AIAttributes.IsHoldingItem, true);

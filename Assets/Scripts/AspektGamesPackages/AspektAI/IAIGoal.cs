@@ -45,5 +45,10 @@ namespace Aspekt.AI
         /// Sets the AI agent's goal state
         /// </summary>
         void SetupGoal();
+
+        /// <summary>
+        /// Used to reset the goal state once achieved
+        /// </summary>
+        void ResetGoal();
     }
 }

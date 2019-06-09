@@ -50,6 +50,7 @@ namespace Aspekt.AI
         }
 
         public abstract void SetupGoal();
+        public abstract void ResetGoal();
 
         protected abstract void SetConditions();
 

@@ -8,39 +8,24 @@ namespace Aspekt.Drones
     {
         private readonly ResourceTypes resourceType;
         
-        private readonly Dictionary<ResourceTypes, AIAttributes> resourceDict = new Dictionary<ResourceTypes, AIAttributes>()
-        {
-            { ResourceTypes.Coal, AIAttributes.HasGatheredCoal },
-            { ResourceTypes.Iron, AIAttributes.HasGatheredIron },
-            { ResourceTypes.Copper, AIAttributes.HasGatheredCopper },
-        };
-
         public GatherResourceGoal(ResourceTypes type)
         {
             resourceType = type;
         }
-        
+
         public override void SetupGoal()
         {
-            var attribute = GetAttribute();
-            if (attribute == AIAttributes.Invalid) return;
-            agent.Memory.Set(attribute, false);
-        }
-        
-        protected override void SetConditions()
-        {
-            AddCondition(GetAttribute(), true);
+            agent.Memory.Set(AIAttributes.ResourceGoalType, resourceType);
         }
 
-        private AIAttributes GetAttribute()
+        public override void ResetGoal()
         {
-            if (resourceDict.ContainsKey(resourceType))
-            {
-                return resourceDict[resourceType];
-            }
-            
-            Debug.LogError("resource type not found in dictionary: " + resourceType);
-            return AIAttributes.Invalid;
+            agent.Memory.Remove(AIAttributes.HasGatheredResource);
+        }
+
+        protected override void SetConditions()
+        {
+            AddCondition(AIAttributes.HasGatheredResource, true);
         }
     }
 }

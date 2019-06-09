@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Aspekt.AI;
 using UnityEngine;
 
@@ -11,16 +12,21 @@ namespace Aspekt.Drones
     [Serializable]
     public class PickupItemAction : AIAction<AIAttributes, object>
     {
-        public float GrabDistance = 1.2f;
+        public float GrabDistance = 2f;
+        public float GatherTime = 0.5f;
+
+        // TODO setup as animation
+        private bool isGathering;
+        private float timeStartedGathering;
         
         public override float Cost => 1f; // TODO update to return the distance to the closest resource 
         
-        private IItem item;
+        private IGrabbableItem item;
         private MoveState moveState;
 
         protected override bool Begin(IStateMachine<AIAttributes, object> stateMachine)
         {
-            item = (IItem)Agent.Memory.Get(AIAttributes.ItemToGather);
+            item = (IGrabbableItem)Agent.Memory.Get(AIAttributes.ItemToGather);
             if (item == null) return false;
 
             moveState = stateMachine.AddState<MoveState>();
@@ -32,6 +38,7 @@ namespace Aspekt.Drones
         protected override void SetEffects()
         {
             AddEffect(AIAttributes.IsHoldingItem, true);
+            AddEffect(AIAttributes.HasItemToGather, false);
         }
         
         protected override void OnTick(float deltaTime)
@@ -44,9 +51,22 @@ namespace Aspekt.Drones
             
             var dist = Vector3.Distance(item.Transform.position, Agent.Owner.transform.position);
             if (dist > GrabDistance) return;
-            
-            Agent.Memory.Set(AIAttributes.HeldItem, item); // TODO delegate to grab ability
-            ActionSuccess();
+
+            if (!isGathering)
+            {
+                moveState.Stop();
+                isGathering = true;
+                timeStartedGathering = Time.time;
+            }
+
+            if (Time.time > timeStartedGathering + GatherTime)
+            {
+                isGathering = false;
+                Agent.Memory.Remove(AIAttributes.ItemToGather);
+                Agent.Memory.Set(AIAttributes.HeldItem, item); // TODO delegate to grab ability
+                item.Transform.gameObject.SetActive(false);
+                ActionSuccess();
+            }
         }
 
         protected override void SetPreconditions()
