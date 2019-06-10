@@ -73,14 +73,13 @@ namespace Aspekt.AI
                 planner.CalculateNewGoal();
             }
 
-            if (state == States.Idle && updateMode == UpdateModes.Periodic && !calculateGoalRequested && Time.time > timeLastUpdated + updateInterval)
+            if (CanUpdatePeriodically)
             {
                 QueueGoalCalculation();
                 return;
             }
             
             if (state != States.Running) return;
-
             
             Sensors.Tick(Time.deltaTime);
             executor.Tick(Time.deltaTime);
@@ -163,6 +162,11 @@ namespace Aspekt.AI
                 state = States.Running;
             }
         }
+
+        private bool CanUpdatePeriodically => state == States.Idle &&
+                                              updateMode == UpdateModes.Periodic &&
+                                              !calculateGoalRequested &&
+                                              Time.time > timeLastUpdated + updateInterval;
 
         private void OnActionPlanNotFound()
         {
