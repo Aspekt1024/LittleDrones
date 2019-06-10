@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Aspekt.AI
+namespace Aspekt.AI.Internal
 {
     public interface IGoalController<L, V>
     {

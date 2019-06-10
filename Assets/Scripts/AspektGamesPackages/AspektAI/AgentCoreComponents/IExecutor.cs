@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Aspekt.AI
+namespace Aspekt.AI.Internal
 {
     public interface IExecutor<L, V>
     {

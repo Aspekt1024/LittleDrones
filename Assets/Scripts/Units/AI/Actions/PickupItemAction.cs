@@ -12,8 +12,8 @@ namespace Aspekt.Drones
     [Serializable]
     public class PickupItemAction : AIAction<AIAttributes, object>
     {
-        public float GrabDistance = 2f;
-        public float GatherTime = 0.5f;
+        public float grabDistance = 2f;
+        public float gatherTime = 0.5f;
 
         // TODO setup as animation
         private bool isGathering;
@@ -50,7 +50,7 @@ namespace Aspekt.Drones
             }
             
             var dist = Vector3.Distance(item.Transform.position, Agent.Owner.transform.position);
-            if (dist > GrabDistance) return;
+            if (dist > grabDistance) return;
 
             if (!isGathering)
             {
@@ -59,7 +59,7 @@ namespace Aspekt.Drones
                 timeStartedGathering = Time.time;
             }
 
-            if (Time.time > timeStartedGathering + GatherTime)
+            if (Time.time > timeStartedGathering + gatherTime)
             {
                 isGathering = false;
                 Agent.Memory.Remove(AIAttributes.ItemToGather);

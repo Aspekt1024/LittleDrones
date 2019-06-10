@@ -1,3 +1,4 @@
+using System;
 using Aspekt.AI;
 using UnityEngine;
 
@@ -6,10 +7,12 @@ namespace Aspekt.Drones
     /// <summary>
     /// Finds the closest item of the given type
     /// </summary>
+    [Serializable]
     public class FindResourceAction : AIAction<AIAttributes, object>
     {
+        public float scanTime = 0.5f;
+        
         public override float Cost => 1f;
-        public float ScanTime = 0.5f;
         
         private ResourceSensor sensor;
         private ResourceTypes resourceType;
@@ -29,7 +32,7 @@ namespace Aspekt.Drones
 
         protected override void OnTick(float deltaTime)
         {
-            if (Time.time < timeStartedScanning + ScanTime) return;
+            if (Time.time < timeStartedScanning + scanTime) return;
             
             var item = sensor.GetClosestResource(resourceType, Agent.Transform.position);
             if (item == null)

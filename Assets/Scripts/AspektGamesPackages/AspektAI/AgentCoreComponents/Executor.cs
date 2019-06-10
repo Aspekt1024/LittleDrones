@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-namespace Aspekt.AI
+namespace Aspekt.AI.Internal
 {
     public class Executor<L, V> : IExecutor<L, V>
     {
@@ -118,7 +117,7 @@ namespace Aspekt.AI
             status += "\n\n<b>Goal:</b> " + currentGoal;
             if (actionPlan == null || CurrentAction == null) return status;
             
-            status += "\n\n<b>Action Plan:</b>\n" + _currentAction;;
+            status += "\n\n<b>Action Plan:</b>\n" + _currentAction;
             foreach (var a in actionPlan)
             {
                 status += "\n" + a;

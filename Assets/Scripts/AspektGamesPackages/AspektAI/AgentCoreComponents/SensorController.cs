@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using UnityEngine;
 
-namespace Aspekt.AI
+namespace Aspekt.AI.Internal
 {
     // Manages the AI agent's sensors
     public class SensorController<L, V> : ISensorController<L, V>

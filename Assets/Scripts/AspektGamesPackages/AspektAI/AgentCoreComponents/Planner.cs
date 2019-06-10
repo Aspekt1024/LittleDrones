@@ -4,7 +4,7 @@ using System.Linq;
 using Aspekt.AI.Planning;
 using UnityEngine;
 
-namespace Aspekt.AI
+namespace Aspekt.AI.Internal
 {
     public class Planner<L, V> : IPlanner<L, V>
     {

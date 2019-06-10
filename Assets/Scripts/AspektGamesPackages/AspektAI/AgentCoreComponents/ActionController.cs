@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Aspekt.AI
+namespace Aspekt.AI.Internal
 {
     public class ActionController<L, V> : IActionController<L, V>
     {

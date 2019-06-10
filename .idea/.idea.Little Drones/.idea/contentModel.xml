@@ -225,29 +225,31 @@
                 <e p="IMemory.cs" t="Include" />
                 <e p="IPlanner.cs" t="Include" />
                 <e p="ISensorController.cs" t="Include" />
-                <e p="IStateMachine.cs" t="Include" />
                 <e p="Memory.cs" t="Include" />
                 <e p="Planner.cs" t="Include" />
                 <e p="SensorController.cs" t="Include" />
-                <e p="StateMachine.cs" t="Include" />
               </e>
-              <e p="AIAction.cs" t="Include" />
               <e p="AIAgent.cs" t="Include" />
-              <e p="AIGoal.cs" t="Include" />
               <e p="AILogger.cs" t="Include" />
-              <e p="IAIAction.cs" t="Include" />
+              <e p="BaseComponents" t="Include">
+                <e p="AIAction.cs" t="Include" />
+                <e p="AIGoal.cs" t="Include" />
+                <e p="IAIAction.cs" t="Include" />
+                <e p="IAIGoal.cs" t="Include" />
+                <e p="IMachineState.cs" t="Include" />
+                <e p="ISensor.cs" t="Include" />
+                <e p="MachineState.cs" t="Include" />
+                <e p="Sensor.cs" t="Include" />
+              </e>
               <e p="IAIAgent.cs" t="Include" />
-              <e p="IAIGoal.cs" t="Include" />
-              <e p="IMachineState.cs" t="Include" />
-              <e p="ISensor.cs" t="Include" />
-              <e p="MachineState.cs" t="Include" />
+              <e p="IStateMachine.cs" t="Include" />
               <e p="Planning" t="Include">
                 <e p="AINode.cs" t="Include" />
                 <e p="AIState.cs" t="Include" />
                 <e p="Astar.cs" t="Include" />
                 <e p="IAstar.cs" t="Include" />
               </e>
-              <e p="Sensor.cs" t="Include" />
+              <e p="StateMachine.cs" t="Include" />
             </e>
             <e p="AspektItems" t="Include">
               <e p="Editor" t="Include">

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Aspekt.AI
+namespace Aspekt.AI.Internal
 {
     public interface IMemory<L, V>
     {

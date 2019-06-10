@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Aspekt.AI
+namespace Aspekt.AI.Internal
 {
     public class GoalController<L, V> : IGoalController<L, V>
     {

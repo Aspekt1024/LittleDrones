@@ -1,18 +1,21 @@
-﻿using UnityEngine;
+﻿using Aspekt.AI.Internal;
+using UnityEngine;
 
 namespace Aspekt.AI
 {
     // Attached to a game object to give it the power of thought
     public abstract class AIAgent<L, V> : MonoBehaviour, IAIAgent<L, V>
     {
+        public AILogger.LogLevels logLevel;
+        
         public GameObject Owner { get; private set; }
         public Transform Transform => transform;
         public IMemory<L, V> Memory { get; } = new Memory<L, V>();
         public IActionController<L, V> Actions { get; } = new ActionController<L, V>();
         public ISensorController<L, V> Sensors { get; } = new SensorController<L, V>();
         public IGoalController<L, V> Goals { get; } = new GoalController<L, V>();
-        
-        private readonly AILogger logger = new AILogger(AILogger.LogLevels.Debug);
+
+        private AILogger logger;
 
         private enum States
         {
@@ -38,12 +41,14 @@ namespace Aspekt.AI
             
             executor = new Executor<L, V>(this);
             planner = new Planner<L, V>(this);
+            
+            logger = new AILogger(logLevel);
 
             planner.OnActionPlanFound += OnActionPlanFound;
             executor.OnActionPlanComplete += OnActionPlanComplete;
         }
         
-        protected virtual void Start()
+        private void Start()
         {
             if (state == States.NotInitialised)
             {

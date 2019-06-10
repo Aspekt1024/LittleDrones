@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Aspekt.AI
+namespace Aspekt.AI.Internal
 {
     // Memory holds everything the agent currently knows about the world and itself.
     // It is typically modified by a sensor, performing an action, or being acted upon.

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Aspekt.AI
+namespace Aspekt.AI.Internal
 {
     /// <summary>
     /// Manages the AI agent's actions
