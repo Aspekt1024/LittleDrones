@@ -45,7 +45,7 @@ namespace Aspekt.AI
             state = States.Disabled;
         }
         
-        protected abstract void OnTick(float deltaTime);
+        protected virtual void OnTick(float deltaTime) { }
         
         /// <summary>
         /// Called after Init to allow child classes to have custom setup options

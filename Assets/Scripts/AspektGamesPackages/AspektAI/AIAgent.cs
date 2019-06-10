@@ -75,7 +75,6 @@ namespace Aspekt.AI
 
             if (state == States.Idle && updateMode == UpdateModes.Periodic && !calculateGoalRequested && Time.time > timeLastUpdated + updateInterval)
             {
-                Debug.Log("periodic update");
                 QueueGoalCalculation();
                 return;
             }

@@ -340,6 +340,7 @@
               </e>
               <e p="Sensors" t="Include">
                 <e p="BuildingSensor.cs" t="Include" />
+                <e p="ObjectSensorBase.cs" t="Include" />
                 <e p="ResourceSensor.cs" t="Include" />
               </e>
             </e>
