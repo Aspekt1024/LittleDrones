@@ -17,11 +17,6 @@ namespace Aspekt.Drones
         {
             agent.Actions.AddAction(action);
         }
-
-        public virtual bool IsTypeMatch(ActionModule other)
-        {
-            return other.GetType() == GetType();
-        }
         
         private void Awake()
         {

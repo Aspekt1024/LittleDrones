@@ -15,6 +15,7 @@ namespace Aspekt.AI.Internal
         private Queue<IAIAction<L, V>> actions = new Queue<IAIAction<L, V>>();
         
         public event Action OnActionPlanFound = delegate { };
+        public event Action OnActionPlanNotFound = delegate { };
         
         public Planner(IAIAgent<L, V> agent)
         {
@@ -24,7 +25,7 @@ namespace Aspekt.AI.Internal
         public void CalculateNewGoal()
         {
             var goals = new List<IAIGoal<L, V>>(agent.Goals.GetGoals());
-            goals.Sort((x, y) => x.Priority.CompareTo(y.Priority));
+            goals.Sort((x, y) => y.Priority.CompareTo(x.Priority));
 
             if (goals.Count == 0)
             {
@@ -32,20 +33,19 @@ namespace Aspekt.AI.Internal
                 return;
             }
             
-            for (int i = 0; i < goals.Count; i++)
+            foreach (var goal in goals)
             {
-                currentGoal = goals[i];
+                currentGoal = goal;
                 if (!IsGoalAchieveableByActions(currentGoal)) continue;
 
-                if (aStar.FindActionPlan(agent, goals[i]))
+                goal.SetupGoal();
+                if (aStar.FindActionPlan(agent, goal))
                 {
                     actions = aStar.GetActionPlan();
-                    agent.LogKeyInfo(this, "action plan found");
+                    agent.LogKeyInfo(this, "action plan found for " + goal);
+                    break;
                 }
-                else
-                {
-                    agent.LogKeyInfo(this, "failed to find action plan.");
-                }
+                agent.LogInfo(this, "failed to find action plan for " + goal);
             }
 
             if (actions.Count > 0)
@@ -54,7 +54,8 @@ namespace Aspekt.AI.Internal
             }
             else
             {
-                agent.LogKeyInfo(this, "action plan is empty");
+                agent.LogKeyInfo(this, "unable to achieve any new goals");
+                OnActionPlanNotFound?.Invoke();
             }
         }
 
@@ -67,22 +68,18 @@ namespace Aspekt.AI.Internal
             // If no actions on the agent meet the goal, the goal is deemed not achievable at this point.
             // If the goal is achievable, the actions' preconditions are checked by the AStar algorithm
 
-            string message = $"checking if {goal} can be achieved. Conditions:";
-            foreach (var condition in goal.GetConditions())
-            {
-                message += $"\n{condition.Key} : {condition.Value}";
-            }
-            agent.LogTrace(this, message);
+            LogGoalConditionsTrace(goal);
+            var conditions = goal.GetConditions();
 
             var conditionsMet = new Dictionary<L, bool>();
-            foreach (var condition in goal.GetConditions())
+            foreach (var condition in conditions)
             {
                 conditionsMet.Add(condition.Key, false);
             }
 
             foreach (var stateValue in agent.Memory.GetState())
             {
-                if (conditionsMet.ContainsKey(stateValue.Key) && conditionsMet[stateValue.Key].Equals(goal.GetConditions()[stateValue.Key]))
+                if (conditionsMet.ContainsKey(stateValue.Key) && conditionsMet[stateValue.Key].Equals(conditions[stateValue.Key]))
                 {
                     conditionsMet[stateValue.Key] = true;
                 }
@@ -93,15 +90,10 @@ namespace Aspekt.AI.Internal
                 agent.LogTrace(this, $"checking if {action} meets goal conditions...");
                 if (!action.CheckProceduralPreconditions()) continue;
 
-                var effects = action.GetEffects();
-                if (!effects.Any())
-                {
-                    Debug.LogError($"{action} has no effect.");
-                }
-                foreach (var effect in effects)
+                foreach (var effect in action.GetEffects())
                 {
                     agent.LogTrace(this, $"Effect: {effect.Key} : {effect.Value}");
-                    if (conditionsMet.ContainsKey(effect.Key) && effect.Value.Equals(goal.GetConditions()[effect.Key]))
+                    if (conditionsMet.ContainsKey(effect.Key) && effect.Value.Equals(conditions[effect.Key]))
                     {
                         agent.LogTrace(this, $"Meets condition: {effect.Key} : {effect.Value}");
                         conditionsMet[effect.Key] = true;
@@ -109,17 +101,32 @@ namespace Aspekt.AI.Internal
                 }
             }
 
-            if (conditionsMet.ContainsValue(false))
-            {
-                agent.LogInfo(this, $"{goal} not achievable by the available actions");
-                foreach (var c in conditionsMet)
-                {
-                    agent.LogInfo(this, $"{c.Key} : {c.Value}");
-                }
-                return false;
-            }
+            if (!conditionsMet.ContainsValue(false)) return true;
+            LogGoalUnachievableTrace(goal, conditionsMet);
+            return false;
+        }
+
+        private void LogGoalConditionsTrace(IAIGoal<L, V> goal)
+        {
+            if (agent.Logger.LogLevel != AILogger.LogLevels.Trace) return;
             
-            return true;
+            string message = $"checking if {goal} can be achieved. Conditions:";
+            foreach (var condition in goal.GetConditions())
+            {
+                message += $"\n{condition.Key} : {condition.Value}";
+            }
+            agent.LogTrace(this, message);
+        }
+
+        private void LogGoalUnachievableTrace(IAIGoal<L, V> goal, Dictionary<L, bool> conditionsMet)
+        {
+            if (agent.Logger.LogLevel != AILogger.LogLevels.Trace) return;
+            
+            agent.LogTrace(this, $"{goal} not achievable by the available actions");
+            foreach (var c in conditionsMet)
+            {
+                agent.LogTrace(this, $"{c.Key} : {c.Value}");
+            }
         }
     }
 }

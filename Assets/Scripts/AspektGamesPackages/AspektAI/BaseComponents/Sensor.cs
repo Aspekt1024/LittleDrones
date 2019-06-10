@@ -1,9 +1,11 @@
 
+using System.Collections.Generic;
+
 namespace Aspekt.AI
 {
     public abstract class Sensor<L, V> : ISensor<L, V>
     {
-        protected IAIAgent<L, V> agent;
+        protected IAIAgent<L, V> Agent;
         
         private enum States
         {
@@ -11,15 +13,13 @@ namespace Aspekt.AI
         }
         private States state = States.NotInitialised;
 
-        public abstract L[] Effects { get; } 
-        
+        public bool IsEnabled => state == States.Enabled;
+
         public void Init(IAIAgent<L, V> agent)
         {
-            this.agent = agent;
-
-            state = States.Enabled;
-            
+            Agent = agent;
             OnInit();
+            state = States.Enabled;
         }
 
         public void Tick(float deltaTime)
@@ -33,18 +33,16 @@ namespace Aspekt.AI
         public void Enable()
         {
             state = States.Enabled;
-            OnEnable();
         }
 
         public void Disable()
         {
             state = States.Disabled;
-            OnDisable();
         }
         
         public void Remove()
         {
-            OnRemove();
+            state = States.Disabled;
         }
         
         protected abstract void OnTick(float deltaTime);
@@ -53,13 +51,5 @@ namespace Aspekt.AI
         /// Called after Init to allow child classes to have custom setup options
         /// </summary>
         protected virtual void OnInit() {}
-
-        /// <summary>
-        /// Called when the sensor is removed to allow cleanup (e.g. removing memory objects)
-        /// </summary>
-        protected abstract void OnRemove();
-
-        protected virtual void OnEnable() { }
-        protected virtual void OnDisable() { }
     }
 }

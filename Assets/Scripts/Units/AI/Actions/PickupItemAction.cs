@@ -18,11 +18,18 @@ namespace Aspekt.Drones
         // TODO setup as animation
         private bool isGathering;
         private float timeStartedGathering;
-        
-        public override float Cost => 1f; // TODO update to return the distance to the closest resource 
-        
+
         private IGrabbableItem item;
         private MoveState moveState;
+        
+        public override float Cost => 1f; // TODO update to return the distance to the closest resource
+
+        public override bool CheckComponents()
+        {
+            // TODO check can move
+            // TODO check can pick up items (has grabber)
+            return true;
+        }
 
         protected override bool Begin(IStateMachine<AIAttributes, object> stateMachine)
         {
@@ -71,8 +78,6 @@ namespace Aspekt.Drones
 
         protected override void SetPreconditions()
         {
-            AddPrecondition(AIAttributes.CanMove, true);
-            AddPrecondition(AIAttributes.CanPickupItems, true);
             AddPrecondition(AIAttributes.HasItemToGather, true);
         }
     }

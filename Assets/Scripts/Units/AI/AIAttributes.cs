@@ -11,13 +11,7 @@ namespace Aspekt.Drones
         IsHoldingItem,
         HeldItem,
         
-        // Abilities
-        CanMove,
-        CanPickupItems,
-        
-        // Sensors
-        HasResourceSensor,
-        HasBuildingSensor,
-        HasGatheredResource
+        // Goals
+        HasGatheredResource,
     }
 }

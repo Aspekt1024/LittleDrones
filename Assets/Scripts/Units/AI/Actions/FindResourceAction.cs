@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Aspekt.AI;
 using UnityEngine;
 
@@ -11,18 +12,26 @@ namespace Aspekt.Drones
     public class FindResourceAction : AIAction<AIAttributes, object>
     {
         public float scanTime = 0.5f;
+
+        private ResourceSensor sensor;
+        private ResourceTypes resourceType;
         
         public override float Cost => 1f;
         
-        private ResourceSensor sensor;
-        private ResourceTypes resourceType;
+        public override bool CheckComponents()
+        {
+            resourceType = (ResourceTypes)Agent.Memory.Get(AIAttributes.ResourceGoalType);
+            if (resourceType == ResourceTypes.None) return false;
+
+            sensor = Agent.Sensors.Get<ResourceSensor>();
+            return sensor != null && sensor.ScanResources(resourceType).Any();
+        }
 
         // TODO set as animation
         private float timeStartedScanning;
         
         protected override void SetPreconditions()
         {
-            AddPrecondition(AIAttributes.HasResourceSensor, true);
         }
 
         protected override void SetEffects()

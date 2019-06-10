@@ -15,4 +15,5 @@ MonoBehaviour:
   itemName: Pickup Resource Goal
   description: A goal to pickup a resource
   icon: {fileID: 21300000, guid: 8ea3e46938e041f4a8abb8200dc90159, type: 3}
+  priority: 1
   resourceType: 1

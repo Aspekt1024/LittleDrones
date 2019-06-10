@@ -49,16 +49,16 @@ namespace Aspekt.AI
             Trace
         }
         
-        private readonly LogLevels logLevel;
+        public readonly LogLevels LogLevel;
 
         public AILogger(LogLevels level)
         {
-            logLevel = level;
+            LogLevel = level;
         }
 
         public void Log<T>(AILogType type, T parent, string message)
         {
-            if (logLevel == LogLevels.None) return;
+            if (LogLevel == LogLevels.None) return;
 
             string prefix = typeof(T).Name;
 
@@ -66,10 +66,10 @@ namespace Aspekt.AI
             switch (type)
             {
                 case AILogType.Trace:
-                    shouldLog = logLevel == LogLevels.Trace;
+                    shouldLog = LogLevel == LogLevels.Trace;
                     break;
                 case AILogType.Info:
-                    shouldLog = logLevel == LogLevels.Debug || logLevel == LogLevels.Trace;
+                    shouldLog = LogLevel == LogLevels.Debug || LogLevel == LogLevels.Trace;
                     break;
                 case AILogType.KeyInfo:
                     shouldLog = true;

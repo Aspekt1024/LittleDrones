@@ -35,6 +35,7 @@ namespace Aspekt.Drones
         public override void OnItemAddedToSlot(InventoryItem item, Slot slot)
         {
             if (!(item is GoalModule module)) return;
+            module.priority = NumSlots - slot.SlotNumber;
             module.AttachTo(ai);
         }
 

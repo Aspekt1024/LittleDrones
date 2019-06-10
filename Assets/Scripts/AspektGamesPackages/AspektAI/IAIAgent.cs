@@ -35,13 +35,15 @@ namespace Aspekt.AI
         /// </summary>
         IGoalController<L, V> Goals { get; }
         
+        AILogger Logger { get; }
+        
         /// <summary>
         /// Initialises the agent
         /// </summary>
         void Init(GameObject owner);
 
         /// <summary>
-        /// Tells the agent to start operation, or resume if in paused state
+        /// Tells the agent to start operation
         /// </summary>
         void Run();
 
@@ -51,12 +53,17 @@ namespace Aspekt.AI
         void QueueGoalCalculation();
 
         /// <summary>
-        /// Pauses operation of the AI agent.
+        /// Pauses operation of the AI agent
         /// </summary>
         void Pause();
 
         /// <summary>
-        /// Stops the agent's AI completely.
+        /// Resumes the operation of the AI agent
+        /// </summary>
+        void Resume();
+
+        /// <summary>
+        /// Stops the agent's AI completely
         /// </summary>
         void Stop();
 

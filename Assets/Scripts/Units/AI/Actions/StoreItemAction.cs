@@ -12,15 +12,20 @@ namespace Aspekt.Drones
     public class StoreItemAction : AIAction<AIAttributes, object>
     {
         public float placementDistance = 2f;
-        
-        public override float Cost => 1f; // TODO update to return the distance to the closest storage 
-        
+
         private IGrabbableItem item;
         private MoveState moveState;
 
         // TODO building and storage are different interfaces of the same object
         private BuildingBase building;
         private IStorage storage;
+        
+        public override float Cost => 1f; // TODO update to return the distance to the closest storage 
+        public override bool CheckComponents()
+        {
+            // TODO can move
+            return Agent.Sensors.HasSensor<BuildingSensor>();
+        }
 
         protected override bool Begin(IStateMachine<AIAttributes, object> stateMachine)
         {
@@ -78,9 +83,6 @@ namespace Aspekt.Drones
 
         protected override void SetPreconditions()
         {
-            AddPrecondition(AIAttributes.CanMove, true);
-            AddPrecondition(AIAttributes.CanPickupItems, true);
-            AddPrecondition(AIAttributes.HasBuildingSensor, true);
             AddPrecondition(AIAttributes.IsHoldingItem, true);
         }
     }

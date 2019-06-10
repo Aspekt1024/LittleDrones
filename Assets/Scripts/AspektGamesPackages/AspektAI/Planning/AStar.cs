@@ -66,13 +66,12 @@ namespace Aspekt.AI.Planning
             for (int i = nullNodes.Count - 1; i >= 0; i--)
             {
                 if (!nullNodes[i].GetAction().CheckProceduralPreconditions()) continue;
-
-                if (AchievesPrecondition(nullNodes[i]))
-                {
-                    nullNodes[i].Update(currentNode);
-                    openNodes.Add(nullNodes[i]);
-                    nullNodes.Remove(nullNodes[i]);
-                }
+                if (!nullNodes[i].GetAction().CheckComponents()) continue;
+                if (!AchievesPrecondition(nullNodes[i])) continue;
+                
+                nullNodes[i].Update(currentNode);
+                openNodes.Add(nullNodes[i]);
+                nullNodes.Remove(nullNodes[i]);
             }
         }
 
@@ -80,7 +79,8 @@ namespace Aspekt.AI.Planning
         {
             foreach (var effect in node.GetAction().GetEffects())
             {
-                if (currentNode.GetState().GetPreconditions().ContainsKey(effect.Key) && currentNode.GetState().GetPreconditions()[effect.Key].Equals(effect.Value))
+                var preconditions = currentNode.GetState().GetPreconditions();
+                if (preconditions.ContainsKey(effect.Key) && preconditions[effect.Key].Equals(effect.Value))
                 {
                     return true;
                 }
@@ -90,7 +90,7 @@ namespace Aspekt.AI.Planning
 
         private AINode<L, V> FindCheapestNode()
         {
-            AINode<L, V> cheapestNode = openNodes[0];
+            var cheapestNode = openNodes[0];
             for (int i = 1; i < openNodes.Count; i++)
             {
                 if (openNodes[i].GetFCost() < cheapestNode.GetFCost())

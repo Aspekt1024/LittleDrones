@@ -1,14 +1,19 @@
+using System;
 using Aspekt.AI;
 using Aspekt.Items;
 
 namespace Aspekt.Drones
 {   
+    [Serializable]
     public abstract class GoalModule : InventoryItem, IDroneModule
     {
+        public float priority;
+        
         private AIGoal<AIAttributes, object> goal;
         
         public void AttachTo(DroneAIAgent agent)
         {
+            goal.SetPriority(priority);
             agent.Goals.AddGoal(goal);
         }
 

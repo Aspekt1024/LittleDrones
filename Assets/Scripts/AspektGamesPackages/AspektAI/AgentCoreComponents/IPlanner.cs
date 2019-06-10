@@ -9,6 +9,11 @@ namespace Aspekt.AI.Internal
         /// Invoked when a new action plan has been found 
         /// </summary>
         event Action OnActionPlanFound;
+
+        /// <summary>
+        /// Invoked when finding a new action plan failed
+        /// </summary>
+        event Action OnActionPlanNotFound;
         
         /// <summary>
         /// Calculates a new goal based on the AI agent's available actions

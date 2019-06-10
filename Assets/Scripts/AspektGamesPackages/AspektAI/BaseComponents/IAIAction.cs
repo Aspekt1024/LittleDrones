@@ -49,6 +49,11 @@ namespace Aspekt.AI
         Dictionary<L, V> GetPreconditions();
 
         /// <summary>
+        /// Check the components required for the action to run are available. Called during the planning phase
+        /// </summary>
+        bool CheckComponents();
+
+        /// <summary>
         /// Checks preconditions that update over time.
         /// This is checked on action planning and for each tick of the AI agent (once per frame)
         /// </summary>

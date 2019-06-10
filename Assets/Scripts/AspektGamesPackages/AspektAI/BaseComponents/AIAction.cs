@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Aspekt.AI.Internal;
 using UnityEditor.UIElements;
+using UnityEngine;
 
 namespace Aspekt.AI
 {
@@ -45,7 +47,17 @@ namespace Aspekt.AI
         }
 
         public Dictionary<L, V> GetPreconditions() => preconditions;
-        public Dictionary<L, V> GetEffects() => effects;
+
+        public abstract bool CheckComponents();
+
+        public Dictionary<L, V> GetEffects()
+        {
+            if (!effects.Any())
+            {
+                Debug.LogError($"{GetType().Name} has no effects.");
+            }
+            return effects;
+        }
 
         public virtual bool CheckProceduralPreconditions()
         {

@@ -10,9 +10,9 @@ namespace Aspekt.AI
     public interface ISensor<L, V>
     {
         /// <summary>
-        /// The effect for having this sensor active
+        /// True if the sensor is enabled
         /// </summary>
-        L[] Effects { get; }
+        bool IsEnabled { get; }
         
         /// <summary>
         /// Initialises the sensor

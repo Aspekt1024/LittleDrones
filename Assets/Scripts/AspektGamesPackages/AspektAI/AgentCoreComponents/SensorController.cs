@@ -38,8 +38,13 @@ namespace Aspekt.AI.Internal
         }
 
         public List<ISensor<L, V>> GetSensors() => sensors;
+        
+        public bool HasSensor<TSensor>()
+        {
+            return sensors.Any(s => s.IsEnabled && s is TSensor);
+        }
 
-        public void DisableSensors()
+        public void Disable()
         {
             if (state == States.Enabled)
             {
@@ -47,7 +52,7 @@ namespace Aspekt.AI.Internal
             }
         }
 
-        public void EnableSensors()
+        public void Enable()
         {
             if (state == States.Disabled)
             {

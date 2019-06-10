@@ -15,4 +15,5 @@ MonoBehaviour:
   itemName: Gather Iron Goal Module
   description: The goal of iron gathering
   icon: {fileID: 21300000, guid: 7c6c8b4baa5364447a19c7dc2fec3fa3, type: 3}
+  priority: 5
   resourceType: 1

@@ -20,11 +20,6 @@ namespace Aspekt.Drones
             agent.Sensors.RemoveSensor(sensor);
         }
 
-        public virtual bool IsTypeMatch(SensorModule other)
-        {
-            return other.GetType() == GetType();
-        }
-
         private void Awake()
         {
             sensor = CreateSensor();

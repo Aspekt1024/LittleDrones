@@ -24,16 +24,23 @@ namespace Aspekt.AI.Internal
         /// Returns a copy of the list of sensors in the sensor controller
         /// </summary>
         List<ISensor<L, V>> GetSensors();
+
+        /// <summary>
+        /// Checks if a sensor of the given type exists on the AI agent and is enabled
+        /// </summary>
+        /// <typeparam name="TSensor">The sensor type</typeparam>
+        /// <returns>true if the sensor exists and is enabled</returns>
+        bool HasSensor<TSensor>();
         
         /// <summary>
         /// Disables all the sensors on the AI agent
         /// </summary>
-        void DisableSensors();
+        void Disable();
         
         /// <summary>
         /// Enables all the sensors on the AI agent
         /// </summary>
-        void EnableSensors();
+        void Enable();
 
         /// <summary>
         /// Adds the given sensor to the AI agent. Replaces sensors of the same type that exist on the AI agent already
