@@ -129,6 +129,8 @@ namespace Aspekt.AI.Internal
         private void BeginNextAction()
         {
             agent.LogTrace(this, "starting next action");
+            stateMachine.Stop();
+            
             if (actionPlan.Count == 0)
             {
                 CurrentAction = null;

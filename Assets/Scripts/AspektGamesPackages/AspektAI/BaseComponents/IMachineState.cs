@@ -7,11 +7,6 @@ namespace Aspekt.AI
         event Action OnComplete;
         
         /// <summary>
-        /// Initialises the state (used on startup)
-        /// </summary>
-        void Init(IAIAgent<L, V> parentAgent);
-        
-        /// <summary>
         /// Called once per frame
         /// </summary>
         void Tick(float deltaTime);

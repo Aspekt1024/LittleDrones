@@ -7,12 +7,12 @@ namespace Aspekt.Drones
 	    /// <summary>
 	    /// Moves to a target transform
 	    /// </summary>
-	    void MoveTo(Transform target, bool isFinalPoint);
+	    void MoveTo(Transform target);
 
 	    /// <summary>
 	    /// Moves to a target position
 	    /// </summary>
-	    void MoveTo(Vector3 position, bool isFinalPoint);
+	    void MoveTo(Vector3 position);
 
 	    /// <summary>
 	    /// Called once per frame
@@ -31,7 +31,6 @@ namespace Aspekt.Drones
 	    /// <param name="immediate">Set to true if the unit should stop immediately</param>
 	    void Stop(bool immediate = false);
 
-	    
 	    bool TargetReached();
     }
 }

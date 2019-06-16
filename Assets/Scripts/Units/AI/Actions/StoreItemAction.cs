@@ -14,7 +14,6 @@ namespace Aspekt.Drones
         public float placementDistance = 2f;
 
         private IGrabbableItem item;
-        private MoveState moveState;
 
         // TODO building and storage are different interfaces of the same object
         private BuildingBase building;
@@ -46,10 +45,17 @@ namespace Aspekt.Drones
             if (building == null || !(building is IStorage s)) return false;
             storage = s;
 
-            moveState = stateMachine.AddState<MoveState>();
-            moveState.MoveTo(building.Transform);
+            var moveState = new MoveState(Agent, Agent.Owner.GetComponent<IMoveable>().GetMovement());
+            moveState.SetTarget(building.Transform, placementDistance);
+            stateMachine.Enqueue(moveState);
+            stateMachine.OnComplete += OnTargetReached;
             
             return true;
+        }
+
+        protected override void SetPreconditions()
+        {
+            AddPrecondition(AIAttributes.IsHoldingItem, true);
         }
 
         protected override void SetEffects()
@@ -57,18 +63,22 @@ namespace Aspekt.Drones
             AddEffect(AIAttributes.HasGatheredResource, true);
             AddEffect(AIAttributes.IsHoldingItem, false);
         }
-        
+
+        protected override bool CheckProceduralConditions()
+        {
+            return true;
+        }
+
         protected override void OnTick(float deltaTime)
         {
-            if (item == null || storage == null)
+            if (item == null || building == null)
             {
                 ActionFailure();
-                return;
             }
-            
-            var dist = Vector3.Distance(building.Transform.position, Agent.Owner.transform.position);
-            if (dist > placementDistance) return;
+        }
 
+        private void OnTargetReached()
+        {
             Agent.Memory.Remove(AIAttributes.HeldItem);
             bool success = storage.TakeItem(item);
             if (success)
@@ -79,11 +89,6 @@ namespace Aspekt.Drones
             {
                 ActionFailure();
             }
-        }
-
-        protected override void SetPreconditions()
-        {
-            AddPrecondition(AIAttributes.IsHoldingItem, true);
         }
     }
 }

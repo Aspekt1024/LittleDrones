@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using Aspekt.AI.Internal;
 using UnityEditor.UIElements;
@@ -61,7 +62,7 @@ namespace Aspekt.AI
 
         public virtual bool CheckProceduralPreconditions()
         {
-            return state == States.Enabled;
+            return state == States.Enabled && CheckProceduralConditions();
         }
 
         public void Enable()
@@ -89,6 +90,7 @@ namespace Aspekt.AI
 
         protected abstract void SetPreconditions();
         protected abstract void SetEffects();
+        protected abstract bool CheckProceduralConditions();
 
         protected void AddPrecondition(L label, V value)
         {

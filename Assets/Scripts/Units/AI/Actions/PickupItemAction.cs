@@ -15,12 +15,13 @@ namespace Aspekt.Drones
         public float grabDistance = 2f;
         public float gatherTime = 0.5f;
 
+        private MoveState moveState;
+        
         // TODO setup as animation
         private bool isGathering;
         private float timeStartedGathering;
 
         private IGrabbableItem item;
-        private MoveState moveState;
         
         public override float Cost => 1f; // TODO update to return the distance to the closest resource
 
@@ -36,10 +37,19 @@ namespace Aspekt.Drones
             item = (IGrabbableItem)Agent.Memory.Get(AIAttributes.ItemToGather);
             if (item == null) return false;
 
-            moveState = stateMachine.AddState<MoveState>();
-            moveState.MoveTo(item.Transform);
+            isGathering = false;
+            
+            moveState = new MoveState(Agent, Agent.Owner.GetComponent<IMoveable>().GetMovement());
+            moveState.SetTarget(item.Transform, grabDistance);
+            stateMachine.Enqueue(moveState);
+            stateMachine.OnComplete += OnTargetReached;
             
             return true;
+        }
+
+        protected override void SetPreconditions()
+        {
+            AddPrecondition(AIAttributes.HasItemToGather, true);
         }
 
         protected override void SetEffects()
@@ -47,38 +57,29 @@ namespace Aspekt.Drones
             AddEffect(AIAttributes.IsHoldingItem, true);
             AddEffect(AIAttributes.HasItemToGather, false);
         }
-        
-        protected override void OnTick(float deltaTime)
+
+        protected override bool CheckProceduralConditions()
         {
-            if (item == null)
-            {
-                ActionFailure();
-                return;
-            }
-            
-            var dist = Vector3.Distance(item.Transform.position, Agent.Owner.transform.position);
-            if (dist > grabDistance) return;
-
-            if (!isGathering)
-            {
-                moveState.Stop();
-                isGathering = true;
-                timeStartedGathering = Time.time;
-            }
-
-            if (Time.time > timeStartedGathering + gatherTime)
-            {
-                isGathering = false;
-                Agent.Memory.Remove(AIAttributes.ItemToGather);
-                Agent.Memory.Set(AIAttributes.HeldItem, item); // TODO delegate to grab ability
-                item.Transform.gameObject.SetActive(false);
-                ActionSuccess();
-            }
+            return true;
         }
 
-        protected override void SetPreconditions()
+        protected override void OnTick(float deltaTime)
         {
-            AddPrecondition(AIAttributes.HasItemToGather, true);
+            if (!isGathering || Time.time < timeStartedGathering + gatherTime) return;
+            
+            isGathering = false;
+            Agent.Memory.Remove(AIAttributes.ItemToGather);
+            Agent.Memory.Set(AIAttributes.HeldItem, item); // TODO delegate to grab ability
+            item.Transform.gameObject.SetActive(false);
+            ActionSuccess();
+        }
+
+        private void OnTargetReached()
+        {
+            if (isGathering) return;
+            
+            isGathering = true;
+            timeStartedGathering = Time.time;
         }
     }
 }

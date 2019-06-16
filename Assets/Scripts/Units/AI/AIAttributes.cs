@@ -5,8 +5,12 @@ namespace Aspekt.Drones
         Invalid,
         
         ResourceGoalType,
+        
         HasItemToGather,
+        HasDepositToGather,
+        
         ItemToGather,
+        DepositToGather,
         
         IsHoldingItem,
         HeldItem,

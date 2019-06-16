@@ -24,19 +24,11 @@ namespace Aspekt.AI
             this.agent = agent;
         }
 
-        public void Enqueue(IMachineState<L, V> state)
+        public void Enqueue(IMachineState<L, V> machineState)
         {
-            stateQueue.Enqueue(state);
+            stateQueue.Enqueue(machineState);
         }
 
-        public T AddState<T>() where T : IMachineState<L, V>, new()
-        {
-            var newState = new T();
-            newState.Init(agent);
-            Enqueue(newState);
-            return newState;
-        }
-        
         public void Start()
         {
             state = States.Running;
@@ -45,7 +37,15 @@ namespace Aspekt.AI
         public void Stop()
         {
             state = States.Stopped;
-            currentState?.Stop();
+            if (currentState != null)
+            {
+                currentState.Stop();
+                currentState.OnComplete -= OnStateCompleted;
+                currentState = null;
+            }
+
+            stateQueue.Clear();
+            OnComplete = null;
         }
 
         public void Pause()
@@ -80,6 +80,7 @@ namespace Aspekt.AI
             
             currentState = stateQueue.Dequeue();
             currentState.OnComplete += OnStateCompleted;
+            currentState.Start();
         }
 
         private void OnStateCompleted()

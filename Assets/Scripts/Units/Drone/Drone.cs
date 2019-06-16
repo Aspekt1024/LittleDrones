@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using Pathfinding;
+using UnityEngine;
 
 namespace Aspekt.Drones
 {
-    public class Drone : UnitBase, IMoveable, ICanAnimate, ICanGrab
+    public class Drone : UnitBase, IMoveable, ICanAnimate
     {
 #pragma warning disable 649
         [SerializeField] private DroneAIAgent ai;
@@ -19,13 +20,13 @@ namespace Aspekt.Drones
 
         private void Awake()
         {
+            movement = new GroundMovement(GetComponent<Rigidbody>(), GetComponentInChildren<Seeker>());
+            animator = GetComponent<Animator>();
+            
             ai.Init(gameObject);
             sensorSlots.Init(ai);
             actionSlots.Init(ai);
             goalSlots.Init(ai);
-            
-            movement = new BasicMovement(GetComponent<Rigidbody>());
-            animator = GetComponent<Animator>();
         }
 
         public void StartAI()
@@ -103,6 +104,10 @@ namespace Aspekt.Drones
                 modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/StoreItem");
                 module = Instantiate(modulePrefab);
                 actionSlots.AddItem(module);
+                
+                modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/GatherFromDeposit");
+                module = Instantiate(modulePrefab);
+                actionSlots.AddItem(module);
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha3))
@@ -111,9 +116,9 @@ namespace Aspekt.Drones
                 var module = Instantiate(modulePrefab);
                 goalSlots.AddItem(module);
                 
-                modulePrefab = Resources.Load<GoalModule>("DroneModules/Goals/PickupResource");
-                module = Instantiate(modulePrefab);
-                goalSlots.AddItem(module);
+//                modulePrefab = Resources.Load<GoalModule>("DroneModules/Goals/PickupResource");
+//                module = Instantiate(modulePrefab);
+//                goalSlots.AddItem(module);
             }
         }
     }

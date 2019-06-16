@@ -273,18 +273,20 @@
             </e>
           </e>
           <e p="Items" t="Include">
+            <e p="GatherableDeposit.cs" t="Include" />
+            <e p="IGatherable.cs" t="Include" />
             <e p="IGrabbableItem.cs" t="Include" />
             <e p="Modules" t="Include">
               <e p="ActionModule.cs" t="Include" />
               <e p="ActionModules" t="Include">
                 <e p="FindResourceActionModule.cs" t="Include" />
+                <e p="GatherFromDepositActionModule.cs" t="Include" />
                 <e p="PickupItemActionModule.cs" t="Include" />
                 <e p="StoreItemActionModule.cs" t="Include" />
               </e>
               <e p="GoalModule.cs" t="Include" />
               <e p="GoalModules" t="Include">
                 <e p="GatherResourceGoalModule.cs" t="Include" />
-                <e p="PickupResourceGoalModule.cs" t="Include" />
               </e>
               <e p="IDroneModule.cs" t="Include" />
               <e p="SensorModule.cs" t="Include" />
@@ -294,8 +296,9 @@
               </e>
             </e>
             <e p="Resource" t="Include">
-              <e p="IronResource.cs" t="Include" />
               <e p="ResourceBase.cs" t="Include" />
+              <e p="ResourceDeposit.cs" t="Include" />
+              <e p="ResourceTypes.cs" t="Include" />
             </e>
           </e>
           <e p="Management" t="Include">
@@ -325,6 +328,7 @@
             <e p="AI" t="Include">
               <e p="Actions" t="Include">
                 <e p="FindResourceAction.cs" t="Include" />
+                <e p="GatherFromDepositAction.cs" t="Include" />
                 <e p="PickupItemAction.cs" t="Include" />
                 <e p="StoreItemAction.cs" t="Include" />
               </e>
@@ -332,16 +336,32 @@
               <e p="DroneAIAgent.cs" t="Include" />
               <e p="Goals" t="Include">
                 <e p="GatherResourceGoal.cs" t="Include" />
-                <e p="PickUpResourceGoal.cs" t="Include" />
               </e>
               <e p="MachineStates" t="Include">
                 <e p="AnimationState.cs" t="Include" />
+                <e p="GatherState.cs" t="Include" />
                 <e p="MoveState.cs" t="Include" />
               </e>
               <e p="Sensors" t="Include">
                 <e p="BuildingSensor.cs" t="Include" />
                 <e p="ObjectSensorBase.cs" t="Include" />
                 <e p="ResourceSensor.cs" t="Include" />
+              </e>
+            </e>
+            <e p="Attributes" t="Include">
+              <e p="ICanAnimate.cs" t="Include" />
+              <e p="ICanGather.cs" t="Include" />
+              <e p="IMoveable.cs" t="Include" />
+            </e>
+            <e p="Components" t="Include">
+              <e p="Gathering" t="Include">
+                <e p="GatherComponent.cs" t="Include" />
+              </e>
+              <e p="IGatherer.cs" t="Include" />
+              <e p="IMovement.cs" t="Include" />
+              <e p="Movement" t="Include">
+                <e p="BasicMovement.cs" t="Include" />
+                <e p="GroundMovement.cs" t="Include" />
               </e>
             </e>
             <e p="Drone" t="Include">
@@ -353,17 +373,7 @@
                 <e p="SensorInventory.cs" t="Include" />
               </e>
             </e>
-            <e p="ICanAnimate.cs" t="Include" />
-            <e p="ItemInteraction" t="Include">
-              <e p="ICanGrab.cs" t="Include" />
-              <e p="IGrabber.cs" t="Include" />
-            </e>
             <e p="IUnit.cs" t="Include" />
-            <e p="Movement" t="Include">
-              <e p="BasicMovement.cs" t="Include" />
-              <e p="IMoveable.cs" t="Include" />
-              <e p="IMovement.cs" t="Include" />
-            </e>
             <e p="UnitBase.cs" t="Include" />
           </e>
         </e>

@@ -14,7 +14,6 @@ namespace Aspekt.Drones
         
         private Transform targetTf;
         private Vector3 targetPos;
-        private bool finalPoint;
         private bool targetReached;
 
         private enum States
@@ -28,16 +27,14 @@ namespace Aspekt.Drones
             this.body = body;
         }
         
-        public void MoveTo(Transform target, bool isFinalPoint)
+        public void MoveTo(Transform target)
         {
-            finalPoint = isFinalPoint;
             targetTf = target;
             state = States.Moving;
         }
 
-        public void MoveTo(Vector3 position, bool isFinalPoint)
+        public void MoveTo(Vector3 position)
         {
-            finalPoint = isFinalPoint;
             targetTf = null;
             targetPos = position;
             state = States.Moving;

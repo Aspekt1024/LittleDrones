@@ -5,13 +5,13 @@ namespace Aspekt.Drones
 {
     public class AnimationState<L, V> : MachineState<L, V>
     {
-        private Animator animator;
-        
-        protected override void OnInit()
-        {
-            animator = agent.Owner.GetComponent<ICanAnimate>().GetAnimator();;
-        }
+        private readonly Animator animator;
 
+        public AnimationState(IAIAgent<L, V> agent, Animator animator) : base(agent)
+        {
+            this.animator = animator;
+        }
+        
         public override void Start()
         {
         }

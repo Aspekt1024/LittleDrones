@@ -5,16 +5,29 @@ namespace Aspekt.Drones
 {
     public class MoveState : MachineState<AIAttributes, object>
     {
-        private IMovement movement;
+        private readonly IMovement movement;
         
-        protected override void OnInit()
+        private Transform targetTf;
+        private Vector3 targetPos;
+
+        private float targetReachedDistance;
+
+        public MoveState(IAIAgent<AIAttributes, object> agent, IMovement movement) : base(agent)
         {
-            movement = agent.Owner.GetComponent<IMoveable>().GetMovement();
+            this.movement = movement;
         }
 
         public override void Start()
         {
             movement.Run();
+            if (targetTf != null)
+            {
+                movement.MoveTo(targetTf);
+            }
+            else
+            {
+                movement.MoveTo(targetPos);
+            }
         }
 
         public override void Pause()
@@ -25,14 +38,29 @@ namespace Aspekt.Drones
         public override void Stop()
         {
             movement.Stop();
+            StateComplete();
         }
 
         public override void Tick(float deltaTime)
         {
             movement.Tick(deltaTime);
+            if (Vector3.Distance(Agent.Owner.transform.position, targetTf.position) < targetReachedDistance)
+            {
+                Stop();
+            }
         }
 
-        public void MoveTo(Vector3 position) => movement.MoveTo(position, true);
-        public void MoveTo(Transform tf) => movement.MoveTo(tf, true);
+        public void SetTarget(Vector3 position, float distance)
+        {
+            targetReachedDistance = distance;
+            targetTf = null;
+            targetPos = position;
+        }
+
+        public void SetTarget(Transform target, float distance)
+        {
+            targetReachedDistance = distance;
+            targetTf = target;
+        }
     }
 }

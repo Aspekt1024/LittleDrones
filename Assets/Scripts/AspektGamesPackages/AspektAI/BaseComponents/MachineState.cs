@@ -4,14 +4,13 @@ namespace Aspekt.AI
 {
     public abstract class MachineState<L, V> : IMachineState<L, V>
     {
-        protected IAIAgent<L, V> agent;
+        protected readonly IAIAgent<L, V> Agent;
         
         public event Action OnComplete = delegate { };
-        
-        public void Init(IAIAgent<L, V> parentAgent)
+
+        public MachineState(IAIAgent<L, V> agent)
         {
-            agent = parentAgent;
-            OnInit();
+            Agent = agent;
         }
 
         public virtual void Tick(float deltaTime)
@@ -31,10 +30,5 @@ namespace Aspekt.AI
         {
             OnComplete?.Invoke();
         }
-
-        /// <summary>
-        /// Called at the end of the Init phase for custom state setup
-        /// </summary>
-        protected abstract void OnInit();
     }
 }

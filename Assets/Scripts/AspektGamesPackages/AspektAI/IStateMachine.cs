@@ -1,18 +1,18 @@
+using System;
+
 namespace Aspekt.AI
 {
     public interface IStateMachine<L, V>
     {
         /// <summary>
+        /// Called when the state machine has completed its queue
+        /// </summary>
+        event Action OnComplete;
+        
+        /// <summary>
         /// Adds the state to the queue
         /// </summary>
         void Enqueue(IMachineState<L, V> state);
-        
-        /// <summary>
-        /// Creates a new instance of a state of the given type and adds it to the queue
-        /// </summary>
-        /// <typeparam name="T">The type of the machine state to add to the queue</typeparam>
-        /// <returns>The new machine state instance</returns>
-        T AddState<T>() where T : IMachineState<L, V>, new();
         
         /// <summary>
         /// Starts the state machine

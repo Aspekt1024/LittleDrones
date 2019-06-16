@@ -2,12 +2,7 @@ using UnityEngine;
 
 namespace Aspekt.Drones
 {
-    public enum ResourceTypes
-    {
-        None, Iron, Coal, Copper
-    }
-    
-    public abstract class ResourceBase : MonoBehaviour, IGrabbableItem
+    public class ResourceBase : MonoBehaviour, IGrabbableItem
     {
         public ResourceTypes resourceType;
         

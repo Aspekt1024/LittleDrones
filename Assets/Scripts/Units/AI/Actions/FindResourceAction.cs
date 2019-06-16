@@ -39,6 +39,24 @@ namespace Aspekt.Drones
             AddEffect(AIAttributes.HasItemToGather, true);
         }
 
+        protected override bool CheckProceduralConditions()
+        {
+            return true;
+        }
+
+        protected override bool Begin(IStateMachine<AIAttributes, object> stateMachine)
+        {
+            sensor = Agent.Sensors.Get<ResourceSensor>();
+            if (sensor == null) return false;
+
+            resourceType = (ResourceTypes)Agent.Memory.Get(AIAttributes.ResourceGoalType);
+            if (resourceType == ResourceTypes.None) return false;
+
+            timeStartedScanning = Time.time;
+            
+            return true;
+        }
+
         protected override void OnTick(float deltaTime)
         {
             if (Time.time < timeStartedScanning + scanTime) return;
@@ -53,19 +71,6 @@ namespace Aspekt.Drones
                 Agent.Memory.Set(AIAttributes.ItemToGather, item);
                 ActionSuccess();
             }
-        }
-
-        protected override bool Begin(IStateMachine<AIAttributes, object> stateMachine)
-        {
-            sensor = Agent.Sensors.Get<ResourceSensor>();
-            if (sensor == null) return false;
-
-            resourceType = (ResourceTypes)Agent.Memory.Get(AIAttributes.ResourceGoalType);
-            if (resourceType == ResourceTypes.None) return false;
-
-            timeStartedScanning = Time.time;
-            
-            return true;
         }
     }
 }
