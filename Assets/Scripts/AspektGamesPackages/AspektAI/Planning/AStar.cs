@@ -65,7 +65,7 @@ namespace Aspekt.AI.Planning
         {
             for (int i = nullNodes.Count - 1; i >= 0; i--)
             {
-                if (!nullNodes[i].GetAction().CheckProceduralPreconditions()) continue;
+                //if (!nullNodes[i].GetAction().IsEnabled()) continue;
                 if (!nullNodes[i].GetAction().CheckComponents()) continue;
                 if (!AchievesPrecondition(nullNodes[i])) continue;
                 

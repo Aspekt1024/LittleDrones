@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50340772cb2449568d694194e6da2ba0, type: 3}
-  m_Name: GatherFromDeposit
+  m_Script: {fileID: 11500000, guid: 35ba14c998274cb29c0e979d442a6287, type: 3}
+  m_Name: ObjectSensor
   m_EditorClassIdentifier: 
-  itemName: Gather from deposit action
-  description: gathers from a deposit
-  icon: {fileID: 21300000, guid: 85a96536cdeba7e46b4a254c6c705151, type: 3}
-  action:
-    gatherDistance: 2
+  itemName: Object Sensor
+  description: Senses all types of objects
+  icon: {fileID: 21300000, guid: 325d33c6d266f0e448f60efb34dde7b1, type: 3}

@@ -5,15 +5,11 @@ using UnityEngine;
 
 namespace Aspekt.Drones
 {
-    /// <summary>
-    /// Finds the closest item of the given type
-    /// </summary>
-    [Serializable]
-    public class FindResourceAction : AIAction<AIAttributes, object>
+    public class FindDepositAction : AIAction<AIAttributes, object>
     {
         public float scanTime = 0.5f;
 
-        private ResourceSensor sensor;
+        private ObjectSensor objectSensor;
         private ResourceTypes resourceType;
         
         public override float Cost => 1f;
@@ -21,14 +17,15 @@ namespace Aspekt.Drones
         public override void GetComponents()
         {
         }
-        
+
         public override bool CheckComponents()
         {
             resourceType = (ResourceTypes)Agent.Memory.Get(AIAttributes.ResourceGoalType);
             if (resourceType == ResourceTypes.None) return false;
 
-            sensor = Agent.Sensors.Get<ResourceSensor>();
-            return sensor != null && sensor.ScanResources(resourceType).Any();
+            objectSensor = Agent.Sensors.Get<ObjectSensor>();
+            bool foundDeposit = objectSensor.IsObjectObtainable<ResourceDeposit>(r => r.resourceType == resourceType);
+            return objectSensor != null && foundDeposit;
         }
 
         // TODO set as animation
@@ -40,7 +37,7 @@ namespace Aspekt.Drones
 
         protected override void SetEffects()
         {
-            AddEffect(AIAttributes.HasItemToGather, true);
+            AddEffect(AIAttributes.HasDepositToGather, true);
         }
 
         protected override bool CheckProceduralConditions()
@@ -50,8 +47,8 @@ namespace Aspekt.Drones
 
         protected override bool Begin(IStateMachine<AIAttributes, object> stateMachine)
         {
-            sensor = Agent.Sensors.Get<ResourceSensor>();
-            if (sensor == null) return false;
+            objectSensor = Agent.Sensors.Get<ObjectSensor>();
+            if (objectSensor == null) return false;
 
             resourceType = (ResourceTypes)Agent.Memory.Get(AIAttributes.ResourceGoalType);
             if (resourceType == ResourceTypes.None) return false;
@@ -65,14 +62,14 @@ namespace Aspekt.Drones
         {
             if (Time.time < timeStartedScanning + scanTime) return;
             
-            var item = sensor.GetClosestResource(resourceType, Agent.Transform.position);
-            if (item == null)
+            var deposit = objectSensor.GetClosest<ResourceDeposit>(r => r.resourceType == resourceType);
+            if (deposit == null)
             {
                 ActionFailure();
             }
             else
             {
-                Agent.Memory.Set(AIAttributes.ItemToGather, item);
+                Agent.Memory.Set(AIAttributes.DepositToGather, deposit);
                 ActionSuccess();
             }
         }

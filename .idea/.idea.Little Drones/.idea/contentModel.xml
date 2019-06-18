@@ -273,12 +273,11 @@
             </e>
           </e>
           <e p="Items" t="Include">
-            <e p="GatherableDeposit.cs" t="Include" />
-            <e p="IGatherable.cs" t="Include" />
             <e p="IGrabbableItem.cs" t="Include" />
             <e p="Modules" t="Include">
               <e p="ActionModule.cs" t="Include" />
               <e p="ActionModules" t="Include">
+                <e p="FindDepositActionModule.cs" t="Include" />
                 <e p="FindResourceActionModule.cs" t="Include" />
                 <e p="GatherFromDepositActionModule.cs" t="Include" />
                 <e p="PickupItemActionModule.cs" t="Include" />
@@ -292,12 +291,12 @@
               <e p="SensorModule.cs" t="Include" />
               <e p="SensorModules" t="Include">
                 <e p="BuildingSensorModule.cs" t="Include" />
+                <e p="ObjectSensorModule.cs" t="Include" />
                 <e p="ResourceSensorModule.cs" t="Include" />
               </e>
             </e>
             <e p="Resource" t="Include">
               <e p="ResourceBase.cs" t="Include" />
-              <e p="ResourceDeposit.cs" t="Include" />
               <e p="ResourceTypes.cs" t="Include" />
             </e>
           </e>
@@ -315,6 +314,11 @@
               <e p="IStorage.cs" t="Include" />
               <e p="ResourceDepot.cs" t="Include" />
             </e>
+            <e p="Deposits" t="Include">
+              <e p="GatherableDeposit.cs" t="Include" />
+              <e p="IGatherable.cs" t="Include" />
+              <e p="ResourceDeposit.cs" t="Include" />
+            </e>
             <e p="IObject.cs" t="Include" />
           </e>
           <e p="UI" t="Include">
@@ -327,6 +331,7 @@
           <e p="Units" t="Include">
             <e p="AI" t="Include">
               <e p="Actions" t="Include">
+                <e p="FindDepositAction.cs" t="Include" />
                 <e p="FindResourceAction.cs" t="Include" />
                 <e p="GatherFromDepositAction.cs" t="Include" />
                 <e p="PickupItemAction.cs" t="Include" />
@@ -344,6 +349,8 @@
               </e>
               <e p="Sensors" t="Include">
                 <e p="BuildingSensor.cs" t="Include" />
+                <e p="LayerSensorBase.cs" t="Include" />
+                <e p="ObjectSensor.cs" t="Include" />
                 <e p="ObjectSensorBase.cs" t="Include" />
                 <e p="ResourceSensor.cs" t="Include" />
               </e>

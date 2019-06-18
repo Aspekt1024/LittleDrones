@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Aspekt.Drones
 {
-    public class Drone : UnitBase, IMoveable, ICanAnimate
+    public class Drone : UnitBase, IMoveable, ICanAnimate, ICanGather
     {
 #pragma warning disable 649
         [SerializeField] private DroneAIAgent ai;
@@ -16,11 +16,13 @@ namespace Aspekt.Drones
 #pragma warning restore 649
 
         private IMovement movement;
+        private IGatherer gatherer;
         private Animator animator;
 
         private void Awake()
         {
             movement = new GroundMovement(GetComponent<Rigidbody>(), GetComponentInChildren<Seeker>());
+            gatherer = new GatherComponent(this);
             animator = GetComponent<Animator>();
             
             ai.Init(gameObject);
@@ -35,6 +37,7 @@ namespace Aspekt.Drones
         }
 
         public IMovement GetMovement() => movement;
+        public IGatherer GetGatherer() => gatherer;
         public Animator GetAnimator() => animator;
 
         public void PowerOn()
@@ -89,6 +92,10 @@ namespace Aspekt.Drones
                 modulePrefab = Resources.Load<SensorModule>("DroneModules/Sensors/BuildingSensor");
                 module = Instantiate(modulePrefab);
                 sensorSlots.AddItem(module);
+                
+                modulePrefab = Resources.Load<SensorModule>("DroneModules/Sensors/ObjectSensor");
+                module = Instantiate(modulePrefab);
+                sensorSlots.AddItem(module);
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -106,6 +113,10 @@ namespace Aspekt.Drones
                 actionSlots.AddItem(module);
                 
                 modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/GatherFromDeposit");
+                module = Instantiate(modulePrefab);
+                actionSlots.AddItem(module);
+                
+                modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/FindDeposit");
                 module = Instantiate(modulePrefab);
                 actionSlots.AddItem(module);
             }

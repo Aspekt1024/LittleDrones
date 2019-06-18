@@ -15,6 +15,9 @@ namespace Aspekt.Drones
         public float grabDistance = 2f;
         public float gatherTime = 0.5f;
 
+        private IGatherer gatherer;
+        private IMovement movement;
+
         private MoveState moveState;
         
         // TODO setup as animation
@@ -25,11 +28,15 @@ namespace Aspekt.Drones
         
         public override float Cost => 1f; // TODO update to return the distance to the closest resource
 
+        public override void GetComponents()
+        {
+            movement = Agent.Owner.GetComponent<IMoveable>()?.GetMovement();
+            gatherer = Agent.Owner.GetComponent<ICanGather>()?.GetGatherer();
+        }
+
         public override bool CheckComponents()
         {
-            // TODO check can move
-            // TODO check can pick up items (has grabber)
-            return true;
+            return gatherer != null && movement != null;
         }
 
         protected override bool Begin(IStateMachine<AIAttributes, object> stateMachine)

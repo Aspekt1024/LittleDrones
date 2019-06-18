@@ -5,6 +5,24 @@ namespace Aspekt.Drones
     public interface IGatherer
     {
         /// <summary>
+        /// The item currently held by the gatherer
+        /// </summary>
+        IGrabbableItem HeldItem { get; }
+
+        /// <summary>
+        /// Gives the gatherer an item to hold
+        /// </summary>
+        /// <param name="item">the item to hold</param>
+        /// <returns>true if the gatherer can hold the item</returns>
+        bool HoldItem(IGrabbableItem item);
+
+        /// <summary>
+        /// Retrieves the item from the gatherer
+        /// </summary>
+        /// <returns>The item currently being held (null if nothing is held)</returns>
+        IGrabbableItem ReleaseItem();
+        
+        /// <summary>
         /// Instructs the gatherer to begin gathering the target gatherable
         /// </summary>
         /// <param name="target">The target gatherable</param>

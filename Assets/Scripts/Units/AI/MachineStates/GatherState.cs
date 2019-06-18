@@ -1,5 +1,4 @@
 using Aspekt.AI;
-using UnityEngine;
 
 namespace Aspekt.Drones
 {
@@ -47,7 +46,7 @@ namespace Aspekt.Drones
 
         private void OnGatherComplete(IGatherable g)
         {
-            Agent.Memory.Set(AIAttributes.HeldItem, g.GetItem());
+            Agent.Memory.Set(AIAttributes.HeldItem, gatherer.HeldItem);
             StateComplete();
         }
        

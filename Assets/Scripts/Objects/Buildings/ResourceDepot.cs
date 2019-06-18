@@ -17,6 +17,8 @@ namespace Aspekt.Drones
             if (!(item is ResourceBase resource)) return false;
             if (!resourceTypes.Contains(resource.resourceType)) return false;
             
+            Destroy(resource.gameObject);
+            
             // TODO setup resources
             Debug.Log("collected resource: " + resource.resourceType);
             

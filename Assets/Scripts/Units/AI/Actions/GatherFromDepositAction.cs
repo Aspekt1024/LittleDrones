@@ -17,13 +17,21 @@ namespace Aspekt.Drones
         // TODO setup as animation
         private bool isGathering;
         private float gatherPercent;
+
+        private IMovement movement;
+        private IGatherer gatherer;
+        
         public override float Cost => 5f; // TODO update to return the distance to the closest deposit plus time to gather
 
+        public override void GetComponents()
+        {
+            movement = Agent.Owner.GetComponent<IMoveable>()?.GetMovement();
+            gatherer = Agent.Owner.GetComponent<ICanGather>()?.GetGatherer();
+        }
+        
         public override bool CheckComponents()
         {
-            // TODO check can move
-            // TODO check can gather (has gatherer component)
-            return true;
+            return movement != null && gatherer != null;
         }
 
         protected override bool Begin(IStateMachine<AIAttributes, object> stateMachine)
@@ -33,8 +41,8 @@ namespace Aspekt.Drones
 
             this.stateMachine = stateMachine;
 
-            var moveState = new MoveState(Agent, Agent.Owner.GetComponent<IMoveable>().GetMovement());
-            var gatherState = new GatherState(Agent, Agent.Owner.GetComponent<ICanGather>().GetGatherer());
+            var moveState = new MoveState(Agent, movement);
+            var gatherState = new GatherState(Agent, gatherer);
             moveState.SetTarget(deposit.transform, gatherDistance);
             gatherState.SetTarget(deposit);
             

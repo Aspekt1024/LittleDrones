@@ -14,16 +14,22 @@ namespace Aspekt.Drones
         public float placementDistance = 2f;
 
         private IGrabbableItem item;
+        private IMovement movement;
 
         // TODO building and storage are different interfaces of the same object
         private BuildingBase building;
         private IStorage storage;
         
         public override float Cost => 1f; // TODO update to return the distance to the closest storage 
+        
+        public override void GetComponents()
+        {
+            movement = Agent.Owner.GetComponent<IMoveable>()?.GetMovement();
+        }
+        
         public override bool CheckComponents()
         {
-            // TODO can move
-            return Agent.Sensors.HasSensor<BuildingSensor>();
+            return movement != null && Agent.Sensors.HasSensor<BuildingSensor>();
         }
 
         protected override bool Begin(IStateMachine<AIAttributes, object> stateMachine)

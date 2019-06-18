@@ -88,7 +88,7 @@ namespace Aspekt.AI.Internal
             foreach (var action in agent.Actions.GetActions())
             {
                 agent.LogTrace(this, $"checking if {action} meets goal conditions...");
-                if (!action.CheckProceduralPreconditions()) continue;
+                //if (!action.IsEnabled()) continue;
 
                 foreach (var effect in action.GetEffects())
                 {

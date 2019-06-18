@@ -11,6 +11,7 @@ namespace Aspekt.Drones
         public void AttachTo(DroneAIAgent agent)
         {
             agent.Actions.AddAction(action);
+            action.GetComponents();
         }
 
         public void RemoveFrom(DroneAIAgent agent)

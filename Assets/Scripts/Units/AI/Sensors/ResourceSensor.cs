@@ -13,14 +13,12 @@ namespace Aspekt.Drones
 
         public ResourceBase[] ScanResources(ResourceTypes type)
         {
-            bool TypeMatchPredicate(ResourceBase r) => r.resourceType == type;
-            return Scan(TypeMatchPredicate);
+            return Scan(r => r.resourceType == type);
         }
 
         public ResourceBase GetClosestResource(ResourceTypes type, Vector3 pos)
         {
-            bool TypeMatchPredicate(ResourceBase r) => r.resourceType == type;
-            return GetClosestObject(pos, TypeMatchPredicate);
+            return GetClosestObject(pos, r => r.resourceType == type);
         }
         
         protected override void OnInit()

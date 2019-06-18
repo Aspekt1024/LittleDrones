@@ -33,6 +33,11 @@ namespace Aspekt.Drones
                 Debug.LogWarning($"{nameof(ResourceDeposit)} of type {resourceType} has a null prefab");
             }
         }
+        
+        public override string ToString()
+        {
+            return resourceType.ToString() + " Deposit";
+        }
 
         protected override IGrabbableItem CreateGatherableItem()
         {

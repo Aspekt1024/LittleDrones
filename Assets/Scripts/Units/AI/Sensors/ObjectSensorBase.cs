@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Aspekt.AI;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 namespace Aspekt.Drones
@@ -28,7 +29,7 @@ namespace Aspekt.Drones
             timeLastSensed = Time.time;
             
             var colliders = Physics.OverlapSphere(Agent.Transform.position, detectionRadius, ObjectLayerMask);
-            scannedObjects = colliders.Select(FindBaseComponent).Where(c => predicate(c)).ToArray();
+            scannedObjects = colliders.Select(FindBaseComponent).Where(c => c != null && predicate(c)).ToArray();
             Agent.LogInfo(this, $"found {scannedObjects.Length} {typeof(T).Name}s");
             return scannedObjects;
         }
