@@ -8,7 +8,7 @@ namespace Aspekt.Drones
     /// Move to an item (stored in memory) and pick it up
     /// </summary>
     [Serializable]
-    public class GatherFromDepositAction : AIAction<AIAttributes, object>
+    public class GatherFromDepositAction : DroneAction
     {
         public float gatherDistance = 2f;
 
@@ -22,15 +22,15 @@ namespace Aspekt.Drones
         private IGatherer gatherer;
         
         public override float Cost => 5f; // TODO update to return the distance to the closest deposit plus time to gather
-
-        public override void GetComponents()
-        {
-            movement = Agent.Owner.GetComponent<IMoveable>()?.GetMovement();
-            gatherer = Agent.Owner.GetComponent<ICanGather>()?.GetGatherer();
-        }
         
         public override bool CheckComponents()
         {
+            if (movement == null || gatherer == null)
+            {
+                movement = GetAbility<IMovement>();
+                gatherer = GetAbility<IGatherer>();
+            }
+            
             return movement != null && gatherer != null;
         }
 

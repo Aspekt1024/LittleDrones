@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Aspekt.Drones
 {
-    public interface IMovement
+    public interface IMovement : IAbility
     {
 	    /// <summary>
 	    /// Moves to a target transform

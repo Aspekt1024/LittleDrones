@@ -8,8 +8,6 @@ namespace Aspekt.Drones
         private float gatherPercent;
         private Action<IGatherable> gatheringCompletedCallback;
 
-        private ICanGather parent;
-
         private enum States
         {
             None, Gathering
@@ -18,6 +16,8 @@ namespace Aspekt.Drones
         private States state = States.None;
         
         public IGrabbableItem HeldItem { get; private set; }
+
+        public bool Enabled { get; set; } = true;
         
         public bool HoldItem(IGrabbableItem item)
         {
@@ -33,11 +33,6 @@ namespace Aspekt.Drones
             return item;
         }
 
-        public GatherComponent(ICanGather parent)
-        {
-            this.parent = parent;
-        }
-        
         public bool StartGathering(IGatherable target, Action<IGatherable> completionCallback)
         {
             var success = target.AddGatherer(this);

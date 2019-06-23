@@ -3,6 +3,11 @@ namespace Aspekt.Drones
     public interface IUnit
     {
         /// <summary>
+        /// The ability manager for the unit
+        /// </summary>
+        IAbilityManager Abilities { get; }
+        
+        /// <summary>
         /// Removes the unit from the game
         /// </summary>
         void Remove();

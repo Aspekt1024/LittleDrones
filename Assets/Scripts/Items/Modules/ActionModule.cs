@@ -6,24 +6,24 @@ namespace Aspekt.Drones
 {
     public abstract class ActionModule : InventoryItem, IDroneModule
     {
-        private IAIAction<AIAttributes, object> action;
+        private DroneAction action;
         
         public void AttachTo(DroneAIAgent agent)
         {
             agent.Actions.AddAction(action);
-            action.GetComponents();
+            action.OnAttach(agent.Owner.GetComponent<Drone>());
         }
 
         public void RemoveFrom(DroneAIAgent agent)
         {
             agent.Actions.AddAction(action);
         }
+
+        protected abstract DroneAction GetAction();
         
         private void Awake()
         {
-            action = CreateAction();
+            action = GetAction();
         }
-
-        protected abstract AIAction<AIAttributes, object> CreateAction();
     }
 }

@@ -2,7 +2,7 @@ using System;
 
 namespace Aspekt.Drones
 {
-    public interface IGatherer
+    public interface IGatherer : IAbility
     {
         /// <summary>
         /// The item currently held by the gatherer

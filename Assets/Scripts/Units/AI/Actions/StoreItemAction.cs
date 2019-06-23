@@ -9,7 +9,7 @@ namespace Aspekt.Drones
     /// Move to a storage location and deposit the held item
     /// </summary>
     [Serializable]
-    public class StoreItemAction : AIAction<AIAttributes, object>
+    public class StoreItemAction : DroneAction
     {
         public float placementDistance = 2f;
 
@@ -22,14 +22,15 @@ namespace Aspekt.Drones
         
         public override float Cost => 1f; // TODO update to return the distance to the closest storage 
         
-        public override void GetComponents()
-        {
-            movement = Agent.Owner.GetComponent<IMoveable>()?.GetMovement();
-        }
-        
+
         public override bool CheckComponents()
         {
-            return movement != null && Agent.Sensors.HasSensor<BuildingSensor>();
+            if (movement == null)
+            {
+                movement = GetAbility<IMovement>();
+            }
+            
+            return movement != null;
         }
 
         protected override bool Begin(IStateMachine<AIAttributes, object> stateMachine)
@@ -51,7 +52,7 @@ namespace Aspekt.Drones
             if (building == null || !(building is IStorage s)) return false;
             storage = s;
 
-            var moveState = new MoveState(Agent, Agent.Owner.GetComponent<IMoveable>().GetMovement());
+            var moveState = new MoveState(Agent, movement);
             moveState.SetTarget(building.Transform, placementDistance);
             stateMachine.Enqueue(moveState);
             stateMachine.OnComplete += OnTargetReached;

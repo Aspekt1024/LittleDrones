@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Aspekt.Drones
 {
-    public class Drone : UnitBase, IMoveable, ICanAnimate, ICanGather
+    public class Drone : UnitBase
     {
 #pragma warning disable 649
         [SerializeField] private DroneAIAgent ai;
@@ -14,15 +14,14 @@ namespace Aspekt.Drones
         [SerializeField] private ActionInventory actionSlots;
         [SerializeField] private GoalInventory goalSlots;
 #pragma warning restore 649
-
-        private IMovement movement;
-        private IGatherer gatherer;
+        
         private Animator animator;
 
+        public override IAbilityManager Abilities { get; } = new AbilityManager();
+        
         private void Awake()
         {
-            movement = new GroundMovement(GetComponent<Rigidbody>(), GetComponentInChildren<Seeker>());
-            gatherer = new GatherComponent(this);
+            InitialiseDroneAbilities();
             animator = GetComponent<Animator>();
             
             ai.Init(gameObject);
@@ -35,9 +34,7 @@ namespace Aspekt.Drones
         {
             ai.Run();
         }
-
-        public IMovement GetMovement() => movement;
-        public IGatherer GetGatherer() => gatherer;
+        
         public Animator GetAnimator() => animator;
 
         public void PowerOn()
@@ -131,6 +128,14 @@ namespace Aspekt.Drones
 //                module = Instantiate(modulePrefab);
 //                goalSlots.AddItem(module);
             }
+        }
+
+        private void InitialiseDroneAbilities()
+        {
+            var movement = new GroundMovement(GetComponent<Rigidbody>(), GetComponentInChildren<Seeker>());
+            var gatherer = new GatherComponent();
+            Abilities.AddAbility(movement);
+            Abilities.AddAbility(gatherer);
         }
     }
 }

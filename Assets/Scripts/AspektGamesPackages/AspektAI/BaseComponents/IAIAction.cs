@@ -47,11 +47,6 @@ namespace Aspekt.AI
         /// Returns the preconditions required for the action to run
         /// </summary>
         Dictionary<L, V> GetPreconditions();
-
-        /// <summary>
-        /// Used to setup components on the agent
-        /// </summary>
-        void GetComponents();
         
         /// <summary>
         /// Check the components required for the action to run are available. Called during the planning phase

@@ -8,7 +8,7 @@ namespace Aspekt.Drones
     {
         public FindDepositAction action = new FindDepositAction();
 
-        protected override AIAction<AIAttributes, object> CreateAction()
+        protected override DroneAction GetAction()
         {
             return action;
         }

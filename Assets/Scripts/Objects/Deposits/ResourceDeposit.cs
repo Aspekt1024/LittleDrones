@@ -36,7 +36,7 @@ namespace Aspekt.Drones
         
         public override string ToString()
         {
-            return resourceType.ToString() + " Deposit";
+            return resourceType + " Deposit";
         }
 
         protected override IGrabbableItem CreateGatherableItem()

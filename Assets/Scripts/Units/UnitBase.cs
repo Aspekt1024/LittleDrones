@@ -7,6 +7,8 @@ namespace Aspekt.Drones
     /// </summary>
     public abstract class UnitBase : MonoBehaviour, IUnit
     {
+        public abstract IAbilityManager Abilities { get; }
+        
         private void Start()
         {
             GameManager.Units.RegisterUnit(this);

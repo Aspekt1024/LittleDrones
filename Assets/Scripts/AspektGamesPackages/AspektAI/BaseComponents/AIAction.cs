@@ -49,7 +49,6 @@ namespace Aspekt.AI
 
         public Dictionary<L, V> GetPreconditions() => preconditions;
 
-        public abstract void GetComponents();
         public abstract bool CheckComponents();
 
         public Dictionary<L, V> GetEffects()

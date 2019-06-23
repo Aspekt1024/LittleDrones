@@ -6,11 +6,11 @@ namespace Aspekt.Drones
     [CreateAssetMenu(fileName = "New Find Resource Action", menuName = "Drone/Action Module/Find Resource")]
     public class FindResourceActionModule : ActionModule
     {
-        public FindResourceAction retrieveAction = new FindResourceAction();
+        public FindResourceAction action = new FindResourceAction();
 
-        protected override AIAction<AIAttributes, object> CreateAction()
+        protected override DroneAction GetAction()
         {
-            return retrieveAction;
+            return action;
         }
     }
 }

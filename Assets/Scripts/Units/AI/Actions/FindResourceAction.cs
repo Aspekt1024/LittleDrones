@@ -9,7 +9,7 @@ namespace Aspekt.Drones
     /// Finds the closest item of the given type
     /// </summary>
     [Serializable]
-    public class FindResourceAction : AIAction<AIAttributes, object>
+    public class FindResourceAction : DroneAction
     {
         public float scanTime = 0.5f;
 
@@ -17,10 +17,6 @@ namespace Aspekt.Drones
         private ResourceTypes resourceType;
         
         public override float Cost => 1f;
-        
-        public override void GetComponents()
-        {
-        }
         
         public override bool CheckComponents()
         {

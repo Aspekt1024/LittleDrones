@@ -329,6 +329,18 @@
             <e p="UnitUI.cs" t="Include" />
           </e>
           <e p="Units" t="Include">
+            <e p="Abilities" t="Include">
+              <e p="Gathering" t="Include">
+                <e p="GatherComponent.cs" t="Include" />
+              </e>
+              <e p="IAbility.cs" t="Include" />
+              <e p="IGatherer.cs" t="Include" />
+              <e p="IMovement.cs" t="Include" />
+              <e p="Movement" t="Include">
+                <e p="BasicMovement.cs" t="Include" />
+                <e p="GroundMovement.cs" t="Include" />
+              </e>
+            </e>
             <e p="AI" t="Include">
               <e p="Actions" t="Include">
                 <e p="FindDepositAction.cs" t="Include" />
@@ -338,6 +350,7 @@
                 <e p="StoreItemAction.cs" t="Include" />
               </e>
               <e p="AIAttributes.cs" t="Include" />
+              <e p="DroneAction.cs" t="Include" />
               <e p="DroneAIAgent.cs" t="Include" />
               <e p="Goals" t="Include">
                 <e p="GatherResourceGoal.cs" t="Include" />
@@ -357,19 +370,10 @@
             </e>
             <e p="Attributes" t="Include">
               <e p="ICanAnimate.cs" t="Include" />
-              <e p="ICanGather.cs" t="Include" />
-              <e p="IMoveable.cs" t="Include" />
             </e>
             <e p="Components" t="Include">
-              <e p="Gathering" t="Include">
-                <e p="GatherComponent.cs" t="Include" />
-              </e>
-              <e p="IGatherer.cs" t="Include" />
-              <e p="IMovement.cs" t="Include" />
-              <e p="Movement" t="Include">
-                <e p="BasicMovement.cs" t="Include" />
-                <e p="GroundMovement.cs" t="Include" />
-              </e>
+              <e p="AbilityManager.cs" t="Include" />
+              <e p="IAbilityManager.cs" t="Include" />
             </e>
             <e p="Drone" t="Include">
               <e p="Drone.cs" t="Include" />
@@ -420,9 +424,7 @@
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
       <e p="PackageToolsEditor.csproj" t="IncludeRecursive" />
-      <e p="Temp" t="ExcludeRecursive">
-        <e p="bin" t="ExcludeRecursive" />
-      </e>
+      <e p="Temp\bin" t="ExcludeRecursive" />
     </e>
   </component>
 </project>

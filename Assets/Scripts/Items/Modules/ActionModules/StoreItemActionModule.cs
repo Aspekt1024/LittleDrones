@@ -6,11 +6,11 @@ namespace Aspekt.Drones
     [CreateAssetMenu(fileName = "New Store Item Action", menuName = "Drone/Action Module/Store Item")]
     public class StoreItemActionModule : ActionModule
     {
-        public StoreItemAction pickupAction = new StoreItemAction();
+        public StoreItemAction action = new StoreItemAction();
 
-        protected override AIAction<AIAttributes, object> CreateAction()
+        protected override DroneAction GetAction()
         {
-            return pickupAction;
+            return action;
         }
     }
 }

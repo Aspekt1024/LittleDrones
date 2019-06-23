@@ -30,6 +30,8 @@ namespace Aspekt.Drones
         }
         private States state = States.None;
 
+        public bool Enabled { get; set; } = true;
+
         public GroundMovement(Rigidbody body, Seeker seeker)
         {
             this.body = body;

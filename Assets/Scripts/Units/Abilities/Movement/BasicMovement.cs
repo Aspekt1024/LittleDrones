@@ -21,6 +21,8 @@ namespace Aspekt.Drones
             None, Moving, Stopping
         }
         private States state = States.None;
+        
+        public bool Enabled { get; set; }
 
         public BasicMovement(Rigidbody body)
         {

@@ -10,7 +10,7 @@ namespace Aspekt.Drones
     /// Move to an item (stored in memory) and pick it up
     /// </summary>
     [Serializable]
-    public class PickupItemAction : AIAction<AIAttributes, object>
+    public class PickupItemAction : DroneAction
     {
         public float grabDistance = 2f;
         public float gatherTime = 0.5f;
@@ -27,16 +27,16 @@ namespace Aspekt.Drones
         private IGrabbableItem item;
         
         public override float Cost => 1f; // TODO update to return the distance to the closest resource
-
-        public override void GetComponents()
-        {
-            movement = Agent.Owner.GetComponent<IMoveable>()?.GetMovement();
-            gatherer = Agent.Owner.GetComponent<ICanGather>()?.GetGatherer();
-        }
-
+        
         public override bool CheckComponents()
         {
-            return gatherer != null && movement != null;
+            if (movement == null || gatherer == null)
+            {
+                movement = GetAbility<IMovement>();
+                gatherer = GetAbility<IGatherer>();
+            }
+            
+            return movement != null && gatherer != null;
         }
 
         protected override bool Begin(IStateMachine<AIAttributes, object> stateMachine)
@@ -46,7 +46,7 @@ namespace Aspekt.Drones
 
             isGathering = false;
             
-            moveState = new MoveState(Agent, Agent.Owner.GetComponent<IMoveable>().GetMovement());
+            moveState = new MoveState(Agent, movement);
             moveState.SetTarget(item.Transform, grabDistance);
             stateMachine.Enqueue(moveState);
             stateMachine.OnComplete += OnTargetReached;

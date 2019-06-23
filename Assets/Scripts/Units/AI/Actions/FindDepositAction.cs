@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Aspekt.Drones
 {
-    public class FindDepositAction : AIAction<AIAttributes, object>
+    public class FindDepositAction : DroneAction
     {
         public float scanTime = 0.5f;
 
@@ -13,10 +13,6 @@ namespace Aspekt.Drones
         private ResourceTypes resourceType;
         
         public override float Cost => 1f;
-        
-        public override void GetComponents()
-        {
-        }
 
         public override bool CheckComponents()
         {

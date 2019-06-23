@@ -53,7 +53,14 @@ namespace Aspekt.AI
             planner.OnActionPlanFound += OnActionPlanFound;
             planner.OnActionPlanNotFound += OnActionPlanNotFound;
             executor.OnActionPlanComplete += OnActionPlanComplete;
+
+            OnInit();
         }
+
+        /// <summary>
+        /// Called after Init, this can be overridden to add additional setup for the agent
+        /// </summary>
+        protected virtual void OnInit() { }
         
         private void Start()
         {

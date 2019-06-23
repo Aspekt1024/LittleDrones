@@ -1,5 +1,6 @@
 using System;
 using Aspekt.AI;
+using UnityEngine;
 
 namespace Aspekt.Drones
 {
@@ -12,6 +13,8 @@ namespace Aspekt.Drones
         }
 
         private Views view;
+
+        private IUnit unit;
         
         public string GetStatus()
         {
@@ -39,6 +42,15 @@ namespace Aspekt.Drones
             base.OnActionPlanComplete();
             LogInfo(this, "action plan complete - finding next goal");
             QueueGoalCalculation();
+        }
+
+        protected override void OnInit()
+        {
+            unit = Owner.GetComponent<IUnit>();
+            if (unit == null)
+            {
+                Debug.LogError($"{nameof(DroneAIAgent)} requires and owner with an {nameof(IUnit)} component");
+            }
         }
     }
 }
