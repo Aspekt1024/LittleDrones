@@ -36,6 +36,7 @@ namespace Aspekt.AI.Internal
             foreach (var goal in goals)
             {
                 currentGoal = goal;
+                if (IsAlreadyAchieved (currentGoal)) continue;
                 if (!IsGoalAchieveableByActions(currentGoal)) continue;
 
                 goal.SetupGoal();
@@ -61,6 +62,15 @@ namespace Aspekt.AI.Internal
 
         public Queue<IAIAction<L, V>> GetActionPlan() => actions;
         public IAIGoal<L, V> GetGoal() => currentGoal;
+
+        private bool IsAlreadyAchieved(IAIGoal<L, V> goal)
+        {
+            foreach (var condition in goal.GetConditions())
+            {
+                if (!agent.Memory.IsMatch(condition.Key, condition.Value)) return false;
+            }
+            return true;
+        }
 
         private bool IsGoalAchieveableByActions(IAIGoal<L, V> goal)
         {

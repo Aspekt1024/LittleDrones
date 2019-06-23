@@ -277,6 +277,7 @@
             <e p="Modules" t="Include">
               <e p="ActionModule.cs" t="Include" />
               <e p="ActionModules" t="Include">
+                <e p="ConsumeFuelActionModule.cs" t="Include" />
                 <e p="FindDepositActionModule.cs" t="Include" />
                 <e p="FindResourceActionModule.cs" t="Include" />
                 <e p="GatherFromDepositActionModule.cs" t="Include" />
@@ -286,6 +287,7 @@
               <e p="GoalModule.cs" t="Include" />
               <e p="GoalModules" t="Include">
                 <e p="GatherResourceGoalModule.cs" t="Include" />
+                <e p="MaintainFuelGoalModule.cs" t="Include" />
               </e>
               <e p="IDroneModule.cs" t="Include" />
               <e p="SensorModule.cs" t="Include" />
@@ -293,6 +295,7 @@
                 <e p="BuildingSensorModule.cs" t="Include" />
                 <e p="ObjectSensorModule.cs" t="Include" />
                 <e p="ResourceSensorModule.cs" t="Include" />
+                <e p="VitalsSensorModule.cs" t="Include" />
               </e>
             </e>
             <e p="Resource" t="Include">
@@ -302,6 +305,7 @@
           </e>
           <e p="Management" t="Include">
             <e p="GameManager.cs" t="Include" />
+            <e p="GameplayManager.cs" t="Include" />
             <e p="IManager.cs" t="Include" />
             <e p="ObjectManager.cs" t="Include" />
             <e p="Singleton.cs" t="Include" />
@@ -343,6 +347,7 @@
             </e>
             <e p="AI" t="Include">
               <e p="Actions" t="Include">
+                <e p="ConsumeFuelAction.cs" t="Include" />
                 <e p="FindDepositAction.cs" t="Include" />
                 <e p="FindResourceAction.cs" t="Include" />
                 <e p="GatherFromDepositAction.cs" t="Include" />
@@ -354,6 +359,7 @@
               <e p="DroneAIAgent.cs" t="Include" />
               <e p="Goals" t="Include">
                 <e p="GatherResourceGoal.cs" t="Include" />
+                <e p="MaintainFuelGoal.cs" t="Include" />
               </e>
               <e p="MachineStates" t="Include">
                 <e p="AnimationState.cs" t="Include" />
@@ -366,10 +372,8 @@
                 <e p="ObjectSensor.cs" t="Include" />
                 <e p="ObjectSensorBase.cs" t="Include" />
                 <e p="ResourceSensor.cs" t="Include" />
+                <e p="VitalsSensor.cs" t="Include" />
               </e>
-            </e>
-            <e p="Attributes" t="Include">
-              <e p="ICanAnimate.cs" t="Include" />
             </e>
             <e p="Components" t="Include">
               <e p="AbilityManager.cs" t="Include" />
@@ -377,6 +381,7 @@
             </e>
             <e p="Drone" t="Include">
               <e p="Drone.cs" t="Include" />
+              <e p="DroneVitals.cs" t="Include" />
               <e p="Inventory" t="Include">
                 <e p="ActionInventory.cs" t="Include" />
                 <e p="GoalInventory.cs" t="Include" />

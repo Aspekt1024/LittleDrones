@@ -6,6 +6,7 @@ namespace Aspekt.Drones
     public class Drone : UnitBase
     {
 #pragma warning disable 649
+        [SerializeField] private DroneVitals vitals;
         [SerializeField] private DroneAIAgent ai;
         
         // TODO move inventory to inventory manager
@@ -18,6 +19,7 @@ namespace Aspekt.Drones
         private Animator animator;
 
         public override IAbilityManager Abilities { get; } = new AbilityManager();
+        public DroneVitals Vitals => vitals;
         
         private void Awake()
         {
@@ -28,27 +30,41 @@ namespace Aspekt.Drones
             sensorSlots.Init(ai);
             actionSlots.Init(ai);
             goalSlots.Init(ai);
+            
+            vitals.SetUsageRate(0.2f);
+            vitals.IsConsumingFuel = false;
         }
-
-        public void StartAI()
-        {
-            ai.Run();
-        }
-        
-        public Animator GetAnimator() => animator;
 
         public void PowerOn()
         {
+            Debug.Log("power on");
+            vitals.IsConsumingFuel = true;
             ai.Run();
         }
 
         public void PowerOff()
         {
+            Debug.Log("power off");
+            vitals.IsConsumingFuel = false;
             ai.Stop();   
         }
+
+        public void AddSensor(SensorModule sensor) => sensorSlots.AddItem(sensor);
+        public void AddAction(ActionModule action) => actionSlots.AddItem(action);
+        public void AddGoal(GoalModule goal) => goalSlots.AddItem(goal);
         
         private void Update()
         {
+            if (vitals.CurrentFuel <= 0f)
+            {
+                Debug.Log("drone ran out of fuel and is dead forever because that's realistic");
+                ai.Stop();
+                Remove();
+                return;
+            }
+            
+            vitals.Tick(Time.deltaTime);
+            
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 var unitUI = GameManager.UI.Get<UnitUI>();
@@ -78,55 +94,6 @@ namespace Aspekt.Drones
                 {
                     inv.Open();
                 }
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                var modulePrefab = Resources.Load<SensorModule>("DroneModules/Sensors/ResourceSensor");
-                var module = Instantiate(modulePrefab);
-                sensorSlots.AddItem(module);
-                
-                modulePrefab = Resources.Load<SensorModule>("DroneModules/Sensors/BuildingSensor");
-                module = Instantiate(modulePrefab);
-                sensorSlots.AddItem(module);
-                
-                modulePrefab = Resources.Load<SensorModule>("DroneModules/Sensors/ObjectSensor");
-                module = Instantiate(modulePrefab);
-                sensorSlots.AddItem(module);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                var modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/PickupItem");
-                var module = Instantiate(modulePrefab);
-                actionSlots.AddItem(module);
-
-                modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/FindResource");
-                module = Instantiate(modulePrefab);
-                actionSlots.AddItem(module);
-                
-                modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/StoreItem");
-                module = Instantiate(modulePrefab);
-                actionSlots.AddItem(module);
-                
-                modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/GatherFromDeposit");
-                module = Instantiate(modulePrefab);
-                actionSlots.AddItem(module);
-                
-                modulePrefab = Resources.Load<ActionModule>("DroneModules/Actions/FindDeposit");
-                module = Instantiate(modulePrefab);
-                actionSlots.AddItem(module);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                var modulePrefab = Resources.Load<GoalModule>("DroneModules/Goals/GatherIronGoal");
-                var module = Instantiate(modulePrefab);
-                goalSlots.AddItem(module);
-                
-//                modulePrefab = Resources.Load<GoalModule>("DroneModules/Goals/PickupResource");
-//                module = Instantiate(modulePrefab);
-//                goalSlots.AddItem(module);
             }
         }
 

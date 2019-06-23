@@ -13,10 +13,12 @@ namespace Aspekt.Drones
         
         private ObjectManager objectManager;
         private UnitManager unitManager;
+        private GameplayManager gameplayManager;
 
         public static ObjectManager Objects => instance.objectManager;
         public static UnitManager Units => instance.unitManager;
         public static UIManager UI => instance.uiManager;
+        public static GameplayManager Gameplay => instance.gameplayManager;
 
         private enum States
         {
@@ -52,10 +54,12 @@ namespace Aspekt.Drones
         {
             objectManager = new ObjectManager();
             unitManager = new UnitManager();
+            gameplayManager = new GameplayManager();
             
             objectManager.Init();
             unitManager.Init();
             uiManager.Init();
+            gameplayManager.Init();
         }
         
     }

@@ -13,6 +13,8 @@ namespace Aspekt.AI
         }
         public UpdateModes updateMode = UpdateModes.OnDemand;
         public float updateInterval = 1f;
+        private const float queueTime = 0.1f;
+        private float timeQueued;
         
         public GameObject Owner { get; private set; }
         public Transform Transform => transform;
@@ -72,7 +74,7 @@ namespace Aspekt.AI
 
         private void Update()
         {
-            if (calculateGoalRequested)
+            if (calculateGoalRequested && Time.time > timeQueued + queueTime)
             {
                 executor.Stop();
                 state = States.AwaitingActionPlan;
@@ -85,11 +87,16 @@ namespace Aspekt.AI
                 QueueGoalCalculation();
                 return;
             }
+
+            if (state == States.AwaitingActionPlan || state == States.Running)
+            {
+                Sensors.Tick(Time.deltaTime);
+            }
             
-            if (state != States.Running) return;
-            
-            Sensors.Tick(Time.deltaTime);
-            executor.Tick(Time.deltaTime);
+            if (state == States.Running)
+            {
+                executor.Tick(Time.deltaTime);
+            }
         }
         
         public void Run()
@@ -105,6 +112,7 @@ namespace Aspekt.AI
 
         public void QueueGoalCalculation()
         {
+            timeQueued = Time.time;
             state = States.AwaitingActionPlan;
             calculateGoalRequested = true;
         }

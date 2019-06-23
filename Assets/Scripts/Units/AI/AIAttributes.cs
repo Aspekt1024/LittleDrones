@@ -12,10 +12,12 @@ namespace Aspekt.Drones
         ItemToGather,
         DepositToGather,
         
+        IsHoldingFuel,
         IsHoldingItem,
         HeldItem,
         
         // Goals
         HasGatheredResource,
+        HasLowFuel,
     }
 }
