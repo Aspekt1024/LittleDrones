@@ -2,30 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9bc76225-ae9a-447d-aeaa-cc1ccd339983" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Data/ResourceData.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Management/DataManager.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Management/DataManager.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Objects/Buildings/CraftingPad.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Objects/Buildings/CraftingPad.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Objects/Buildings/ICraftingStation.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Objects/Buildings/ICraftingStation.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Units/Abilities/IWorker.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Units/Abilities/IWorker.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Units/Drone/DroneParent.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Units/Drone/DroneParent.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Little Drones/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Little Drones/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Little Drones/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Little Drones/.idea/indexLayout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Little Drones/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Little Drones/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Management/GameplayManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Management/GameplayManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Management/UnitManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Management/UnitManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Objects/Buildings/BuildingBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Objects/Buildings/BuildingBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Objects/Buildings/IStorage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Objects/Buildings/IStorage.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Objects/Buildings/ResourceDepot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Objects/Buildings/ResourceDepot.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Units/Attributes.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -118,7 +97,7 @@
             <entry file="file://$PROJECT_DIR$/Assets/Scripts/Units/Drone/Drone.cs">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="1552">
-                  <caret line="98" lean-forward="true" selection-start-line="98" selection-end-line="98" />
+                  <caret line="98" selection-start-line="98" selection-end-line="98" />
                   <folding>
                     <marker date="1561297111927" expanded="false" signature="6:37" ph="..." />
                     <marker date="1561297111927" expanded="true" signature="62:3211" ph="{...}" />
@@ -145,7 +124,7 @@
             <entry file="file://$PROJECT_DIR$/Assets/Scripts/Management/GameplayManager.cs">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="256">
-                  <caret line="16" column="1" lean-forward="true" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
+                  <caret line="16" column="1" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
                   <folding>
                     <marker date="1564402318845" expanded="true" signature="43:313" ph="{...}" />
                     <marker date="1564402318845" expanded="true" signature="50:111" ph="/// Manages the gameplay ... " />
@@ -160,7 +139,7 @@
             <entry file="file://$PROJECT_DIR$/Assets/Scripts/Units/Drone/DroneParent.cs">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="240">
-                  <caret line="15" column="54" lean-forward="true" selection-start-line="15" selection-start-column="54" selection-end-line="15" selection-end-column="54" />
+                  <caret line="15" column="54" selection-start-line="15" selection-start-column="54" selection-end-line="15" selection-end-column="54" />
                   <folding>
                     <marker date="1564402802431" expanded="true" signature="43:2162" ph="{...}" />
                     <marker date="1564402802431" expanded="true" signature="50:121" ph="/// Manages the creation of drones ... " />
@@ -216,7 +195,7 @@
             <entry file="file://$PROJECT_DIR$/Assets/Scripts/Management/GameManager.cs">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="255">
-                  <caret line="18" column="27" lean-forward="true" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="27" />
+                  <caret line="18" column="27" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="27" />
                   <folding>
                     <marker date="1561276001201" expanded="true" signature="43:1804" ph="{...}" />
                     <marker date="1561276001201" expanded="true" signature="50:158" ph="/// Handles the operation of the game from initialisation to completion ... " />
@@ -236,7 +215,7 @@
             <entry file="file://$PROJECT_DIR$/Assets/Scripts/Management/UnitManager.cs">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="542">
-                  <caret line="49" column="13" lean-forward="true" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
+                  <caret line="49" column="13" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
                   <folding>
                     <marker date="1564402802441" expanded="false" signature="6:52" ph="..." />
                     <marker date="1564402802441" expanded="true" signature="77:1530" ph="{...}" />
@@ -261,7 +240,7 @@
             <entry file="file://$PROJECT_DIR$/Assets/Scripts/Objects/Buildings/CraftingPad.cs">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="318">
-                  <caret line="20" column="32" lean-forward="true" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
+                  <caret line="20" column="32" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
                   <folding>
                     <marker date="1564402837809" expanded="true" signature="6:66" ph="..." />
                     <marker date="1564402837809" expanded="true" signature="91:3882" ph="{...}" />
@@ -705,12 +684,12 @@
       <workItem from="1563671669820" duration="738000" />
       <workItem from="1563931838281" duration="1065000" />
       <workItem from="1564210021230" duration="4151000" />
-      <workItem from="1564388606181" duration="6377000" />
+      <workItem from="1564388606181" duration="6737000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="266306000" />
+    <option name="totallyTimeSpent" value="266666000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -723,7 +702,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info id="Image Layers" order="1" />
@@ -1567,7 +1545,7 @@
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/Units/Drone/Drone.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1552">
-          <caret line="98" lean-forward="true" selection-start-line="98" selection-end-line="98" />
+          <caret line="98" selection-start-line="98" selection-end-line="98" />
           <folding>
             <marker date="1561297111927" expanded="false" signature="6:37" ph="..." />
             <marker date="1561297111927" expanded="true" signature="62:3211" ph="{...}" />
@@ -1592,7 +1570,7 @@
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/Management/GameManager.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
-          <caret line="18" column="27" lean-forward="true" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="27" />
+          <caret line="18" column="27" selection-start-line="18" selection-start-column="27" selection-end-line="18" selection-end-column="27" />
           <folding>
             <marker date="1561276001201" expanded="true" signature="43:1804" ph="{...}" />
             <marker date="1561276001201" expanded="true" signature="50:158" ph="/// Handles the operation of the game from initialisation to completion ... " />
@@ -1610,7 +1588,7 @@
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/Management/GameplayManager.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="256">
-          <caret line="16" column="1" lean-forward="true" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
+          <caret line="16" column="1" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
           <folding>
             <marker date="1564402318845" expanded="true" signature="43:313" ph="{...}" />
             <marker date="1564402318845" expanded="true" signature="50:111" ph="/// Manages the gameplay ... " />
@@ -1623,7 +1601,7 @@
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/Management/UnitManager.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="542">
-          <caret line="49" column="13" lean-forward="true" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
+          <caret line="49" column="13" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
           <folding>
             <marker date="1564402802441" expanded="false" signature="6:52" ph="..." />
             <marker date="1564402802441" expanded="true" signature="77:1530" ph="{...}" />
@@ -1646,7 +1624,7 @@
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/Units/Drone/DroneParent.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
-          <caret line="15" column="54" lean-forward="true" selection-start-line="15" selection-start-column="54" selection-end-line="15" selection-end-column="54" />
+          <caret line="15" column="54" selection-start-line="15" selection-start-column="54" selection-end-line="15" selection-end-column="54" />
           <folding>
             <marker date="1564402802431" expanded="true" signature="43:2162" ph="{...}" />
             <marker date="1564402802431" expanded="true" signature="50:121" ph="/// Manages the creation of drones ... " />
@@ -1662,7 +1640,7 @@
     <entry file="file://$PROJECT_DIR$/Assets/Scripts/Objects/Buildings/CraftingPad.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="318">
-          <caret line="20" column="32" lean-forward="true" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
+          <caret line="20" column="32" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
           <folding>
             <marker date="1564402837809" expanded="true" signature="6:66" ph="..." />
             <marker date="1564402837809" expanded="true" signature="91:3882" ph="{...}" />
