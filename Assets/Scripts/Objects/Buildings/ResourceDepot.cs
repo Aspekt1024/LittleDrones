@@ -7,6 +7,8 @@ namespace Aspekt.Drones
     {
         public List<ResourceTypes> resourceTypes;
         
+        private readonly Dictionary<ResourceTypes, int> resourceDict = new Dictionary<ResourceTypes, int>();
+        
         private void Awake()
         {
             buildingType = BuildingTypes.ResourceDepot;
@@ -18,11 +20,22 @@ namespace Aspekt.Drones
             if (!resourceTypes.Contains(resource.resourceType)) return false;
             
             Destroy(resource.gameObject);
-            
-            // TODO setup resources
-            Debug.Log("collected resource: " + resource.resourceType);
+
+            if (!resourceDict.ContainsKey(resource.resourceType))
+            {
+                resourceDict.Add(resource.resourceType, 1);
+            }
+            else
+            {
+                resourceDict[resource.resourceType]++;
+            }
             
             return true;
+        }
+
+        public int GetResourceCount(ResourceTypes type)
+        {
+            return resourceDict.ContainsKey(type) ? resourceDict[type] : 0;
         }
     }
 }

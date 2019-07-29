@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\dszab\.Rider2018.3\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\dszab\.Rider2018.3\system\resharper-host\local\Transient\ReSharperHost\v183\SolutionCaches\_Little Drones.1730071601.00" t="ExcludeRecursive" />
+    <e p="C:\Users\dszab\.Rider2019.1\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\dszab\.Rider2019.1\system\resharper-host\local\Transient\ReSharperHost\v191\SolutionCaches\_Little Drones.1730071601.00" t="ExcludeRecursive" />
     <e p="C:\Users\dszab\Documents\2. Unity Projects\Little Drones\Little Drones" t="IncludeRecursive">
       <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
@@ -272,6 +272,9 @@
               <e p="UIPanel.cs" t="Include" />
             </e>
           </e>
+          <e p="Data" t="Include">
+            <e p="ResourceData.cs" t="Include" />
+          </e>
           <e p="Items" t="Include">
             <e p="IGrabbableItem.cs" t="Include" />
             <e p="Modules" t="Include">
@@ -304,6 +307,7 @@
             </e>
           </e>
           <e p="Management" t="Include">
+            <e p="DataManager.cs" t="Include" />
             <e p="GameManager.cs" t="Include" />
             <e p="GameplayManager.cs" t="Include" />
             <e p="IManager.cs" t="Include" />
@@ -315,6 +319,8 @@
           <e p="Objects" t="Include">
             <e p="Buildings" t="Include">
               <e p="BuildingBase.cs" t="Include" />
+              <e p="CraftingPad.cs" t="Include" />
+              <e p="ICraftingStation.cs" t="Include" />
               <e p="IStorage.cs" t="Include" />
               <e p="ResourceDepot.cs" t="Include" />
             </e>
@@ -340,6 +346,7 @@
               <e p="IAbility.cs" t="Include" />
               <e p="IGatherer.cs" t="Include" />
               <e p="IMovement.cs" t="Include" />
+              <e p="IWorker.cs" t="Include" />
               <e p="Movement" t="Include">
                 <e p="BasicMovement.cs" t="Include" />
                 <e p="GroundMovement.cs" t="Include" />
@@ -381,6 +388,7 @@
             </e>
             <e p="Drone" t="Include">
               <e p="Drone.cs" t="Include" />
+              <e p="DroneParent.cs" t="Include" />
               <e p="DroneVitals.cs" t="Include" />
               <e p="Inventory" t="Include">
                 <e p="ActionInventory.cs" t="Include" />
@@ -424,7 +432,6 @@
       </e>
       <e p="AstarPathfindingProject.csproj" t="IncludeRecursive" />
       <e p="AstarPathfindingProjectEditor.csproj" t="IncludeRecursive" />
-      <e p="Library" t="ExcludeRecursive" />
       <e p="Little Drones.sln" t="IncludeFlat" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />

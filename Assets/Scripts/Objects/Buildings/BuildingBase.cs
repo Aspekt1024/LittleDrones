@@ -4,7 +4,7 @@ namespace Aspekt.Drones
 {
     public enum BuildingTypes
     {
-        None, ResourceDepot,
+        None, ResourceDepot, CraftingPad
     }
     
     public abstract class BuildingBase : MonoBehaviour, IObject

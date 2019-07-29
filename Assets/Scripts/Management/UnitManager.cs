@@ -9,10 +9,17 @@ namespace Aspekt.Drones
     public class UnitManager : IManager
     {
         private readonly List<IUnit> units = new List<IUnit>();
+        private DroneParent droneParent;
         
         public void Init()
         {
             Debug.Log("Unit manager online");
+            droneParent = Object.FindObjectOfType<DroneParent>();
+
+            if (droneParent == null)
+            {
+                Debug.LogError($"{nameof(DroneParent)} was not found in the scene");
+            }
         }
 
         public void RegisterUnit(IUnit unit)
@@ -25,6 +32,29 @@ namespace Aspekt.Drones
             if (units.Contains(unit))
             {
                 units.Remove(unit);
+            }
+        }
+
+        /// <summary>
+        /// Initialises the unit with the default modules
+        /// </summary>
+        public void InitialiseDefaultUnit(IUnit unit)
+        {
+            switch (unit)
+            {
+                case null:
+                    return;
+                case Drone drone:
+                    droneParent.InitialiseDroneModules(drone);
+                    break;
+            }
+        }
+
+        public void CreateUnit<T>(Vector3 spawnPosition) where T : IUnit
+        {
+            if (typeof(T) == typeof(Drone))
+            {
+                droneParent.CreateDrone(spawnPosition);
             }
         }
     }
