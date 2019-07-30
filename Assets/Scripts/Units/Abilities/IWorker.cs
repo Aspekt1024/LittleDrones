@@ -1,6 +1,6 @@
 namespace Aspekt.Drones
 {
-    public interface IWorker
+    public interface IWorker : IAbility
     {
         float WorkerSkill { get; }
 

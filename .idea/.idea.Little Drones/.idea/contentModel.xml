@@ -322,6 +322,7 @@
               <e p="CraftingPad.cs" t="Include" />
               <e p="ICraftingStation.cs" t="Include" />
               <e p="IStorage.cs" t="Include" />
+              <e p="IWorkstation.cs" t="Include" />
               <e p="ResourceDepot.cs" t="Include" />
             </e>
             <e p="Deposits" t="Include">
@@ -351,6 +352,7 @@
                 <e p="BasicMovement.cs" t="Include" />
                 <e p="GroundMovement.cs" t="Include" />
               </e>
+              <e p="WorkerComponent.cs" t="Include" />
             </e>
             <e p="AI" t="Include">
               <e p="Actions" t="Include">

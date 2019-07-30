@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Aspekt.Drones
@@ -14,13 +14,14 @@ namespace Aspekt.Drones
         [SerializeField] private int numCoalRequired;
         [SerializeField] private float timeToCraft;
         [SerializeField] private Transform spawnPoint;
+        [SerializeField] private int maxWorkers = 1;
 
         private int numIron;
         private int numCopper;
         private int numCoal;
         private float craftTime;
 
-        private IWorker currentWorker;
+        public List<IWorker> Workers { get; } = new List<IWorker>();
         
         public List<IGrabbableItem> Materials { get; } = new List<IGrabbableItem>();
         
@@ -85,37 +86,39 @@ namespace Aspekt.Drones
         }
 
         /// <summary>
-        /// Adds a worker to the crafting pad. Only one worker can be present at a time.
-        /// Returns true if the station is free and a drone can be crafted.
+        /// Adds a worker to the crafting pad.
+        /// Returns true if the station is available and a drone can be crafted.
         /// </summary>
         public bool AddWorker(IWorker crafter)
         {
-            if (currentWorker != null) return false;
+            if (Workers.Count >= maxWorkers) return false;
             if (NeedsCoal || NeedsCopper || NeedsIron) return false;
-            currentWorker = crafter;
+            Workers.Add(crafter);
             return true;
         }
 
         public void RemoveWorker(IWorker crafter)
         {
-            if (currentWorker == crafter)
-            {
-                currentWorker = null;
-            }
+            Workers.Remove(crafter);
         }
 
         private void Update()
         {
-            if (currentWorker == null) return;
-            
-            float scale = 1f + currentWorker.WorkerSkill / 4f;
-            craftTime += Time.deltaTime * scale;
-            if (craftTime >= timeToCraft)
+            if (!Workers.Any()) return;
+
+            foreach (var worker in Workers)
             {
-                currentWorker.JobComplete();
-                currentWorker = null;
-                GameManager.Units.CreateUnit<Drone>(spawnPoint.position);
+                float scale = 1f + worker.WorkerSkill / 4f;
+                craftTime += Time.deltaTime * scale;
             }
+            if (craftTime < timeToCraft) return;
+            
+            foreach (var worker in Workers)
+            {
+                worker.JobComplete();
+            }
+            Workers.Clear();
+            GameManager.Units.CreateUnit<Drone>(spawnPoint.position);
         }
     }
 }

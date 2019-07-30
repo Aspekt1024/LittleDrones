@@ -101,8 +101,11 @@ namespace Aspekt.Drones
         {
             var movement = new GroundMovement(GetComponent<Rigidbody>(), GetComponentInChildren<Seeker>());
             var gatherer = new GatherComponent();
+            var worker = new WorkerComponent(this);
+            
             Abilities.AddAbility(movement);
             Abilities.AddAbility(gatherer);
+            Abilities.AddAbility(worker);
         }
     }
 }

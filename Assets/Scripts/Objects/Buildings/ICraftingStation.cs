@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Aspekt.Drones
 {
-    public interface ICraftingStation
+    public interface ICraftingStation : IWorkstation
     {
         List<IGrabbableItem> Materials { get; }
         
@@ -20,17 +20,5 @@ namespace Aspekt.Drones
         /// <param name="item">the material to be removed.</param>
         /// <returns>true if the item can be removed</returns>
         bool RemoveMaterial(IGrabbableItem item);
-        
-        /// <summary>
-        /// Adds a worker to begin crafting. Returns true if crafting can commence
-        /// </summary>
-        bool AddWorker(IWorker crafter);
-
-        /// <summary>
-        /// Removes a worker from the station
-        /// </summary>
-        /// <param name="crafter"></param>
-        /// <returns></returns>
-        void RemoveWorker(IWorker crafter);
     }
 }
