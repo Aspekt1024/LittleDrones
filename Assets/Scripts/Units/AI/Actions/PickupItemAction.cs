@@ -61,7 +61,7 @@ namespace Aspekt.Drones
 
         protected override void SetEffects()
         {
-            AddEffect(AIAttributes.IsHoldingItem, true);
+            AddEffect(AIAttributes.IsHoldingResource, true);
             AddEffect(AIAttributes.HasItemToGather, false);
         }
 

@@ -28,6 +28,9 @@ namespace Aspekt.Drones
         public bool NeedsIron => numIron < numIronRequired;
         public bool NeedsCopper => numCopper < numCopperRequired;
         public bool NeedsCoal => numCoal < numCoalRequired;
+
+        public bool HasResources => !(NeedsIron || NeedsCopper || NeedsCoal);
+        public bool CanWorkHere(IWorker worker) => Workers.Contains(worker) || Workers.Count < maxWorkers;
         
         public bool AddMaterial(IGrabbableItem item)
         {

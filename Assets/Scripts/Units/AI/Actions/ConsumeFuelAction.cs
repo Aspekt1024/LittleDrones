@@ -21,13 +21,13 @@ namespace Aspekt.Drones
 
         protected override void SetPreconditions()
         {
-            AddPrecondition(AIAttributes.IsHoldingItem, true);
+            AddPrecondition(AIAttributes.IsHoldingResource, true);
         }
 
         protected override void SetEffects()
         {
             AddEffect(AIAttributes.HasLowFuel, false);
-            AddEffect(AIAttributes.IsHoldingItem, false);
+            AddEffect(AIAttributes.IsHoldingResource, false);
         }
 
         protected override bool CheckProceduralConditions()

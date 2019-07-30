@@ -62,13 +62,13 @@ namespace Aspekt.Drones
         {
             AddEffect(AIAttributes.DepositToGather, null);
             AddEffect(AIAttributes.HasDepositToGather, false);
-            AddEffect(AIAttributes.IsHoldingItem, true);
+            AddEffect(AIAttributes.IsHoldingResource, true);
         }
 
         protected override bool CheckProceduralConditions()
         {
             if (Agent.Memory.Get(AIAttributes.DepositToGather) == null) return false;
-            if (Agent.Memory.Get(AIAttributes.IsHoldingItem) != null) return false;
+            if (Agent.Memory.Get(AIAttributes.IsHoldingResource) != null) return false;
             if (Agent.Memory.IsMatch(AIAttributes.HasDepositToGather, false)) return false;
             return true;
         }

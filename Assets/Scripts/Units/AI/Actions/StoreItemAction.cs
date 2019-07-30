@@ -29,7 +29,6 @@ namespace Aspekt.Drones
             {
                 movement = GetAbility<IMovement>();
             }
-            
             return movement != null;
         }
 
@@ -48,7 +47,7 @@ namespace Aspekt.Drones
             var buildingSensor = Agent.Sensors.Get<BuildingSensor>();
             if (buildingSensor == null) return false;
 
-            building = buildingSensor.FindClosestBuilding(type);
+            building = buildingSensor.FindClosestBuilding(type, Agent.Owner.transform.position);
             if (building == null || !(building is IStorage s)) return false;
             storage = s;
 
@@ -62,13 +61,13 @@ namespace Aspekt.Drones
 
         protected override void SetPreconditions()
         {
-            AddPrecondition(AIAttributes.IsHoldingItem, true);
+            AddPrecondition(AIAttributes.IsHoldingResource, true);
         }
 
         protected override void SetEffects()
         {
             AddEffect(AIAttributes.HasGatheredResource, true);
-            AddEffect(AIAttributes.IsHoldingItem, false);
+            AddEffect(AIAttributes.IsHoldingResource, false);
         }
 
         protected override bool CheckProceduralConditions()

@@ -356,7 +356,9 @@
             </e>
             <e p="AI" t="Include">
               <e p="Actions" t="Include">
+                <e p="AddToCraftingStationAction.cs" t="Include" />
                 <e p="ConsumeFuelAction.cs" t="Include" />
+                <e p="CraftDroneAction.cs" t="Include" />
                 <e p="FindDepositAction.cs" t="Include" />
                 <e p="FindResourceAction.cs" t="Include" />
                 <e p="GatherFromDepositAction.cs" t="Include" />
@@ -367,8 +369,10 @@
               <e p="DroneAction.cs" t="Include" />
               <e p="DroneAIAgent.cs" t="Include" />
               <e p="Goals" t="Include">
+                <e p="CraftDroneGoal.cs" t="Include" />
                 <e p="GatherResourceGoal.cs" t="Include" />
                 <e p="MaintainFuelGoal.cs" t="Include" />
+                <e p="SupplyCraftingStationGoal.cs" t="Include" />
               </e>
               <e p="MachineStates" t="Include">
                 <e p="AnimationState.cs" t="Include" />
