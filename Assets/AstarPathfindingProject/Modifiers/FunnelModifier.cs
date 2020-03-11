@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Pathfinding.Util;
 
 namespace Pathfinding {
-	[AddComponentMenu("Pathfinding/Modifiers/Funnel")]
+	[AddComponentMenu("Pathfinding/Modifiers/Funnel Modifier")]
 	[System.Serializable]
 	/// <summary>
 	/// Simplifies paths on navmesh graphs using the funnel algorithm.
@@ -15,11 +15,32 @@ namespace Pathfinding {
 	/// simplify the path as much as you would like it to. The <see cref="Pathfinding.RaycastModifier"/> can be a better fit for grid graphs.
 	/// [Open online documentation to see images]
 	///
+	/// Note: The <see cref="Pathfinding.RichAI"/> movement script has its own internal funnel modifier.
+	/// You do not need to attach this component if you are using the RichAI movement script.
+	///
 	/// \ingroup modifiers
 	/// See: http://digestingduck.blogspot.se/2010/03/simple-stupid-funnel-algorithm.html
 	/// </summary>
 	[HelpURL("http://arongranberg.com/astar/docs/class_pathfinding_1_1_funnel_modifier.php")]
 	public class FunnelModifier : MonoModifier {
+		/// <summary>
+		/// Determines if funnel simplification is used.
+		/// When using the low quality setting only the funnel algorithm is used
+		/// but when the high quality setting an additional step is done to simplify the path even more.
+		///
+		/// On tiled recast/navmesh graphs, but sometimes on normal ones as well, it can be good to simplify
+		/// the funnel as a post-processing step to make the paths straighter.
+		///
+		/// This has a moderate performance impact during frames when a path calculation is completed.
+		/// This is why it is disabled by default. For any units that you want high
+		/// quality movement for you should enable it.
+		///
+		/// [Open online documentation to see images]
+		///
+		/// See: <see cref="Funnel.Simplify"/>
+		/// </summary>
+		public FunnelQuality quality = FunnelQuality.Medium;
+
 		/// <summary>
 		/// Determines if twists and bends should be straightened out before running the funnel algorithm.
 		/// If the unwrap option is disabled the funnel will simply be projected onto the XZ plane.
@@ -45,6 +66,11 @@ namespace Pathfinding {
 		/// [Open online documentation to see images]
 		/// </summary>
 		public bool splitAtEveryPortal;
+
+		public enum FunnelQuality {
+			Medium,
+			High,
+		}
 
 	#if UNITY_EDITOR
 		[UnityEditor.MenuItem("CONTEXT/Seeker/Add Funnel Modifier")]
@@ -75,6 +101,8 @@ namespace Pathfinding {
 				// In that case we want to simply keep the original path, which is just a single point.
 				return;
 			}
+
+			if (quality == FunnelQuality.High) Funnel.Simplify(parts, ref p.path);
 
 			for (int i = 0; i < parts.Count; i++) {
 				var part = parts[i];

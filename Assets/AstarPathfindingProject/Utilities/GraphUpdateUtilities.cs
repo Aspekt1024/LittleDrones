@@ -48,6 +48,7 @@ namespace Pathfinding {
 		/// <param name="alwaysRevert">If true, reverts the graphs to the old state even if no blocking occurred</param>
 		public static bool UpdateGraphsNoBlock (GraphUpdateObject guo, GraphNode node1, GraphNode node2, bool alwaysRevert = false) {
 			List<GraphNode> buffer = ListPool<GraphNode>.Claim();
+
 			buffer.Add(node1);
 			buffer.Add(node2);
 

@@ -7,11 +7,11 @@ namespace Aspekt.Drones
     [Serializable]
     public class VitalsSensor : Sensor<AIAttributes, object>
     {
-#pragma warning disable 649
+#pragma warning disable 414
         [SerializeField] private float lowFuelPercent = 0.5f;
         [SerializeField] private float criticalFuelPercent = 0.1f;
-        [SerializeField] private float nominalFuelPercent = 0.8f;
-#pragma warning restore 649
+        [SerializeField] private float nominalFuelPercent = 0.8f; 
+#pragma warning restore 414
         
         private DroneVitals vitals;
 

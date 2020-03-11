@@ -99,7 +99,7 @@ namespace Aspekt.Drones
 
         private void InitialiseDroneAbilities()
         {
-            var movement = new GroundMovement(GetComponent<Rigidbody>(), GetComponentInChildren<Seeker>());
+            var movement = new GroundMovement(GetComponent<Rigidbody>(), GetComponent<RichAI>());
             var gatherer = new GatherComponent();
             var worker = new WorkerComponent(this);
             

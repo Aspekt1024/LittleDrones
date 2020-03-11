@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 namespace Pathfinding {
+	using Pathfinding.Util;
+
 	/// <summary>
 	/// Moves a grid graph to follow a target.
 	///
@@ -17,7 +19,6 @@ namespace Pathfinding {
 	///   This only works to some degree however since an update has an inherent overhead.
 	/// - Reduce the grid size.
 	/// - Turn on multithreading (A* Inspector -> Settings)
-	/// - Disable the <see cref="floodFill"/> field. However note the restrictions on when this can be done.
 	/// - Disable Height Testing or Collision Testing in the grid graph. This can give a performance boost
 	///   since fewer calls to the physics engine need to be done.
 	/// - Avoid using any erosion in the grid graph settings. This is relatively slow.
@@ -56,6 +57,9 @@ namespace Pathfinding {
 
 		/// <summary>True while the graph is being updated by this script</summary>
 		public bool updatingGraph { get; private set; }
+
+		/// <summary>Approximate maximum number of milliseconds this script is allowed to use for processing each frame</summary>
+		const float MaxMillisPerFrame = 2f;
 
 		void Start () {
 			if (AstarPath.active == null) throw new System.Exception("There is no AstarPath object in the scene");
@@ -126,7 +130,7 @@ namespace Pathfinding {
 			// to avoid too large FPS drops
 			IEnumerator ie = UpdateGraphCoroutine();
 			AstarPath.active.AddWorkItem(new AstarWorkItem(
-					(context, force) => {
+				(context, force) => {
 				// If force is true we need to calculate all steps at once
 				if (force) while (ie.MoveNext()) {}
 
@@ -173,19 +177,17 @@ namespace Pathfinding {
 			// Cache some variables for easier access
 			int width = graph.width;
 			int depth = graph.depth;
-			GridNodeBase[] nodes;
+			GridNodeBase[] nodes = graph.nodes;
 			// Layers are required when handling LayeredGridGraphs
 			int layers = graph.LayerCount;
-			nodes = graph.nodes;
 
 			// Create a temporary buffer required for the calculations
-			if (buffer == null || buffer.Length != width*depth) {
-				buffer = new GridNodeBase[width*depth];
-			}
+			Memory.Realloc(ref buffer, width*depth);
 
 			// Check if we have moved less than a whole graph width all directions
 			// If we have moved more than this we can just as well recalculate the whole graph
 			if (Mathf.Abs(offset.x) <= width && Mathf.Abs(offset.y) <= depth) {
+				// Note: the upper limits are treated as exclusive limits (xmax, ymax)
 				IntRect recalculateRect = new IntRect(0, 0, offset.x, offset.y);
 
 				// If offset.x < 0, adjust the rect
@@ -201,12 +203,6 @@ namespace Pathfinding {
 					recalculateRect.ymax = depth + recalculateRect.ymin;
 					recalculateRect.ymin = depth + tmp2;
 				}
-
-				// Connections need to be recalculated for the neighbours as well, so we need to expand the rect by 1
-				var connectionRect = recalculateRect.Expand(1);
-
-				// Makes sure the rect stays inside the grid
-				connectionRect = IntRect.Intersection(connectionRect, new IntRect(0, 0, width, depth));
 
 				// Offset each node by the #offset variable
 				// nodes which would end up outside the graph
@@ -235,11 +231,14 @@ namespace Pathfinding {
 						}
 
 						// Calculate the limits for the region that has been wrapped
-						// to the other side of the graph
+						// to the other side of the graph.
+						// This part is made up of a couple of rows and a couple of columns
+						// So depending on the row we are in (z) we should either iterate over the whole row
+						// or only the relevant columns.
 						int xmin, xmax;
 						if (z >= recalculateRect.ymin && z < recalculateRect.ymax) {
 							xmin = 0;
-							xmax = depth;
+							xmax = width;
 						} else {
 							xmin = recalculateRect.xmin;
 							xmax = recalculateRect.xmax;
@@ -260,62 +259,29 @@ namespace Pathfinding {
 					yield return null;
 				}
 
-				// The calculation will only update approximately this number of
-				// nodes per frame. This is used to keep CPU load per frame low
-				int yieldEvery = 1000;
-				// To avoid the update taking too long, make yieldEvery somewhat proportional to the number of nodes that we are going to update
-				int approxNumNodesToUpdate = Mathf.Max(Mathf.Abs(offset.x), Mathf.Abs(offset.y)) * Mathf.Max(width, depth);
-				yieldEvery = Mathf.Max(yieldEvery, approxNumNodesToUpdate/10);
-				int counter = 0;
-
 				// Recalculate the nodes
 				// Take a look at the image in the docs for the UpdateGraph method
 				// to see which nodes are being recalculated.
-				for (int z = 0; z < depth; z++) {
-					int xmin, xmax;
-					if (z >= recalculateRect.ymin && z < recalculateRect.ymax) {
-						xmin = 0;
-						xmax = width;
-					} else {
-						xmin = recalculateRect.xmin;
-						xmax = recalculateRect.xmax;
-					}
+				var dependencyTracker = ObjectPool<Jobs.JobDependencyTracker>.Claim();
+				var updateNodesJob1 = graph.UpdateRegion(new IntRect(0, recalculateRect.ymin, width, recalculateRect.ymax), dependencyTracker, Unity.Collections.Allocator.Persistent);
 
-					for (int x = xmin; x < xmax; x++) {
-						graph.RecalculateCell(x, z, false, false);
-					}
+				// Note: It is important the the main thread work is completed before the second update begins.
+				// Otherwise if we give updateNodesJob1 as a dependency the code might call .Complete on a the handle and block indefinitely
+				// since it requires work to complete in the main thread.
+				foreach (var _ in updateNodesJob1.CompleteTimeSliced(MaxMillisPerFrame)) yield return null;
 
-					counter += (xmax - xmin);
-
-					if (counter > yieldEvery) {
-						counter = 0;
-						yield return null;
-					}
+				IntRect job2rect;
+				if (recalculateRect.ymin == 0) {
+					job2rect = new IntRect(recalculateRect.xmin, recalculateRect.ymax, recalculateRect.xmax, depth);
+				} else if (recalculateRect.ymax == depth) {
+					job2rect = new IntRect(recalculateRect.xmin, 0, recalculateRect.xmax, recalculateRect.ymin - 1);
+				} else {
+					throw new System.Exception("Should not happen");
 				}
 
-				for (int z = 0; z < depth; z++) {
-					int xmin, xmax;
-					if (z >= connectionRect.ymin && z < connectionRect.ymax) {
-						xmin = 0;
-						xmax = width;
-					} else {
-						xmin = connectionRect.xmin;
-						xmax = connectionRect.xmax;
-					}
-
-					for (int x = xmin; x < xmax; x++) {
-						graph.CalculateConnections(x, z);
-					}
-
-					counter += (xmax - xmin);
-
-					if (counter > yieldEvery) {
-						counter = 0;
-						yield return null;
-					}
-				}
-
-				yield return null;
+				var updateNodesJob2 = graph.UpdateRegion(job2rect, dependencyTracker, Unity.Collections.Allocator.Persistent);
+				foreach (var _ in updateNodesJob2.CompleteTimeSliced(MaxMillisPerFrame)) yield return null;
+				ObjectPool<Jobs.JobDependencyTracker>.Release(ref dependencyTracker);
 
 				// Calculate all connections for the nodes along the boundary
 				// of the graph, these always need to be updated
@@ -325,34 +291,13 @@ namespace Pathfinding {
 						if (x == 0 || z == 0 || x == width-1 || z == depth-1) graph.CalculateConnections(x, z);
 					}
 				}
-			} else {
-				// The calculation will only update approximately this number of
-				// nodes per frame. This is used to keep CPU load per frame low
-				int yieldEvery = Mathf.Max(depth*width / 20, 1000);
-				int counter = 0;
-				// Just update all nodes
-				for (int z = 0; z < depth; z++) {
-					for (int x = 0; x < width; x++) {
-						graph.RecalculateCell(x, z);
-					}
-					counter += width;
-					if (counter > yieldEvery) {
-						counter = 0;
-						yield return null;
-					}
-				}
 
-				// Recalculate the connections of all nodes
-				for (int z = 0; z < depth; z++) {
-					for (int x = 0; x < width; x++) {
-						graph.CalculateConnections(x, z);
-					}
-					counter += width;
-					if (counter > yieldEvery) {
-						counter = 0;
-						yield return null;
-					}
-				}
+				yield return null;
+			} else {
+				var dependencyTracker = ObjectPool<Jobs.JobDependencyTracker>.Claim();
+				var updateNodesJob = graph.UpdateRegion(new IntRect(0, 0, width, depth), dependencyTracker, Unity.Collections.Allocator.Persistent);
+				foreach (var _ in updateNodesJob.CompleteTimeSliced(MaxMillisPerFrame)) yield return null;
+				ObjectPool<Jobs.JobDependencyTracker>.Release(ref dependencyTracker);
 			}
 		}
 	}

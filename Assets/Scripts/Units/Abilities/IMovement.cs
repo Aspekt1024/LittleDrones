@@ -30,7 +30,5 @@ namespace Aspekt.Drones
 	    /// </summary>
 	    /// <param name="immediate">Set to true if the unit should stop immediately</param>
 	    void Stop(bool immediate = false);
-
-	    bool TargetReached();
     }
 }

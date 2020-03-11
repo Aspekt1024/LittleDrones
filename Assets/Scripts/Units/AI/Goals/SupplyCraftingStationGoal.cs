@@ -6,7 +6,9 @@ namespace Aspekt.Drones
     {
         public override void SetupGoal()
         {
-            // use sensor to find closest crafting station that requires resources
+            // use sensor to find closest crafting station that requires resources,
+            // as well as the available resources
+            
         }
 
         public override void ResetGoal()

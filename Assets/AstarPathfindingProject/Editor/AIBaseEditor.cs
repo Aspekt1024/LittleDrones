@@ -6,6 +6,7 @@ namespace Pathfinding {
 	[CanEditMultipleObjects]
 	public class BaseAIEditor : EditorBase {
 		float lastSeenCustomGravity = float.NegativeInfinity;
+		bool debug = false;
 
 		protected override void Inspector () {
 			var isAIPath = typeof(AIPath).IsAssignableFrom(target.GetType());
@@ -54,7 +55,11 @@ namespace Pathfinding {
 			if (PropertyField("enableRotation")) {
 				EditorGUI.indentLevel++;
 				FloatField("rotationSpeed", min: 0f);
-				PropertyField("slowWhenNotFacingTarget");
+				if (PropertyField("slowWhenNotFacingTarget")) {
+					EditorGUI.indentLevel++;
+					PropertyField("preventMovingBackwards");
+					EditorGUI.indentLevel--;
+				}
 				EditorGUI.indentLevel--;
 			}
 
@@ -69,14 +74,28 @@ namespace Pathfinding {
 			}
 
 			FloatField("endReachedDistance", min: 0f);
+			PropertyField("whenCloseToDestination");
 
 			if (isAIPath) {
 				PropertyField("alwaysDrawGizmos");
-				PropertyField("whenCloseToDestination");
 				PropertyField("constrainInsideGraph");
 			}
 
 			var mono = target as MonoBehaviour;
+			var hasRVO = mono.GetComponent<Pathfinding.RVO.RVOController>();
+			if (hasRVO) {
+				if (PropertyField("rvoDensityBehavior.enabled", "Stop when destination is crowded")) {
+					EditorGUI.indentLevel++;
+					PropertyField("rvoDensityBehavior.densityThreshold");
+					PropertyField("rvoDensityBehavior.returnAfterBeingPushedAway");
+					EditorGUI.indentLevel--;
+				}
+			} else {
+				EditorGUI.BeginDisabledGroup(true);
+				EditorGUILayout.Toggle(new GUIContent("Stop when destination is crowded", "Requires an attached RVOController"), false);
+				EditorGUI.EndDisabledGroup();
+			}
+
 			var rigid = mono.GetComponent<Rigidbody>();
 			var rigid2D = mono.GetComponent<Rigidbody2D>();
 			var controller = mono.GetComponent<CharacterController>();
@@ -119,8 +138,27 @@ namespace Pathfinding {
 				EditorGUI.EndDisabledGroup();
 			}
 
+			debug = EditorGUILayout.Foldout(debug, "Debug info");
+			if (debug) {
+				var ai = mono as IAstarAI;
+				EditorGUI.BeginDisabledGroup(true);
+				EditorGUILayout.Toggle("Reached Destination", ai.reachedDestination);
+				EditorGUILayout.Toggle("Reached End Of Path", ai.reachedEndOfPath);
+				EditorGUILayout.Toggle("Destination is crowded", (ai as AIBase).rvoDensityBehavior.lastJobDensityResult);
+				EditorGUILayout.Slider("Progress Average", (ai as AIBase).rvoDensityBehavior.progressAverage, -1.0f, 1.0f);
+				EditorGUILayout.Toggle("Path Pending", ai.pathPending);
+				EditorGUILayout.Vector3Field("Destination", ai.destination);
+				EditorGUILayout.LabelField("Remaining distance", ai.remainingDistance.ToString("0.00"));
+				EditorGUI.EndDisabledGroup();
+			}
+
 			if ((rigid != null || rigid2D != null) && (controller != null && controller.enabled)) {
 				EditorGUILayout.HelpBox("You are using both a Rigidbody and a Character Controller. Those components are not really designed for that. Please use only one of them.", MessageType.Warning);
+			}
+
+			var isRichAI = typeof(RichAI).IsAssignableFrom(target.GetType());
+			if (isRichAI && Application.isPlaying && AstarPath.active != null && AstarPath.active.graphs.Length > 0 && AstarPath.active.data.recastGraph == null && AstarPath.active.data.navmesh == null) {
+				EditorGUILayout.HelpBox("This script only works with a navmesh or recast graph. If you are using some other graph type you might want to use another movement script.", MessageType.Warning);
 			}
 		}
 	}

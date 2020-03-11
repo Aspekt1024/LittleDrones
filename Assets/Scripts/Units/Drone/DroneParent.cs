@@ -7,7 +7,9 @@ namespace Aspekt.Drones
     /// </summary>
     public class DroneParent : MonoBehaviour
     {
+        #pragma warning disable 649
         [SerializeField] private GameObject dronePrefab;
+        #pragma warning restore 649
 
         /// <summary>
         /// Creates a drone at the specified position

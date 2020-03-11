@@ -73,6 +73,8 @@ namespace Pathfinding {
 
 		protected override void Awake () {
 			base.Awake();
+			if (!Application.isPlaying) return;
+
 			coll = GetComponent<Collider>();
 			coll2D = GetComponent<Collider2D>();
 			tr = transform;
@@ -93,8 +95,10 @@ namespace Pathfinding {
 		}
 
 		void Update () {
+			if (!Application.isPlaying) return;
+
 			if (coll == null && coll2D == null) {
-				Debug.LogError("Removed collider from DynamicGridObstacle", this);
+				Debug.LogError("No collider attached to this GameObject. The DynamicGridObstacle component requires a collider.", this);
 				enabled = false;
 				return;
 			}

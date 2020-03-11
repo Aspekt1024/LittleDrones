@@ -9,13 +9,15 @@ namespace Aspekt.Drones
     /// </summary>
     public class CraftingPad : BuildingBase, ICraftingStation
     {
+        #pragma warning disable 649
         [SerializeField] private int numIronRequired;
         [SerializeField] private int numCopperRequired;
         [SerializeField] private int numCoalRequired;
         [SerializeField] private float timeToCraft;
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private int maxWorkers = 1;
-
+        #pragma warning restore 649
+        
         private int numIron;
         private int numCopper;
         private int numCoal;

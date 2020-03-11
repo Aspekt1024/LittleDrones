@@ -10,8 +10,8 @@ namespace Pathfinding {
 	/// See: turnbased (view in online documentation for working links)
 	/// </summary>
 	public interface ITraversalProvider {
-		bool CanTraverse (Path path, GraphNode node);
-		uint GetTraversalCost (Path path, GraphNode node);
+		bool CanTraverse(Path path, GraphNode node);
+		uint GetTraversalCost(Path path, GraphNode node);
 	}
 
 	/// <summary>Convenience class to access the default implementation of the ITraversalProvider</summary>
@@ -64,7 +64,7 @@ namespace Pathfinding {
 
 		/// <summary>Returns the state of the path in the pathfinding pipeline</summary>
 		public PathState PipelineState { get; private set; }
-		System.Object stateLock = new object ();
+		System.Object stateLock = new object();
 
 		/// <summary>
 		/// Provides additional traversal information to a path request.
@@ -193,7 +193,7 @@ namespace Pathfinding {
 		public int enabledTags = -1;
 
 		/// <summary>List of zeroes to use as default tag penalties</summary>
-		static readonly int[] ZeroTagPenalties = new int[32];
+		internal static readonly int[] ZeroTagPenalties = new int[32];
 
 		/// <summary>
 		/// The tag penalties that are actually used.
@@ -212,10 +212,13 @@ namespace Pathfinding {
 		/// Penalties for each tag.
 		/// Tag 0 which is the default tag, will have added a penalty of tagPenalties[0].
 		/// These should only be positive values since the A* algorithm cannot handle negative penalties.
-		/// Note: This array will never be null. If you try to set it to null or with a length which is not 32. It will be set to "new int[0]".
 		///
-		/// Note: If you are using a Seeker. The Seeker will set this value to what is set in the inspector field on StartPath.
-		/// So you need to change the Seeker value via script, not set this value if you want to change it via script.
+		/// When assigning an array to this property it must have a length of 32.
+		///
+		/// Note: Setting this to null, or trying to assign an array which does not have a length of 32, will make all tag penalties be treated as if they are zero.
+		///
+		/// Note: If you are using a Seeker. The Seeker will set this value to what is set in the inspector field when you call seeker.StartPath.
+		/// So you need to change the Seeker's value via script, not set this value.
 		///
 		/// See: Seeker.tagPenalties
 		/// </summary>
@@ -319,10 +322,19 @@ namespace Pathfinding {
 			switch (heuristic) {
 			case Heuristic.Euclidean:
 				h = (uint)(((GetHTarget() - node.position).costMagnitude)*heuristicScale);
+				// Inlining this check and the return
+				// for each case saves an extra jump.
+				// This code is pretty hot
+				if (hTargetNode != null) {
+					h = System.Math.Max(h, AstarPath.active.euclideanEmbedding.GetHeuristic(node.NodeIndex, hTargetNode.NodeIndex));
+				}
 				return h;
 			case Heuristic.Manhattan:
 				Int3 p2 = node.position;
 				h = (uint)((System.Math.Abs(hTarget.x-p2.x) + System.Math.Abs(hTarget.y-p2.y) + System.Math.Abs(hTarget.z-p2.z))*heuristicScale);
+				if (hTargetNode != null) {
+					h = System.Math.Max(h, AstarPath.active.euclideanEmbedding.GetHeuristic(node.NodeIndex, hTargetNode.NodeIndex));
+				}
 				return h;
 			case Heuristic.DiagonalManhattan:
 				Int3 p = GetHTarget() - node.position;
@@ -332,6 +344,9 @@ namespace Pathfinding {
 				int diag = System.Math.Min(p.x, p.z);
 				int diag2 = System.Math.Max(p.x, p.z);
 				h = (uint)((((14*diag)/10) + (diag2-diag) + p.y) * heuristicScale);
+				if (hTargetNode != null) {
+					h = System.Math.Max(h, AstarPath.active.euclideanEmbedding.GetHeuristic(node.NodeIndex, hTargetNode.NodeIndex));
+				}
 				return h;
 			}
 			return 0U;
@@ -790,7 +805,7 @@ namespace Pathfinding {
 		/// Called before the path is started.
 		/// Called right before Initialize
 		/// </summary>
-		protected abstract void Prepare ();
+		protected abstract void Prepare();
 
 		/// <summary>
 		/// Always called after the path has been calculated.
@@ -804,10 +819,10 @@ namespace Pathfinding {
 		/// Initializes the path.
 		/// Sets up the open list and adds the first node to it
 		/// </summary>
-		protected abstract void Initialize ();
+		protected abstract void Initialize();
 
 		/// <summary>Calculates the until it is complete or the time has progressed past targetTick</summary>
-		protected abstract void CalculateStep (long targetTick);
+		protected abstract void CalculateStep(long targetTick);
 
 		PathHandler IPathInternals.PathHandler { get { return pathHandler; } }
 		void IPathInternals.OnEnterPool () { OnEnterPool(); }
@@ -824,14 +839,14 @@ namespace Pathfinding {
 	internal interface IPathInternals {
 		PathHandler PathHandler { get; }
 		bool Pooled { get; set; }
-		void AdvanceState (PathState s);
-		void OnEnterPool ();
-		void Reset ();
-		void ReturnPath ();
-		void PrepareBase (PathHandler handler);
-		void Prepare ();
-		void Initialize ();
-		void Cleanup ();
-		void CalculateStep (long targetTick);
+		void AdvanceState(PathState s);
+		void OnEnterPool();
+		void Reset();
+		void ReturnPath();
+		void PrepareBase(PathHandler handler);
+		void Prepare();
+		void Initialize();
+		void Cleanup();
+		void CalculateStep(long targetTick);
 	}
 }

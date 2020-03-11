@@ -14,7 +14,6 @@ namespace Aspekt.Drones
         
         private Transform targetTf;
         private Vector3 targetPos;
-        private bool targetReached;
 
         private enum States
         {
@@ -58,7 +57,6 @@ namespace Aspekt.Drones
             float speed = MaxSpeed;
             if (sqrDist < SqrTargetReachedThreshold)
             {
-                targetReached = true;
                 Stop();
             }
             else if (sqrDist < SqrProximityThreshold)
@@ -87,7 +85,5 @@ namespace Aspekt.Drones
             body.velocity = Vector3.zero;
             state = States.None;
         }
-
-        public bool TargetReached() => targetReached;
     }
 }

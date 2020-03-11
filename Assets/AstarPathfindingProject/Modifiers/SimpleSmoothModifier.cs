@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Pathfinding.Util;
 
 namespace Pathfinding {
-	[AddComponentMenu("Pathfinding/Modifiers/Simple Smooth")]
+	[AddComponentMenu("Pathfinding/Modifiers/Simple Smooth Modifier")]
 	[System.Serializable]
 	[RequireComponent(typeof(Seeker))]
 	/// <summary>

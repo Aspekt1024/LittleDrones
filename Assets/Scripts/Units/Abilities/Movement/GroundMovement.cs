@@ -14,15 +14,10 @@ namespace Aspekt.Drones
         private const float MaxSpeed = 8f;
 
         private readonly Rigidbody body;
-        private readonly Seeker seeker;
+        private readonly IAstarAI ai;
         
         private Transform targetTf;
         private Vector3 targetPos;
-
-        private Queue<Vector3> path;
-        private Vector3 currentPoint;
-        private bool isFinalPoint;
-        private bool targetReached;
 
         private enum States
         {
@@ -32,10 +27,12 @@ namespace Aspekt.Drones
 
         public bool Enabled { get; set; } = true;
 
-        public GroundMovement(Rigidbody body, Seeker seeker)
+        public GroundMovement(Rigidbody body, IAstarAI ai)
         {
             this.body = body;
-            this.seeker = seeker;
+            this.ai = ai;
+
+            ai.maxSpeed = MaxSpeed;
         }
         
         public void MoveTo(Transform target)
@@ -44,7 +41,6 @@ namespace Aspekt.Drones
             
             targetTf = target;
             targetPos = targetTf.position;
-            state = States.Moving;
             CalculatePath();
         }
 
@@ -63,28 +59,12 @@ namespace Aspekt.Drones
                 state = States.None;
             }
             
-            if (state != States.Moving) return;
+            if (state != States.Moving || targetTf == null) return;
 
-            if (targetTf != null)
+            if (Vector3.SqrMagnitude(targetTf.position - targetPos) > SqrTargetRecalculationDistance)
             {
-                if (Vector3.SqrMagnitude(targetTf.position - targetPos) > SqrTargetRecalculationDistance)
-                {
-                    CalculatePath();
-                    return;
-                }
+                CalculatePath();
             }
-            
-            Vector3 distVector = currentPoint - body.position;
-            distVector.y = 0f; // force to horizontal plane
-            float sqrDist = Vector3.SqrMagnitude(distVector);
-
-            if (sqrDist < SqrTargetReachedThreshold)
-            {
-                GotoNextPoint();
-                return;
-            }
-            
-            body.velocity = distVector.normalized * MaxSpeed;
         }
 
         public void Run()
@@ -99,41 +79,18 @@ namespace Aspekt.Drones
         public void Stop(bool immediate = false)
         {
             targetTf = null;
+            ai.isStopped = true;
             body.velocity = Vector3.zero;
             state = States.None;
         }
 
-        public bool TargetReached() => targetReached;
-
         private void CalculatePath()
         {
             state = States.AwaitingPath;
-            seeker.StartPath(body.position, targetPos, OnPathCalculated);
-        }
-        
-        private void OnPathCalculated(Path newPath)
-        {
-            path = new Queue<Vector3>(newPath.vectorPath);
-            targetReached = false;
-            isFinalPoint = false;
+            ai.destination = targetPos;
+            ai.SearchPath();
+            ai.isStopped = false;
             state = States.Moving;
-            GotoNextPoint();
-        }
-
-        private void GotoNextPoint()
-        {
-            if (isFinalPoint || path == null || path.Count == 0)
-            {
-                targetReached = true;
-                Stop();
-                return;
-            }
-            
-            currentPoint = path.Dequeue();
-            if (path.Count == 0)
-            {
-                isFinalPoint = true;
-            }
         }
     }
 }

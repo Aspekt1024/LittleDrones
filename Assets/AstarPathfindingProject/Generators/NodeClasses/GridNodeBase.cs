@@ -1,12 +1,10 @@
+#define PREALLOCATE_NODES
 using UnityEngine;
 using Pathfinding.Serialization;
 
 namespace Pathfinding {
 	/// <summary>Base class for GridNode and LevelGridNode</summary>
 	public abstract class GridNodeBase : GraphNode {
-		protected GridNodeBase (AstarPath astar) : base(astar) {
-		}
-
 		const int GridFlagsWalkableErosionOffset = 8;
 		const int GridFlagsWalkableErosionMask = 1 << GridFlagsWalkableErosionOffset;
 
@@ -156,9 +154,40 @@ namespace Pathfinding {
 		///         |
 		/// </code>
 		///
-		/// See: GetConnections
+		/// See: <see cref="GetConnections"/>
+		/// See: <see cref="GetNeighbourAlongDirection"/>
 		/// </summary>
-		public abstract GridNodeBase GetNeighbourAlongDirection (int direction);
+		public abstract GridNodeBase GetNeighbourAlongDirection(int direction);
+
+		/// <summary>
+		/// True if the node has a connection to an adjecent node in the specified direction.
+		///
+		/// The dir parameter corresponds to directions in the grid as:
+		/// <code>
+		///         Z
+		///         |
+		///         |
+		///
+		///      6  2  5
+		///       \ | /
+		/// --  3 - X - 1  ----- X
+		///       / | \
+		///      7  0  4
+		///
+		///         |
+		///         |
+		/// </code>
+		///
+		/// See: <see cref="GetConnections"/>
+		/// See: <see cref="GetNeighbourAlongDirection"/>
+		/// </summary>
+		public virtual bool HasConnectionInDirection (int direction) {
+			// TODO: Can be optimized if overriden in each subclass
+			return GetNeighbourAlongDirection(direction) != null;
+		}
+
+		/// <summary>True if this node has any grid connections</summary>
+		public abstract bool HasAnyGridConnections { get; }
 
 		public override bool ContainsConnection (GraphNode node) {
 #if !ASTAR_GRID_NO_CUSTOM_CONNECTIONS
@@ -179,6 +208,13 @@ namespace Pathfinding {
 
 			return false;
 		}
+
+		/// <summary>
+		/// Disables all grid connections from this node.
+		/// Note: Other nodes might still be able to get to this node.
+		/// Therefore it is recommended to also disable the relevant connections on adjacent nodes.
+		/// </summary>
+		public abstract void ResetConnectionsInternal();
 
 #if ASTAR_GRID_NO_CUSTOM_CONNECTIONS
 		public override void AddConnection (GraphNode node, uint cost) {
@@ -304,6 +340,9 @@ namespace Pathfinding {
 		/// Note: This only removes the connection from this node to the other node.
 		/// You may want to call the same function on the other node to remove its eventual connection
 		/// to this node.
+		///
+		/// Warning: For grid nodes this method only handles custom connections (those added using link components or the AddConnection method).
+		/// Regular grid connections must be added or removed using <see cref="Pathfinding.GridNode.SetConnectionInternal"/>.
 		/// </summary>
 		public override void RemoveConnection (GraphNode node) {
 			if (connections == null) return;

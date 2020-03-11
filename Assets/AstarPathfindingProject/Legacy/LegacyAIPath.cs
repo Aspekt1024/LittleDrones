@@ -68,6 +68,10 @@ namespace Pathfinding.Legacy {
 
 		protected override void Awake () {
 			base.Awake();
+			if (rvoController != null) {
+				if (rvoController is LegacyRVOController) (rvoController as LegacyRVOController).enableRotation = false;
+				else Debug.LogError("The LegacyAIPath component only works with the legacy RVOController, not the latest one. Please upgrade this component", this);
+			}
 		}
 
 		/// <summary>
@@ -131,7 +135,7 @@ namespace Pathfinding.Legacy {
 			}
 		}
 
-		protected override void Update () {
+		protected override void OnUpdate (float dt) {
 			if (!canMove) { return; }
 
 			Vector3 dir = CalculateVelocity(GetFeetPosition());
@@ -139,12 +143,15 @@ namespace Pathfinding.Legacy {
 			//Rotate towards targetDirection (filled in by CalculateVelocity)
 			RotateTowards(targetDirection);
 
+			if (rvoController != null) {
+				rvoController.Move(dir);
+			} else
 			if (controller != null) {
 				controller.SimpleMove(dir);
 			} else if (rigid != null) {
 				rigid.AddForce(dir);
 			} else {
-				tr.Translate(dir*Time.deltaTime, Space.World);
+				tr.Translate(dir*dt, Space.World);
 			}
 		}
 

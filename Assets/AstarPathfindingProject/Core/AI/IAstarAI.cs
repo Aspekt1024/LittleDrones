@@ -9,20 +9,20 @@ namespace Pathfinding {
 	/// </summary>
 	public interface IAstarAI {
 		/// <summary>
-		/// Height of the agent in world units.
+		/// Radius of the agent in world units.
 		/// This is visualized in the scene view as a yellow cylinder around the character.
-		///
-		/// This value is currently only used if an RVOController is attached to the same GameObject, otherwise it is only used for drawing nice gizmos in the scene view.
-		/// However since the height value is used for some things, the radius field is always visible for consistency and easier visualization of the character.
-		/// That said, it may be used for something in a future release.
 		///
 		/// Note: The <see cref="Pathfinding.AILerp"/> script doesn't really have any use of knowing the radius or the height of the character, so this property will always return 0 in that script.
 		/// </summary>
 		float radius { get; set; }
 
 		/// <summary>
-		/// Radius of the agent in world units.
+		/// Height of the agent in world units.
 		/// This is visualized in the scene view as a yellow cylinder around the character.
+		///
+		/// This value is currently only used if an RVOController is attached to the same GameObject, otherwise it is only used for drawing nice gizmos in the scene view.
+		/// However since the height value is used for some things, the radius field is always visible for consistency and easier visualization of the character.
+		/// That said, it may be used for something in a future release.
 		///
 		/// Note: The <see cref="Pathfinding.AILerp"/> script doesn't really have any use of knowing the radius or the height of the character, so this property will always return 0 in that script.
 		/// </summary>
@@ -59,8 +59,39 @@ namespace Pathfinding {
 		/// In world units per second.
 		///
 		/// See: <see cref="velocity"/>
+		///
+		/// Note: The <see cref="Pathfinding.AILerp"/> movement script doesn't use local avoidance or gravity so this property will always be identical to <see cref="velocity"/> on that component.
 		/// </summary>
 		Vector3 desiredVelocity { get; }
+
+		/// <summary>
+		/// Velocity that this agent wants to move with before taking local avoidance into account.
+		///
+		/// Includes gravity.
+		/// In world units per second.
+		///
+		/// Setting this property will set the current velocity that the agent is trying to move with, including gravity.
+		/// This can be useful if you want to make the agent come to a complete stop in a single frame or if you want to modify the velocity in some way.
+		///
+		/// <code>
+		/// // Set the velocity to zero, but keep the current gravity
+		/// var newVelocity = new Vector3(0, ai.desiredVelocityWithoutLocalAvoidance.y, 0);
+		///
+		/// ai.desiredVelocityWithoutLocalAvoidance = newVelocity;
+		/// </code>
+		///
+		/// Note: The <see cref="Pathfinding.AILerp"/> movement script doesn't use local avoidance so this property will always be identical to <see cref="velocity"/> on that component.
+		///
+		/// Warning: Trying to set this property on an AILerp component will throw an exception since its velocity cannot meaningfully be changed abitrarily.
+		///
+		/// If you are not using local avoidance then this property will in almost all cases be identical to <see cref="desiredVelocity"/> plus some noise due to floating point math.
+		///
+		/// See: <see cref="velocity"/>
+		/// See: <see cref="desiredVelocity"/>
+		/// See: <see cref="Move"/>
+		/// See: <see cref="MovementUpdate"/>
+		/// </summary>
+		Vector3 desiredVelocityWithoutLocalAvoidance { get; set; }
 
 		/// <summary>
 		/// Remaining distance along the current path to the end of the path.
@@ -75,6 +106,7 @@ namespace Pathfinding {
 		///
 		/// See: <see cref="reachedDestination"/>
 		/// See: <see cref="reachedEndOfPath"/>
+		/// See: <see cref="pathPending"/>
 		/// </summary>
 		float remainingDistance { get; }
 
@@ -97,6 +129,19 @@ namespace Pathfinding {
 		/// even though it may actually be quite a long way around the wall to the other side.
 		///
 		/// In contrast to <see cref="reachedEndOfPath"/>, this property is immediately updated when the <see cref="destination"/> is changed.
+		///
+		/// <code>
+		/// IEnumerator Start () {
+		///     ai.destination = somePoint;
+		///     // Start to search for a path to the destination immediately
+		///     ai.SearchPath();
+		///     // Wait until the agent has reached the destination
+		///     while (!ai.reachedDestination) {
+		///         yield return null;
+		///     }
+		///     // The agent has reached the destination now
+		/// }
+		/// </code>
 		///
 		/// See: <see cref="AIPath.endReachedDistance"/>
 		/// See: <see cref="remainingDistance"/>
@@ -133,7 +178,21 @@ namespace Pathfinding {
 		/// During this time the <see cref="pathPending"/> property will return true.
 		///
 		/// If you are setting a destination and then want to know when the agent has reached that destination
-		/// then you should check both <see cref="pathPending"/> and <see cref="reachedEndOfPath"/>:
+		/// then you could either use <see cref="reachedDestination"/> (recommended) or check both <see cref="pathPending"/> and <see cref="reachedEndOfPath"/>.
+		/// Check the documentation for the respective fields to learn about their differences.
+		///
+		/// <code>
+		/// IEnumerator Start () {
+		///     ai.destination = somePoint;
+		///     // Start to search for a path to the destination immediately
+		///     ai.SearchPath();
+		///     // Wait until the agent has reached the destination
+		///     while (!ai.reachedDestination) {
+		///         yield return null;
+		///     }
+		///     // The agent has reached the destination now
+		/// }
+		/// </code>
 		/// <code>
 		/// IEnumerator Start () {
 		///     ai.destination = somePoint;
@@ -235,7 +294,7 @@ namespace Pathfinding {
 		///
 		/// See: <see cref="pathPending"/>
 		/// </summary>
-		void SearchPath ();
+		void SearchPath();
 
 		/// <summary>
 		/// Make the AI follow the specified path.
@@ -248,6 +307,9 @@ namespace Pathfinding {
 		/// Note that if you calculate the path using seeker.StartPath then this script will already pick it up because it is listening for
 		/// all paths that the Seeker finishes calculating. In that case you do not need to call this function.
 		///
+		/// If you pass null as a parameter then the current path will be cleared and the agent will stop moving.
+		/// Note than unless you have also disabled <see cref="canSearch"/> then the agent will soon recalculate its path and start moving again.
+		///
 		/// You can disable the automatic path recalculation by setting the <see cref="canSearch"/> field to false.
 		///
 		/// <code>
@@ -258,9 +320,14 @@ namespace Pathfinding {
 		/// // The path will be about 20 world units long (the default cost of moving 1 world unit is 1000).
 		/// var path = FleePath.Construct(ai.position, pointToAvoid, 1000 * 20);
 		/// ai.SetPath(path);
+		///
+		/// // If you want to make use of properties like ai.reachedDestination or ai.remainingDistance or similar
+		/// // you should also set the destination property to something reasonable.
+		/// // Since the agent's own path recalculation is disabled, setting this will not affect how the paths are calculated.
+		/// // ai.destination = ...
 		/// </code>
 		/// </summary>
-		void SetPath (Path path);
+		void SetPath(Path path);
 
 		/// <summary>
 		/// Instantly move the agent to a new position.
@@ -272,7 +339,7 @@ namespace Pathfinding {
 		/// See: Works similarly to Unity's NavmeshAgent.Warp.
 		/// See: <see cref="SearchPath"/>
 		/// </summary>
-		void Teleport (Vector3 newPosition, bool clearPath = true);
+		void Teleport(Vector3 newPosition, bool clearPath = true);
 
 		/// <summary>
 		/// Move the agent.
@@ -291,7 +358,7 @@ namespace Pathfinding {
 		/// </code>
 		/// </summary>
 		/// <param name="deltaPosition">Direction and distance to move the agent in world space.</param>
-		void Move (Vector3 deltaPosition);
+		void Move(Vector3 deltaPosition);
 
 		/// <summary>
 		/// Calculate how the character wants to move during this frame.
@@ -318,7 +385,7 @@ namespace Pathfinding {
 		/// <param name="deltaTime">time to simulate movement for. Usually set to Time.deltaTime.</param>
 		/// <param name="nextPosition">the position that the agent wants to move to during this frame.</param>
 		/// <param name="nextRotation">the rotation that the agent wants to rotate to during this frame.</param>
-		void MovementUpdate (float deltaTime, out Vector3 nextPosition, out Quaternion nextRotation);
+		void MovementUpdate(float deltaTime, out Vector3 nextPosition, out Quaternion nextRotation);
 
 		/// <summary>
 		/// Move the agent.
@@ -328,6 +395,6 @@ namespace Pathfinding {
 		///
 		/// See: <see cref="MovementUpdate"/> for a code example.
 		/// </summary>
-		void FinalizeMovement (Vector3 nextPosition, Quaternion nextRotation);
+		void FinalizeMovement(Vector3 nextPosition, Quaternion nextRotation);
 	}
 }

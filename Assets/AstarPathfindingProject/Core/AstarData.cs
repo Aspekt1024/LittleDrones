@@ -37,6 +37,12 @@ namespace Pathfinding {
 		/// Updated at scanning time
 		/// </summary>
 		public GridGraph gridGraph { get; private set; }
+
+		/// <summary>
+		/// Shortcut to the first LayerGridGraph.
+		/// Updated at scanning time.
+		/// </summary>
+		public LayerGridGraph layerGridGraph { get; private set; }
 #endif
 
 #if !ASTAR_NO_POINT_GRAPH
@@ -47,6 +53,11 @@ namespace Pathfinding {
 		public PointGraph pointGraph { get; private set; }
 #endif
 
+		/// <summary>
+		/// Shortcut to the first RecastGraph.
+		/// Updated at scanning time.
+		/// </summary>
+		public RecastGraph recastGraph { get; private set; }
 
 		/// <summary>
 		/// All supported graph types.
@@ -62,11 +73,13 @@ namespace Pathfinding {
 		public static readonly System.Type[] DefaultGraphTypes = new System.Type[] {
 #if !ASTAR_NO_GRID_GRAPH
 			typeof(GridGraph),
+			typeof(LayerGridGraph),
 #endif
 #if !ASTAR_NO_POINT_GRAPH
 			typeof(PointGraph),
 #endif
 			typeof(NavMeshGraph),
+			typeof(RecastGraph),
 		};
 #endif
 
@@ -108,10 +121,10 @@ namespace Pathfinding {
 					data = upgradeData;
 					upgradeData = null;
 				}
-				return dataString != null ? System.Convert.FromBase64String(dataString) : null;
+				return dataString != null? System.Convert.FromBase64String(dataString) : null;
 			}
 			set {
-				dataString = value != null ? System.Convert.ToBase64String(value) : null;
+				dataString = value != null? System.Convert.ToBase64String(value) : null;
 			}
 		}
 
@@ -236,11 +249,14 @@ namespace Pathfinding {
 
 #if !ASTAR_NO_GRID_GRAPH
 			gridGraph = (GridGraph)FindGraphOfType(typeof(GridGraph));
+			layerGridGraph = (LayerGridGraph)FindGraphOfType(typeof(LayerGridGraph));
 #endif
 
 #if !ASTAR_NO_POINT_GRAPH
 			pointGraph = (PointGraph)FindGraphOfType(typeof(PointGraph));
 #endif
+
+			recastGraph = (RecastGraph)FindGraphOfType(typeof(RecastGraph));
 		}
 
 		/// <summary>Load from data from <see cref="file_cachedStartup"/></summary>
@@ -307,8 +323,18 @@ namespace Pathfinding {
 			}
 		}
 
-		/// <summary>Destroys all graphs and sets graphs to null</summary>
-		void ClearGraphs () {
+		/// <summary>
+		/// Destroys all graphs and sets <see cref="graphs"/> to null.
+		/// See: <see cref="RemoveGraph"/>
+		/// </summary>
+		public void ClearGraphs () {
+			var graphLock = AssertSafe();
+
+			ClearGraphsInternal();
+			graphLock.Release();
+		}
+
+		void ClearGraphsInternal () {
 			if (graphs == null) return;
 			for (int i = 0; i < graphs.Length; i++) {
 				if (graphs[i] != null) {
@@ -320,8 +346,18 @@ namespace Pathfinding {
 			UpdateShortcuts();
 		}
 
+		public void DisposeUnmanagedData () {
+			if (graphs == null) return;
+			AssertSafe();
+			for (int i = 0; i < graphs.Length; i++) {
+				if (graphs[i] != null) {
+					((IGraphInternals)graphs[i]).DisposeUnmanagedData();
+				}
+			}
+		}
+
 		public void OnDestroy () {
-			ClearGraphs();
+			ClearGraphsInternal();
 		}
 
 		/// <summary>
@@ -355,7 +391,7 @@ namespace Pathfinding {
 						Debug.Log("Invalid data file (cannot read zip).\nThe data is either corrupt or it was saved using a 3.0.x or earlier version of the system");
 					}
 				} else {
-					throw new System.ArgumentNullException("bytes");
+					throw new System.ArgumentNullException(nameof(bytes));
 				}
 				active.VerifyIntegrity();
 			} catch (System.Exception e) {
@@ -364,6 +400,7 @@ namespace Pathfinding {
 			}
 
 			UpdateShortcuts();
+			GraphModifier.TriggerEvent(GraphModifier.EventType.PostGraphLoad);
 			graphLock.Release();
 		}
 
@@ -377,7 +414,7 @@ namespace Pathfinding {
 			// the graphs with the correct graph indexes
 			sr.SetGraphIndexOffset(gr.Count);
 
-			if (graphTypes == null) FindGraphTypes();
+			FindGraphTypes();
 			gr.AddRange(sr.DeserializeGraphs(graphTypes));
 			graphs = gr.ToArray();
 
@@ -411,6 +448,8 @@ namespace Pathfinding {
 		/// Using reflection, the assembly is searched for types which inherit from NavGraph.
 		/// </summary>
 		public void FindGraphTypes () {
+			if (graphTypes != null) return;
+
 #if !ASTAR_FAST_NO_EXCEPTIONS && !UNITY_WINRT && !UNITY_WEBGL
 			var graphList = new List<System.Type>();
 			foreach (var assembly in System.AppDomain.CurrentDomain.GetAssemblies()) {
@@ -594,6 +633,8 @@ namespace Pathfinding {
 		///
 		/// Version: Changed in 3.2.5 to call SafeOnDestroy before removing
 		/// and nulling it in the array instead of removing the element completely in the <see cref="graphs"/> array.
+		///
+		/// See: <see cref="ClearGraphs"/>
 		/// </summary>
 		public bool RemoveGraph (NavGraph graph) {
 			// Make sure the pathfinding threads are stopped

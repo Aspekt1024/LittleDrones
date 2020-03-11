@@ -1420,6 +1420,7 @@ namespace Pathfinding {
 		/// <param name="outTriangles">Triangles of the output mesh.</param>
 		public static void CompressMesh (List<Int3> vertices, List<int> triangles, out Int3[] outVertices, out int[] outTriangles) {
 			Dictionary<Int3, int> firstVerts = cached_Int3_int_dict;
+
 			firstVerts.Clear();
 
 			// Use cached array to reduce memory allocations
