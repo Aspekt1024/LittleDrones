@@ -488,6 +488,7 @@
             </e>
           </e>
           <e p="Management" t="Include">
+            <e p="CameraManager.cs" t="Include" />
             <e p="DataManager.cs" t="Include" />
             <e p="GameManager.cs" t="Include" />
             <e p="GameplayManager.cs" t="Include" />
@@ -517,6 +518,7 @@
             <e p="DronePanel.cs" t="Include" />
             <e p="InventoryUI.cs" t="Include" />
             <e p="PowerButton.cs" t="Include" />
+            <e p="ProgressUI.cs" t="Include" />
             <e p="TooltipUI.cs" t="Include" />
             <e p="UnitUI.cs" t="Include" />
           </e>
@@ -572,6 +574,7 @@
             <e p="Components" t="Include">
               <e p="AbilityManager.cs" t="Include" />
               <e p="IAbilityManager.cs" t="Include" />
+              <e p="ProgressIndicator.cs" t="Include" />
             </e>
             <e p="Drone" t="Include">
               <e p="Drone.cs" t="Include" />

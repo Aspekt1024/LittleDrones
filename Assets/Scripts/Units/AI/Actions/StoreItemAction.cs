@@ -52,7 +52,8 @@ namespace Aspekt.Drones
             storage = s;
 
             var moveState = new MoveState(Agent, movement);
-            moveState.SetTarget(building.Transform, placementDistance);
+            var target = building.pathingPoint == null ? building.Transform : building.pathingPoint;
+            moveState.SetTarget(target, placementDistance);
             stateMachine.Enqueue(moveState);
             stateMachine.OnComplete += OnTargetReached;
             

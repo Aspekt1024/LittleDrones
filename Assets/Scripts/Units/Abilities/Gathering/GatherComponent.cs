@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace Aspekt.Drones
 {
@@ -7,6 +8,13 @@ namespace Aspekt.Drones
         private IGatherable gatherable;
         private float gatherPercent;
         private Action<IGatherable> gatheringCompletedCallback;
+
+        private UnitBase unit;
+        
+        public GatherComponent(UnitBase unit)
+        {
+            this.unit = unit;
+        }
 
         private enum States
         {
@@ -49,6 +57,7 @@ namespace Aspekt.Drones
         {
             state = States.None;
             gatherable.RemoveGatherer(this);
+            GameManager.UI.Get<ProgressUI>().StopProgress(unit.transform);
         }
 
         public void Tick(float deltaTime)
@@ -61,6 +70,11 @@ namespace Aspekt.Drones
                 StopGathering();
                 Hold(gatherable.GetItem());
                 gatheringCompletedCallback?.Invoke(gatherable);
+                GameManager.UI.Get<ProgressUI>().ShowProgressComplete(unit.transform);
+            }
+            else
+            {
+                GameManager.UI.Get<ProgressUI>().ShowProgress(gatherPercent, unit.transform);
             }
         }
 

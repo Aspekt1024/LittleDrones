@@ -10,6 +10,7 @@ namespace Aspekt.Drones
     public abstract class BuildingBase : MonoBehaviour, IObject
     {
         public BuildingTypes buildingType;
+        public Transform pathingPoint;
 
         private void Start()
         {

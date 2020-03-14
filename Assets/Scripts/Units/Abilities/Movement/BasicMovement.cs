@@ -22,7 +22,7 @@ namespace Aspekt.Drones
         private States state = States.None;
         
         public bool Enabled { get; set; }
-
+        
         public BasicMovement(Rigidbody body)
         {
             this.body = body;

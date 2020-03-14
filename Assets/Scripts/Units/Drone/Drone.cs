@@ -19,6 +19,7 @@ namespace Aspekt.Drones
         private Animator animator;
 
         public override IAbilityManager Abilities { get; } = new AbilityManager();
+
         public DroneVitals Vitals => vitals;
         
         private void Awake()
@@ -100,7 +101,7 @@ namespace Aspekt.Drones
         private void InitialiseDroneAbilities()
         {
             var movement = new GroundMovement(GetComponent<Rigidbody>(), GetComponent<RichAI>());
-            var gatherer = new GatherComponent();
+            var gatherer = new GatherComponent(this);
             var worker = new WorkerComponent(this);
             
             Abilities.AddAbility(movement);
