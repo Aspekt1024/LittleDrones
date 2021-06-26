@@ -1,4 +1,3 @@
-using Aspekt.AI;
 using Aspekt.Items;
 using TMPro;
 using UnityEngine;

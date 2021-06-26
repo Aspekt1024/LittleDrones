@@ -15,4 +15,4 @@ MonoBehaviour:
   itemName: Maintain Fuel Goal
   description: Maintains fuel levels
   icon: {fileID: 21300000, guid: 8ea3e46938e041f4a8abb8200dc90159, type: 3}
-  priority: 1
+  priority: 10

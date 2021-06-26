@@ -11,9 +11,9 @@ namespace Aspekt.Drones
             return other is MaintainFuelGoalModule;
         }
 
-        protected override AIGoal<AIAttributes, object> CreateGoal()
+        protected override AIGoal<AIAttributes, object> CreateGoal(int priority)
         {
-            return new MaintainFuelGoal();
+            return new MaintainFuelGoal(priority);
         }
     }
 }

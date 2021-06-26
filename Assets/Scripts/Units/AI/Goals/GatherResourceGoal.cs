@@ -7,8 +7,8 @@ namespace Aspekt.Drones
     public class GatherResourceGoal : AIGoal<AIAttributes, object>
     {
         private readonly ResourceTypes resourceType;
-        
-        public GatherResourceGoal(ResourceTypes type)
+
+        public GatherResourceGoal(ResourceTypes type, int priority) : base(priority)
         {
             resourceType = type;
         }

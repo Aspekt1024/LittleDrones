@@ -4,6 +4,10 @@ namespace Aspekt.Drones
 {
     public class MaintainFuelGoal : AIGoal<AIAttributes, object>
     {
+        public MaintainFuelGoal(int priority) : base(priority)
+        {
+        }
+        
         public override void SetupGoal()
         {
             agent.Memory.Set(AIAttributes.ResourceGoalType, ResourceTypes.Coal);

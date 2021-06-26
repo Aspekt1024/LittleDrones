@@ -7,13 +7,12 @@ namespace Aspekt.Drones
     [Serializable]
     public abstract class GoalModule : InventoryItem, IDroneModule
     {
-        public float priority;
+        public int priority;
         
         private AIGoal<AIAttributes, object> goal;
         
         public void AttachTo(DroneAIAgent agent)
         {
-            goal.SetPriority(priority);
             agent.Goals.AddGoal(goal);
         }
 
@@ -26,9 +25,9 @@ namespace Aspekt.Drones
         
         private void Awake()
         {
-            goal = CreateGoal();
+            goal = CreateGoal(priority);
         }
 
-        protected abstract AIGoal<AIAttributes, object> CreateGoal();
+        protected abstract AIGoal<AIAttributes, object> CreateGoal(int priority);
     }
 }

@@ -8,9 +8,9 @@ namespace Aspekt.Drones
     {
         public ResourceTypes resourceType;
 
-        protected override AIGoal<AIAttributes, object> CreateGoal()
+        protected override AIGoal<AIAttributes, object> CreateGoal(int priority)
         {
-            return new GatherResourceGoal(resourceType);;
+            return new GatherResourceGoal(resourceType, priority);
         }
         
         public override bool IsTypeMatch(GoalModule other)

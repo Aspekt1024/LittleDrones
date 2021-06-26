@@ -44,7 +44,7 @@ namespace Aspekt.Drones
         private void Awake()
         {
             nameText.text = aiAgent.GetComponentInParent<Drone>().GetName();
-        }
+        } 
 
         private void Update()
         {

@@ -4,6 +4,10 @@ namespace Aspekt.Drones
 {
     public class CraftDroneGoal : AIGoal<AIAttributes, object>
     {
+        public CraftDroneGoal(int priority) : base(priority)
+        {
+        }
+        
         public override void SetupGoal()
         {
             

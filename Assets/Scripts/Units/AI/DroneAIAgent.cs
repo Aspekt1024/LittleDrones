@@ -37,9 +37,9 @@ namespace Aspekt.Drones
         public void SetMemoryView() => view = Views.Memory;
         public void SetExecutionView() => view = Views.Execution;
         
-        protected override void OnActionPlanComplete()
+        protected override void OnActionPlanComplete(bool success)
         {
-            base.OnActionPlanComplete();
+            base.OnActionPlanComplete(success);
             LogInfo(this, "action plan complete - finding next goal");
             QueueGoalCalculation();
         }

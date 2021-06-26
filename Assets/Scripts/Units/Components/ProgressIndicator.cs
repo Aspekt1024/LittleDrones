@@ -7,18 +7,17 @@ namespace Aspekt.Drones
     public class ProgressIndicator : UIPanel
     {
         #pragma warning disable 649
+        [SerializeField] private Animator anim;
         [SerializeField] private Slider slider;
         #pragma warning restore 649
         
         private Transform tf;
-        private Animator anim;
         private Transform target;
         private static readonly int IsComplete = Animator.StringToHash("isComplete");
 
         private void Awake()
         {
             tf = transform;
-            anim = GetComponent<Animator>();
         }
 
         private void Update()
