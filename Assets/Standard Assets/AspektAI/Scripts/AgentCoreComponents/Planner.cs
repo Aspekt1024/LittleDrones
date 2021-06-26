@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Aspekt.AI.Planning;
-using UnityEngine;
 
 namespace Aspekt.AI.Internal
 {
@@ -13,7 +11,11 @@ namespace Aspekt.AI.Internal
         
         private IAIGoal<L, V> currentGoal;
         private Queue<IAIAction<L, V>> actions = new Queue<IAIAction<L, V>>();
-        
+
+        private bool isDiagnosticsEnabled;
+        private PlannerDiagnosticData<L, V> diagnosticData;
+        public PlannerDiagnosticData<L, V> GetDiagnostics() => diagnosticData;
+
         public event Action OnActionPlanFound = delegate { };
         public event Action OnActionPlanNotFound = delegate { };
 
@@ -68,6 +70,8 @@ namespace Aspekt.AI.Internal
 
         private ActionPlan<L, V> CalculateActionPlan()
         {
+            diagnosticData = new PlannerDiagnosticData<L, V>();
+            
             var goals = new List<IAIGoal<L, V>>(agent.Goals.GetGoals());
             goals.Sort((x, y) => y.Priority.CompareTo(x.Priority));
 
@@ -79,21 +83,27 @@ namespace Aspekt.AI.Internal
 
             foreach (var goal in goals)
             {
-                if (IsAlreadyAchieved (goal)) continue;
-                if (!IsGoalAchieveableByActions(goal)) continue;
+                diagnosticData.BeginGoalInfo(goal);
+
+                if (IsAlreadyAchieved(goal) || !IsGoalAchieveableByActions(goal))
+                {
+                    diagnosticData.EndGoalInfo(false, new ActionPlan<L, V>());
+                    continue;
+                }
 
                 goal.SetupGoal();
                 if (aStar.FindActionPlan(agent, goal))
                 {
                     var actionPlan = aStar.GetActionPlan();
                     agent.LogKeyInfo(this, "action plan found for " + goal);
-                    return new ActionPlan<L, V>
-                    {
-                        Goal = goal,
-                        Actions = actionPlan
-                    };
+                    if (isDiagnosticsEnabled) diagnosticData.AddGoalMessage("Action plan found");
+                    var plan = new ActionPlan<L, V> {Goal = goal, Actions = actionPlan};
+                    diagnosticData.EndGoalInfo(true, plan);
+                    return plan;
                 }
                 agent.LogInfo(this, "failed to find action plan for " + goal);
+                if (isDiagnosticsEnabled) diagnosticData.AddGoalMessage("Unable to find action plan from available actions.");
+                diagnosticData.EndGoalInfo(false, new ActionPlan<L, V>());
             }
             
             throw new NoActionPlanFoundException();
@@ -102,12 +112,21 @@ namespace Aspekt.AI.Internal
         public Queue<IAIAction<L, V>> GetActionPlan() => actions;
         public IAIGoal<L, V> GetGoal() => currentGoal;
 
+        public void SetDiagnosticsStatus(bool isActive)
+        {
+#if UNITY_EDITOR
+            // Diagnostics is only relevant in the editor, so we'll keep it disabled in builds.
+            isDiagnosticsEnabled = isActive;
+#endif
+        }
+
         private bool IsAlreadyAchieved(IAIGoal<L, V> goal)
         {
             foreach (var condition in goal.GetConditions())
             {
                 if (!agent.Memory.IsMatch(condition.Key, condition.Value)) return false;
             }
+            if (isDiagnosticsEnabled) diagnosticData.AddGoalMessage("Goal conditions have already been achieved.");
             return true;
         }
 
@@ -169,6 +188,7 @@ namespace Aspekt.AI.Internal
 
         private void LogGoalUnachievableTrace(IAIGoal<L, V> goal, Dictionary<L, bool> conditionsMet)
         {
+            if (isDiagnosticsEnabled) diagnosticData.AddGoalMessage("Goal condition is not achievable by any of its actions.");
             if (agent.Logger.LogLevel != AILogger.LogLevels.Trace) return;
             
             agent.LogTrace(this, $"{goal} not achievable by the available actions");

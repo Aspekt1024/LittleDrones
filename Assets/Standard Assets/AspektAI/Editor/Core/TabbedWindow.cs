@@ -47,7 +47,10 @@ namespace Aspekt.AI
             
             toolbar.Init();
 
+            Undo.undoRedoPerformed -= DataFilesUpdated;
             Undo.undoRedoPerformed += DataFilesUpdated;
+            EditorApplication.playModeStateChanged -= OnPlayStateChanged;
+            EditorApplication.playModeStateChanged += OnPlayStateChanged;
             this.SetAntiAliasing(4);
         }
 
@@ -55,11 +58,20 @@ namespace Aspekt.AI
         {
             pages.ForEach(p => p.UpdateContents());
         }
+
+        private void OnPlayStateChanged(PlayModeStateChange stateChange)
+        {
+            if (stateChange == PlayModeStateChange.EnteredPlayMode || stateChange == PlayModeStateChange.EnteredEditMode)
+            {
+                pages.ForEach(p => p.UpdateContents());
+            }
+        }
         
 
         private void OnDisable()
         {
             Undo.undoRedoPerformed -= DataFilesUpdated;
+            EditorApplication.playModeStateChanged -= OnPlayStateChanged;
         }
         
         protected abstract void AddPages();

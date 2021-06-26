@@ -21,6 +21,7 @@ namespace Aspekt.Drones
         public override IAbilityManager Abilities { get; } = new AbilityManager();
 
         public DroneVitals Vitals => vitals;
+        public DroneAIAgent AIAgent => ai;
         
         private void Awake()
         {

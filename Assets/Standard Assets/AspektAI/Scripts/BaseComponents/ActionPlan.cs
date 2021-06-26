@@ -9,5 +9,7 @@ namespace Aspekt.AI
     {
         public IAIGoal<L, V> Goal;
         public Queue<IAIAction<L, V>> Actions;
+
+        public bool IsValid => Goal != null;
     }
 }

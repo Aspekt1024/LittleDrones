@@ -68,7 +68,7 @@ namespace Aspekt.Drones
         protected override bool CheckProceduralConditions()
         {
             if (Agent.Memory.Get(AIAttributes.DepositToGather) == null) return false;
-            if (Agent.Memory.Get(AIAttributes.IsHoldingResource) != null) return false;
+            if (Agent.Memory.IsTrue(AIAttributes.IsHoldingResource)) return false;
             if (Agent.Memory.IsMatch(AIAttributes.HasDepositToGather, false)) return false;
             return true;
         }

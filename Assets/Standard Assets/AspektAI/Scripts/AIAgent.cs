@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Aspekt.AI.Internal;
+using Aspekt.AI.Planning;
 using UnityEngine;
 
 namespace Aspekt.AI
@@ -27,7 +29,7 @@ namespace Aspekt.AI
         public ISensorController<L, V> Sensors { get; } = new SensorController<L, V>();
         public IGoalController<L, V> Goals { get; } = new GoalController<L, V>();
         public AILogger Logger { get; private set; }
-
+        
         public bool IsExecuting => executor.IsExecuting;
         public bool IsIdle => state == States.Idle;
 
@@ -43,6 +45,16 @@ namespace Aspekt.AI
 
         private bool calculateGoalRequested;
         private float timeLastUpdated;
+
+        public interface IObserver
+        {
+            void OnAgentPlanCalculated(Queue<IAIAction<L, V>> newActionPlan, IAIGoal<L, V> goal);
+            void OnAgentPlanCalculationFailure();
+        }
+
+        private readonly List<IObserver> observers = new List<IObserver>();
+        public void RegisterObserver(IObserver observer) => observers.Add(observer);
+        public void UnregisterObserver(IObserver observer) => observers.Remove(observer);
 
         public void Init(GameObject owner)
         {
@@ -205,8 +217,13 @@ namespace Aspekt.AI
             return status;
         }
 
+        public void SetDiagnosticsStatus(bool isActive) => planner.SetDiagnosticsStatus(isActive);
+        public PlannerDiagnosticData<L, V> GetDiagnostics() => planner.GetDiagnostics();
+
         private void OnActionPlanFound()
         {
+            observers.ForEach(o => o.OnAgentPlanCalculated(planner.GetActionPlan(), planner.GetGoal()));
+            
             timeLastUpdated = Time.time;
             executor.ExecutePlan(planner.GetActionPlan(), planner.GetGoal());
             if (state == States.AwaitingActionPlan)
@@ -222,6 +239,7 @@ namespace Aspekt.AI
 
         private void OnActionPlanNotFound()
         {
+            observers.ForEach(o => o.OnAgentPlanCalculationFailure());
             timeLastUpdated = Time.time;
             state = States.Idle;
         }

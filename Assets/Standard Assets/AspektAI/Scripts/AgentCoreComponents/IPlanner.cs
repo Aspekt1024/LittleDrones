@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Aspekt.AI.Planning;
 
 namespace Aspekt.AI.Internal
 {
@@ -31,5 +32,16 @@ namespace Aspekt.AI.Internal
         /// Retrieves the goal that the action plan aims to fulfil
         /// </summary>
         IAIGoal<L, V> GetGoal();
+
+        /// <summary>
+        /// Enables or disables Diagnostics for the AI Agent. This will keep track of detailed info
+        /// during the planning stage for displaying in the editor.
+        /// </summary>
+        void SetDiagnosticsStatus(bool isActive);
+
+        /// <summary>
+        /// Returns the diagnostics data. Only valid if <see cref="SetDiagnosticsStatus"/> is called and set to true
+        /// </summary>
+        PlannerDiagnosticData<L, V> GetDiagnostics();
     }
 }

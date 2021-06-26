@@ -2,7 +2,8 @@
     "name": "Aspekt.AI.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:a7b3e3b2bc5a9514daa7f82a71913d6c"
+        "GUID:a7b3e3b2bc5a9514daa7f82a71913d6c",
+        "GUID:5b8367656878c4643920146fdc2e690f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

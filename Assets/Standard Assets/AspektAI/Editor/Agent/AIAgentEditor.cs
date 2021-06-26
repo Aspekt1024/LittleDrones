@@ -17,7 +17,7 @@ namespace Aspekt.AI.AgentEditor
         
         protected override void AddPages()
         {
-            AddPage(new Planner());
+            AddPage(new DronePlanner());
             AddPage(new Mem());
         }
 

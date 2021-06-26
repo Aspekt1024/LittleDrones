@@ -1,0 +1,13 @@
+.diagnostics-container {
+    border-width: 1px;
+    border-color: black;
+    background-color: whitesmoke;
+    
+    color: black;
+    
+    
+}
+
+.diagnostics-container Label {
+    color: black;
+}
