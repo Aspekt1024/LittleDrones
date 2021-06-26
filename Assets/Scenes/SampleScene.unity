@@ -1960,7 +1960,7 @@ MonoBehaviour:
   manualDebugFloorRoof: 0
   showSearchTree: 0
   unwalkableNodeDebugSize: 0.3
-  logPathResults: 1
+  logPathResults: 0
   maxNearestNodeDistance: 100
   scanOnStartup: 1
   fullGetNearestSearch: 0
@@ -8035,7 +8035,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fb6356e77b940f494e6760179dac672, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  logLevel: 1
+  logLevel: 0
   updateMode: 1
   updateInterval: 1
 --- !u!4 &1084050669

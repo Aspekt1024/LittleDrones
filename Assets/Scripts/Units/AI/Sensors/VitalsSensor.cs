@@ -10,7 +10,10 @@ namespace Aspekt.Drones
 #pragma warning disable 414
         [SerializeField] private float lowFuelPercent = 0.5f;
         [SerializeField] private float criticalFuelPercent = 0.1f;
-        [SerializeField] private float nominalFuelPercent = 0.8f; 
+        [SerializeField] private float nominalFuelPercent = 0.8f;
+        [SerializeField] private int normalFuelPriority = 1;
+        [SerializeField] private int lowFuelPriority = 100;
+        [SerializeField] private int criticalFuelPriority = 1000;
 #pragma warning restore 414
         
         private DroneVitals vitals;
@@ -28,29 +31,34 @@ namespace Aspekt.Drones
         
         protected override void OnTick(float deltaTime)
         {
+            CheckFuelLevels();
+        }
+
+        private void CheckFuelLevels()
+        {
             float fuelPercent = vitals.CurrentFuel / vitals.FuelCapacity;
 
-            if (isFuelLow && fuelPercent < 0.8f)
+            if (isFuelLow && fuelPercent < nominalFuelPercent)
             {
                 Agent.Memory.Set(AIAttributes.HasLowFuel, true);
+                Agent.Goals.Get<MaintainFuelGoal>().Priority = normalFuelPriority;
             }
-            if (fuelPercent < 0.5f)
+            if (fuelPercent < lowFuelPercent)
             {
                 Agent.Memory.Set(AIAttributes.HasLowFuel, true);
+                Agent.Goals.Get<MaintainFuelGoal>().Priority = lowFuelPriority;
                 isFuelLow = true;
             }
-            if (fuelPercent < 0.1f)
+            if (fuelPercent < criticalFuelPercent)
             {
-                // TODO increase maintain fuel goal priority
+                Agent.Goals.Get<MaintainFuelGoal>().Priority = criticalFuelPriority;
             }
 
-            if (fuelPercent > 0.8f)
+            if (fuelPercent > nominalFuelPercent)
             {
                 Agent.Memory.Set(AIAttributes.HasLowFuel, false);
                 isFuelLow = false;
             }
-            
-            Debug.Log(Agent.Memory.Get(AIAttributes.HasLowFuel));
         }
     }
 }
