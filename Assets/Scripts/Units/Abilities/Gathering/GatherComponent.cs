@@ -9,9 +9,9 @@ namespace Aspekt.Drones
         private float gatherPercent;
         private Action<IGatherable> gatheringCompletedCallback;
 
-        private UnitBase unit;
+        private Unit unit;
         
-        public GatherComponent(UnitBase unit)
+        public GatherComponent(Unit unit)
         {
             this.unit = unit;
         }

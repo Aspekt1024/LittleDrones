@@ -21,7 +21,7 @@ namespace Aspekt.Drones
         private IMovement movement;
         private IGatherer gatherer;
         
-        public override float Cost => 5f; // TODO update to return the distance to the closest deposit plus time to gather
+        public override float Cost => 5f;
         
         public override bool CheckComponents()
         {

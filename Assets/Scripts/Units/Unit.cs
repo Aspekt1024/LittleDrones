@@ -5,7 +5,7 @@ namespace Aspekt.Drones
     /// <summary>
     /// The base class for all units in the game
     /// </summary>
-    public abstract class UnitBase : MonoBehaviour, IUnit
+    public abstract class Unit : MonoBehaviour, IUnit
     {
         public abstract IAbilityManager Abilities { get; }
         

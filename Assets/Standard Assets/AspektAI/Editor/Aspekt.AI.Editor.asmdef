@@ -1,0 +1,16 @@
+{
+    "name": "Aspekt.AI.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a7b3e3b2bc5a9514daa7f82a71913d6c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

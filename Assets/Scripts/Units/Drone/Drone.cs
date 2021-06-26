@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Aspekt.Drones
 {
-    public class Drone : UnitBase
+    public class Drone : Unit
     {
 #pragma warning disable 649
         [SerializeField] private DroneVitals vitals;
