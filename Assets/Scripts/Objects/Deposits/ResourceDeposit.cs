@@ -6,32 +6,19 @@ namespace Aspekt.Drones
     public class ResourceDeposit : GatherableDeposit
     {
         public ResourceTypes resourceType;
+        public ResourceBase resourcePrefab;
+        public DepositAnimator.Settings animationSettings;
 
-        private GameObject resourcePrefab;
-
+        private DepositAnimator depositAnim;
+        
         private void Start()
         {
-            switch (resourceType)
-            {
-                case ResourceTypes.None:
-                    break;
-                case ResourceTypes.Iron:
-                    resourcePrefab = Resources.Load<GameObject>("Items/Resources/Iron");
-                    break;
-                case ResourceTypes.Coal:
-                    resourcePrefab = Resources.Load<GameObject>("Items/Resources/Coal");
-                    break;
-                case ResourceTypes.Copper:
-                    resourcePrefab = Resources.Load<GameObject>("Items/Resources/Copper");
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
             if (resourcePrefab == null)
             {
                 Debug.LogWarning($"{nameof(ResourceDeposit)} of type {resourceType} has a null prefab");
             }
+
+            depositAnim = new DepositAnimator(animationSettings);
         }
         
         public override string ToString()
@@ -41,7 +28,12 @@ namespace Aspekt.Drones
 
         protected override IGrabbableItem CreateGatherableItem()
         {
-            return resourcePrefab == null ? null : Instantiate(resourcePrefab).GetComponent<ResourceBase>();
+            return resourcePrefab == null ? null : Instantiate(resourcePrefab);
+        }
+
+        private void Update()
+        {
+            depositAnim.Tick();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Pathfinding;
+﻿using System.Collections.Generic;
+using Pathfinding;
 using UnityEngine;
 
 namespace Aspekt.Drones
@@ -14,9 +15,12 @@ namespace Aspekt.Drones
         [SerializeField] private SensorInventory sensorSlots;
         [SerializeField] private ActionInventory actionSlots;
         [SerializeField] private GoalInventory goalSlots;
+
+        [SerializeField] private List<MeshRenderer> renderers;
 #pragma warning restore 649
         
         private Animator animator;
+        private DroneMaterial droneMat;
 
         public override IAbilityManager Abilities { get; } = new AbilityManager();
 
@@ -35,6 +39,8 @@ namespace Aspekt.Drones
             
             vitals.SetUsageRate(0.2f);
             vitals.IsConsumingFuel = false;
+
+            droneMat = new DroneMaterial(renderers);
         }
 
         public void PowerOn()
@@ -57,6 +63,8 @@ namespace Aspekt.Drones
         
         private void Update()
         {
+            droneMat.Tick();
+            
             if (vitals.CurrentFuel <= 0f)
             {
                 Debug.Log("drone ran out of fuel and is dead forever because that's realistic");
