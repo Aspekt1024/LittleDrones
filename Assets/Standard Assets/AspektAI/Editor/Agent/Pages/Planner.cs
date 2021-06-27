@@ -19,24 +19,34 @@ namespace Aspekt.AI.AgentEditor
         private readonly List<PlannerDiagnosticData<L, V>> previousDiagnostics = new List<PlannerDiagnosticData<L, V>>();
 
         private bool diagnosticsEnabled;
+        private VisualElement header;
         private VisualElement planInfo;
         private VisualElement diagnosticsInfo;
-        
-        public override void UpdateContents()
+
+        protected override void Setup()
         {
-            Root.Clear();
-            SetupData();
+            header = new VisualElement();
             
             var refreshButton = new Button { text = "Refresh" };
             refreshButton.clicked += UpdateContents;
-            Root.Add(refreshButton);
+            header.Add(refreshButton);
+            
+            Root.Add(header);
             
             planInfo = new VisualElement();
+            Root.Add(planInfo);
+            
             diagnosticsInfo = new VisualElement();
             diagnosticsInfo.AddToClassList("diagnostics-container");
-            
-            Root.Add(planInfo);
             Root.Add(diagnosticsInfo);
+        }
+
+        public override void UpdateContents()
+        {
+            SetupData();
+            
+            diagnosticsInfo.Clear();
+            planInfo.Clear();
             
             if (Application.isPlaying)
             {
@@ -46,7 +56,7 @@ namespace Aspekt.AI.AgentEditor
                 {
                     var diagnosticsButton = new Button {text = diagnosticsEnabled ? "Diagnostics Enabled" : "Diagnostics Disabled"};
                     diagnosticsButton.clicked += ToggleDiagnostics;
-                    Root.Add(diagnosticsButton);
+                    diagnosticsInfo.Add(diagnosticsButton);
                     DisplayActionInfo();
                 }
             }
@@ -88,7 +98,6 @@ namespace Aspekt.AI.AgentEditor
 
         private void DisplayActionInfo()
         {
-            planInfo.Clear();
             if (actionPlan.IsValid)
             {
                 planInfo.Add(new Label(actionPlan.Goal.ToString()));
@@ -126,7 +135,7 @@ namespace Aspekt.AI.AgentEditor
             aiAgent = Object.FindObjectOfType<AIAgent<L, V>>();
             if (aiAgent == null)
             {
-                Root.Add(new Label("Could not find ai agent!"));
+                header.Add(new Label("Could not find ai agent!"));
                 return;
             }
             aiAgent.RegisterObserver(this);

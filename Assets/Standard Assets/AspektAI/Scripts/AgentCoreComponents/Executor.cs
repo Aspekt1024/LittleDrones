@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Aspekt.AI.Internal
 {
@@ -161,6 +162,7 @@ namespace Aspekt.AI.Internal
             }
             else
             {
+                agent.LogKeyInfo(this, $"action failed on begin phase: {CurrentAction}");
                 OnActionFailure();
             }
         }

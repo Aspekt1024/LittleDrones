@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Aspekt.AI
@@ -50,6 +51,15 @@ namespace Aspekt.AI
         }
         
         public readonly LogLevels LogLevel;
+        
+        public interface IObserver
+        {
+            void OnLogMessageReceived(AILogType type, string parent, string message);
+        }
+
+        private readonly List<IObserver> observers = new List<IObserver>();
+        public void RegisterObserver(IObserver observer) => observers.Add(observer);
+        public void UnregisterObserver(IObserver observer) => observers.Remove(observer);
 
         public AILogger(LogLevels level)
         {
@@ -58,9 +68,10 @@ namespace Aspekt.AI
 
         public void Log<T>(AILogType type, T parent, string message)
         {
-            if (LogLevel == LogLevels.None) return;
-
             string prefix = typeof(T).Name;
+            observers.ForEach(o => o.OnLogMessageReceived(type, prefix, message));
+            
+            if (LogLevel == LogLevels.None) return;
 
             bool shouldLog = false;
             switch (type)

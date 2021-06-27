@@ -17,8 +17,9 @@ namespace Aspekt.Drones
 #pragma warning restore 414
         
         private DroneVitals vitals;
+        private MaintainFuelGoal fuelGoal;
 
-        private bool isFuelLow;
+        private bool isRefillingFromLow;
         
         protected override void OnInit()
         {
@@ -36,29 +37,33 @@ namespace Aspekt.Drones
 
         private void CheckFuelLevels()
         {
+            if (fuelGoal == null)
+            {
+                fuelGoal = Agent.Goals.Get<MaintainFuelGoal>();
+                if (fuelGoal == null) return;
+            }
+            
             float fuelPercent = vitals.CurrentFuel / vitals.FuelCapacity;
 
-            if (isFuelLow && fuelPercent < nominalFuelPercent)
-            {
-                Agent.Memory.Set(AIAttributes.HasLowFuel, true);
-                Agent.Goals.Get<MaintainFuelGoal>().Priority = normalFuelPriority;
-            }
-            if (fuelPercent < lowFuelPercent)
-            {
-                Agent.Memory.Set(AIAttributes.HasLowFuel, true);
-                Agent.Goals.Get<MaintainFuelGoal>().Priority = lowFuelPriority;
-                isFuelLow = true;
-            }
             if (fuelPercent < criticalFuelPercent)
             {
-                Agent.Goals.Get<MaintainFuelGoal>().Priority = criticalFuelPriority;
+                fuelGoal.Priority = criticalFuelPriority;
             }
-
-            if (fuelPercent > nominalFuelPercent)
+            else if (fuelPercent < lowFuelPercent)
             {
-                Agent.Memory.Set(AIAttributes.HasLowFuel, false);
-                isFuelLow = false;
+                isRefillingFromLow = true;
+                fuelGoal.Priority = lowFuelPriority;
             }
+            else if (fuelPercent < nominalFuelPercent)
+            {
+                fuelGoal.Priority = isRefillingFromLow ? lowFuelPriority : normalFuelPriority;
+            }
+            else
+            {
+                isRefillingFromLow = false;
+            }
+            
+            Agent.Memory.Set(AIAttributes.MaintainFuelGoal, fuelPercent > nominalFuelPercent);
         }
     }
 }

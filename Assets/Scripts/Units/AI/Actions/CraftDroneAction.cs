@@ -37,13 +37,13 @@ namespace Aspekt.Drones
 
         protected override void SetPreconditions()
         {
-            AddPrecondition(AIAttributes.IsHoldingResource, false);
+            AddPrecondition(AIAttributes.IsHoldingItem, false);
             AddPrecondition(AIAttributes.CraftingStationReady, true);
         }
 
         protected override void SetEffects()
         {
-            AddEffect(AIAttributes.HasCraftedDrone, true);
+            AddEffect(AIAttributes.CraftDroneGoal, true);
         }
 
         protected override bool CheckProceduralConditions()

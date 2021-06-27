@@ -60,15 +60,13 @@ namespace Aspekt.Drones
         
         protected override void SetEffects()
         {
-            AddEffect(AIAttributes.DepositToGather, null);
-            AddEffect(AIAttributes.HasDepositToGather, false);
-            AddEffect(AIAttributes.IsHoldingResource, true);
+            AddEffect(AIAttributes.IsHoldingItem, true);
         }
 
         protected override bool CheckProceduralConditions()
         {
             if (Agent.Memory.Get(AIAttributes.DepositToGather) == null) return false;
-            if (Agent.Memory.IsTrue(AIAttributes.IsHoldingResource)) return false;
+            if (Agent.Memory.IsTrue(AIAttributes.IsHoldingItem)) return false;
             if (Agent.Memory.IsMatch(AIAttributes.HasDepositToGather, false)) return false;
             return true;
         }
@@ -80,6 +78,8 @@ namespace Aspekt.Drones
         private void OnComplete()
         {
             stateMachine.OnComplete -= OnComplete;
+            Agent.Memory.Set(AIAttributes.DepositToGather, null);
+            Agent.Memory.Set(AIAttributes.HasDepositToGather, false);
             ActionSuccess();
         }
     }

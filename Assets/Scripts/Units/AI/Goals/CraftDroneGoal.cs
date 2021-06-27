@@ -15,12 +15,12 @@ namespace Aspekt.Drones
 
         public override void ResetGoal()
         {
-            agent.Memory.Set(AIAttributes.HasCraftedDrone, false);
+            agent.Memory.Set(AIAttributes.CraftDroneGoal, false);
         }
 
         protected override void SetConditions()
         {
-            AddCondition(AIAttributes.HasCraftedDrone, true);
+            AddCondition(AIAttributes.CraftDroneGoal, true);
         }
     }
 }

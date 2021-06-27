@@ -61,8 +61,7 @@ namespace Aspekt.Drones
 
         protected override void SetEffects()
         {
-            AddEffect(AIAttributes.IsHoldingResource, true);
-            AddEffect(AIAttributes.HasItemToGather, false);
+            AddEffect(AIAttributes.IsHoldingItem, true);
         }
 
         protected override bool CheckProceduralConditions()
@@ -77,6 +76,7 @@ namespace Aspekt.Drones
             isGathering = false;
             Agent.Memory.Remove(AIAttributes.ItemToGather);
             Agent.Memory.Set(AIAttributes.HeldItem, item); // TODO delegate to grab ability
+            Agent.Memory.Set(AIAttributes.HasItemToGather, false);
             item.Transform.gameObject.SetActive(false);
             ActionSuccess();
         }

@@ -7,9 +7,16 @@ namespace Aspekt.AI.AgentEditor
         public override string Title => "Mem";
         public override string TemplateName => "Mem";
 
+        private VisualElement memContainer;
+        
+        protected override void Setup()
+        {
+            memContainer = new VisualElement();
+        }
+        
         public override void UpdateContents()
         {
-            Root.Add(new Label("mem"));
+            memContainer.Add(new Label("mem"));
         }
 
     }

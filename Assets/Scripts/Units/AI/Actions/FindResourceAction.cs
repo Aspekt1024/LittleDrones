@@ -20,7 +20,7 @@ namespace Aspekt.Drones
         
         public override bool CheckComponents()
         {
-            resourceType = (ResourceTypes)Agent.Memory.Get(AIAttributes.ResourceGoalType);
+            resourceType = Agent.Memory.Get<ResourceTypes>(AIAttributes.ResourceGoalType);
             if (resourceType == ResourceTypes.None) return false;
 
             sensor = Agent.Sensors.Get<ResourceSensor>();

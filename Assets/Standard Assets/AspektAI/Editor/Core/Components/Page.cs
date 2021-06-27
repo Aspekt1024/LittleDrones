@@ -19,8 +19,6 @@ namespace Aspekt.AI
             UpdateContents();
         }
 
-        public abstract void UpdateContents();
-        
         private void AddToRoot(VisualElement editorRoot, string templateName)
         {
             var rootDir = Path.Combine(Editor.DirectoryRoot, Editor.PagesSubDirectory);
@@ -31,6 +29,12 @@ namespace Aspekt.AI
             visualTree.CloneTree(Root);
             Root.styleSheets.Add(styleSheet);
             editorRoot.Add(Root);
+            
+            Setup();
         }
+
+        protected abstract void Setup();
+        
+        public abstract void UpdateContents();
     }
 }

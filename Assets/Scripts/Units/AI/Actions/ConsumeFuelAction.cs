@@ -21,13 +21,12 @@ namespace Aspekt.Drones
 
         protected override void SetPreconditions()
         {
-            AddPrecondition(AIAttributes.IsHoldingResource, true);
+            AddPrecondition(AIAttributes.IsHoldingItem, true);
         }
 
         protected override void SetEffects()
         {
-            AddEffect(AIAttributes.HasLowFuel, false);
-            AddEffect(AIAttributes.IsHoldingResource, false);
+            AddEffect(AIAttributes.MaintainFuelGoal, true);
         }
 
         protected override bool CheckProceduralConditions()
@@ -40,9 +39,11 @@ namespace Aspekt.Drones
             if (fuel == null)
             {
                 ActionFailure();
+                return;
             }
             
             Agent.Memory.Remove(AIAttributes.HeldItem);
+            Agent.Memory.Set(AIAttributes.IsHoldingItem, false);
             vitals.AddFuel(2f);
             Object.Destroy(fuel.gameObject);
             ActionSuccess();

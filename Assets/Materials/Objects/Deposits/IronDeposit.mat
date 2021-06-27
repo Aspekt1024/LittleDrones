@@ -20,21 +20,22 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: e4c6a01faea259f46984b293add3df4c, type: 3}
+        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normal:
         m_Texture: {fileID: 2800000, guid: 8c76dad3d59e548469bd252a15004d96, type: 3}
         m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Offset: {x: 1.71, y: 1.36}
     - _RampTex:
         m_Texture: {fileID: 2800000, guid: 37734656bd2cc104b8a80f1edce7f7b4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _NormalStrength: 1.56
-    - _RimPow: 2
+    - _NormalStrength: 4.33
+    - _RimPow: 4.03
+    - _TexScale: 2.25
     m_Colors:
-    - _Color: {r: 0.8415806, g: 0.85749584, b: 0.9056604, a: 1}
-    - _EmissiveRim: {r: 0.055414356, g: 0.084905684, b: 0.031639382, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _EmissiveRim: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

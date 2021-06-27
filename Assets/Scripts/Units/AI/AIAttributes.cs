@@ -12,17 +12,16 @@ namespace Aspekt.Drones
         ItemToGather,
         DepositToGather,
         
-        IsHoldingFuel,
-        IsHoldingResource,
+        IsHoldingItem,
         HeldItem,
         
         CraftingStationReady,
         TargetBuilding,
         
         // Goals
-        HasGatheredResource,
-        HasLowFuel,
-        HasCraftedDrone,
-        HasSuppliedCraftingStation,
+        GatherResourceGoal,
+        MaintainFuelGoal,
+        CraftDroneGoal,
+        SupplyCraftingStationGoal,
     }
 }

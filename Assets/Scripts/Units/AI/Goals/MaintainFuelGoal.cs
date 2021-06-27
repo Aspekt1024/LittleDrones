@@ -20,7 +20,7 @@ namespace Aspekt.Drones
 
         protected override void SetConditions()
         {
-            AddCondition(AIAttributes.HasLowFuel, false);
+            AddCondition(AIAttributes.MaintainFuelGoal, true);
         }
     }
 }

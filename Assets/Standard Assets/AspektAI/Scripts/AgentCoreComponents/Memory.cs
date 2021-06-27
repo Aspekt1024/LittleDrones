@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Aspekt.AI.Internal
 {
@@ -26,7 +26,8 @@ namespace Aspekt.AI.Internal
         {
             if (state.ContainsKey(label))
             {
-                return state[label].Equals(value);
+                var comparer = Comparer<V>.Default;
+                return comparer.Compare(state[label], value) == 0;
             }
 
             // Agents are conservative and a "don't know" results in a failed condition check.

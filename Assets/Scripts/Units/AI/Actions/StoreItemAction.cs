@@ -62,13 +62,12 @@ namespace Aspekt.Drones
 
         protected override void SetPreconditions()
         {
-            AddPrecondition(AIAttributes.IsHoldingResource, true);
+            AddPrecondition(AIAttributes.IsHoldingItem, true);
         }
 
         protected override void SetEffects()
         {
-            AddEffect(AIAttributes.HasGatheredResource, true);
-            AddEffect(AIAttributes.IsHoldingResource, false);
+            AddEffect(AIAttributes.GatherResourceGoal, true);
         }
 
         protected override bool CheckProceduralConditions()
@@ -86,11 +85,12 @@ namespace Aspekt.Drones
 
         private void OnTargetReached()
         {
-            Agent.Memory.Remove(AIAttributes.HeldItem);
             bool success = storage.TakeItem(item);
             if (success)
             {
                 ActionSuccess();
+                Agent.Memory.Remove(AIAttributes.HeldItem);
+                Agent.Memory.Set(AIAttributes.IsHoldingItem, false);
             }
             else
             {

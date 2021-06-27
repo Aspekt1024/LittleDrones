@@ -16,12 +16,14 @@ namespace Aspekt.Drones
 
         public override bool CheckComponents()
         {
-            resourceType = (ResourceTypes)Agent.Memory.Get(AIAttributes.ResourceGoalType);
+            resourceType = Agent.Memory.Get<ResourceTypes>(AIAttributes.ResourceGoalType);
             if (resourceType == ResourceTypes.None) return false;
 
             objectSensor = Agent.Sensors.Get<ObjectSensor>();
-            bool foundDeposit = objectSensor.IsObjectObtainable<ResourceDeposit>(r => r.resourceType == resourceType);
-            return objectSensor != null && foundDeposit;
+            if (objectSensor == null) return false;
+            
+            var foundDeposit = objectSensor.IsObjectObtainable<ResourceDeposit>(r => r.resourceType == resourceType);
+            return foundDeposit;
         }
 
         // TODO set as animation

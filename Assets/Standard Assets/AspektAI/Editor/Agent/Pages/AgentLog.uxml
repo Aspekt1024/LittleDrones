@@ -1,0 +1,8 @@
+<UXML xmlns="UnityEngine.UIElements">
+    <VisualElement class="page">
+        <VisualElement name="Header" />
+        <ScrollView show-vertical-scroller="true">
+            <VisualElement name="LogContents" />
+        </ScrollView>
+    </VisualElement>
+</UXML>

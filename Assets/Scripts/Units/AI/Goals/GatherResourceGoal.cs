@@ -20,12 +20,12 @@ namespace Aspekt.Drones
 
         public override void ResetGoal()
         {
-            agent.Memory.Remove(AIAttributes.HasGatheredResource);
+            agent.Memory.Remove(AIAttributes.GatherResourceGoal);
         }
 
         protected override void SetConditions()
         {
-            AddCondition(AIAttributes.HasGatheredResource, true);
+            AddCondition(AIAttributes.GatherResourceGoal, true);
         }
     }
 }
