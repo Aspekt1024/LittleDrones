@@ -82,6 +82,8 @@ namespace Aspekt.AI.Internal
         
         public void Stop()
         {
+            if (state == States.Stopped) return;
+            
             if (CurrentAction != null)
             {
                 stateMachine.Stop();
@@ -96,6 +98,7 @@ namespace Aspekt.AI.Internal
             }
             
             state = States.Stopped;
+            agent.LogKeyInfo(this, "executor has stopped");
         }
 
         public void Pause()
@@ -201,7 +204,7 @@ namespace Aspekt.AI.Internal
 
         private void OnActionFailure()
         {
-            agent.LogInfo(this, $"action failed: {CurrentAction}");
+            agent.LogKeyInfo(this, $"action failed: {CurrentAction}");
             Stop();
             OnActionPlanComplete?.Invoke(true);
         }

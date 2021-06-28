@@ -50,10 +50,9 @@ namespace Aspekt.Drones
             building = buildingSensor.FindClosestBuilding(type, Agent.Owner.transform.position);
             if (building == null || !(building is IStorage s)) return false;
             storage = s;
-
-            var moveState = new MoveState(Agent, movement);
+            
             var target = building.pathingPoint == null ? building.Transform : building.pathingPoint;
-            moveState.SetTarget(target, placementDistance);
+            var moveState = new MoveState(Agent, movement, target);
             stateMachine.Enqueue(moveState);
             stateMachine.OnComplete += OnTargetReached;
             

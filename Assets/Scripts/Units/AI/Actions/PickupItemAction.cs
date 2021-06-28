@@ -12,7 +12,6 @@ namespace Aspekt.Drones
     [Serializable]
     public class PickupItemAction : DroneAction
     {
-        public float grabDistance = 2f;
         public float gatherTime = 0.5f;
 
         private IGatherer gatherer;
@@ -46,8 +45,7 @@ namespace Aspekt.Drones
 
             isGathering = false;
             
-            moveState = new MoveState(Agent, movement);
-            moveState.SetTarget(item.Transform, grabDistance);
+            moveState = new MoveState(Agent, movement, item.Transform);
             stateMachine.Enqueue(moveState);
             stateMachine.OnComplete += OnTargetReached;
             

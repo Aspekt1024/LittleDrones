@@ -4,10 +4,18 @@ namespace Aspekt.Drones
 {
     public interface IMovement : IAbility
     {
+	    public interface IObserver
+	    {
+		    void OnTargetReached();
+	    }
+
+	    void RegisterObserver(IObserver observer);
+	    void UnregisterObserver(IObserver observer);
+	    
 	    /// <summary>
 	    /// Moves to a target transform
 	    /// </summary>
-	    void MoveTo(Transform target);
+	    void MoveTo(Transform target, float targetReachedDistance = 1f);
 
 	    /// <summary>
 	    /// Moves to a target position
@@ -17,8 +25,7 @@ namespace Aspekt.Drones
 	    /// <summary>
 	    /// Called once per frame
 	    /// </summary>
-	    /// <param name="deltaTime">The time since the last frame update</param>
-	    void Tick(float deltaTime);
+	    void Tick();
 
 	    /// <summary>
 	    /// Starts / Resumes movement

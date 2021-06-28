@@ -10,8 +10,6 @@ namespace Aspekt.Drones
     [Serializable]
     public class GatherFromDepositAction : DroneAction
     {
-        public float gatherDistance = 2f;
-
         private IStateMachine<AIAttributes, object> stateMachine;
         
         // TODO setup as animation
@@ -41,9 +39,8 @@ namespace Aspekt.Drones
 
             this.stateMachine = stateMachine;
 
-            var moveState = new MoveState(Agent, movement);
+            var moveState = new MoveState(Agent, movement, deposit.transform);
             var gatherState = new GatherState(Agent, gatherer);
-            moveState.SetTarget(deposit.transform, gatherDistance);
             gatherState.SetTarget(deposit);
             
             stateMachine.Enqueue(moveState);

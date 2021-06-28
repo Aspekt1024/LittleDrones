@@ -65,8 +65,7 @@ namespace Aspekt.Drones
             if (pad == null || !(pad is BuildingBase b)) return false;
             building = b;
             
-            var moveState = new MoveState(Agent, movement);
-            moveState.SetTarget(building.Transform, placementDistance);
+            var moveState = new MoveState(Agent, movement, building.Transform);
             stateMachine.Enqueue(moveState);
             stateMachine.OnComplete += OnTargetReached;
 

@@ -64,6 +64,8 @@ namespace Aspekt.Drones
         private void Update()
         {
             droneMat.Tick();
+            Abilities.GetAbility<GroundMovement>().Tick();
+            // TODO MOVEMENT.TICK
             
             if (vitals.CurrentFuel <= 0f)
             {

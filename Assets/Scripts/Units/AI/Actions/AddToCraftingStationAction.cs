@@ -64,8 +64,7 @@ namespace Aspekt.Drones
             if (building == null || !(building is ICraftingStation s)) return false;
             station = s;
 
-            var moveState = new MoveState(Agent, movement);
-            moveState.SetTarget(building.Transform, placementDistance);
+            var moveState = new MoveState(Agent, movement, building.Transform);
             stateMachine.Enqueue(moveState);
             stateMachine.OnComplete += OnTargetReached;
             

@@ -8,7 +8,7 @@ namespace Aspekt.Drones
 
         protected override void OnInit()
         {
-            ObjectLayerMask = 1 << LayerMask.NameToLayer("Resource");
+            ObjectLayerMask = LayerUtil.GetMask(Layers.Resource, Layers.FixedObject);
         }
     }
 }

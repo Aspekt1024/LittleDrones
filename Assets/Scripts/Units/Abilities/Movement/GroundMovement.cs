@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Pathfinding;
 using UnityEngine;
 
@@ -9,8 +10,7 @@ namespace Aspekt.Drones
 	/// </summary>
     public class GroundMovement : IMovement
     {
-        private const float SqrTargetReachedThreshold = 0.7f;      // Stop at this distance
-        private const float SqrTargetRecalculationDistance = 0.5f;
+        private const float SqrTargetRecalculationDistance = 0.25f;
         private const float MaxSpeed = 8f;
 
         private readonly Rigidbody body;
@@ -18,10 +18,15 @@ namespace Aspekt.Drones
         
         private Transform targetTf;
         private Vector3 targetPos;
+        private float targetReachedDistance;
+
+        private readonly List<IMovement.IObserver> observers = new List<IMovement.IObserver>();
+        public void RegisterObserver(IMovement.IObserver observer) => observers.Add(observer);
+        public void UnregisterObserver(IMovement.IObserver observer) => observers.Remove(observer);
 
         private enum States
         {
-            None, AwaitingPath, Moving, Stopping
+            None, AwaitingPath, Moving, TargetReached, Stopping
         }
         private States state = States.None;
 
@@ -35,12 +40,14 @@ namespace Aspekt.Drones
             ai.maxSpeed = MaxSpeed;
         }
         
-        public void MoveTo(Transform target)
+        public void MoveTo(Transform target, float targetReachedDistance = 3f)
         {
             if (state == States.Moving && target == targetTf) return;
             
             targetTf = target;
             targetPos = targetTf.position;
+            this.targetReachedDistance = targetReachedDistance;
+            
             CalculatePath();
         }
 
@@ -48,22 +55,41 @@ namespace Aspekt.Drones
         {
             targetTf = null;
             targetPos = position;
+            targetReachedDistance = 1f;
+            
             CalculatePath();
         }
 
-        public void Tick(float deltaTime)
+        public void Tick()
         {
-            if (state == States.Stopping)
-            {
-                body.velocity = Vector3.zero;
-                state = States.None;
-            }
-            
-            if (state != States.Moving || targetTf == null) return;
+            if (targetTf == null) return;
 
-            if (Vector3.SqrMagnitude(targetTf.position - targetPos) > SqrTargetRecalculationDistance)
+            if (state == States.Moving || state == States.TargetReached)
             {
-                CalculatePath();
+                if (HasTargetMoved())
+                {
+                    CalculatePath();
+                }
+
+                if (state == States.Moving && HasReachedTarget())
+                {
+                    state = States.TargetReached;
+                    ai.isStopped = true;
+                    body.velocity = Vector3.zero;
+                    observers.ToList().ForEach(o => o.OnTargetReached());
+                }
+                
+                if (state == States.TargetReached)
+                {
+                    LookAtTarget();
+                    
+                    if (!HasReachedTarget())
+                    {
+                        state = States.Moving;
+                        ai.isStopped = false;
+                        ai.destination = targetTf.position;
+                    }
+                }
             }
         }
 
@@ -91,6 +117,34 @@ namespace Aspekt.Drones
             ai.SearchPath();
             ai.isStopped = false;
             state = States.Moving;
+        }
+
+        private bool HasReachedTarget()
+        {
+            var pos = body.transform.position;
+            pos.y = 0f;
+
+            var dist = Vector3.Distance(pos, new Vector3(targetPos.x, 0f, targetPos.z));
+            return dist < targetReachedDistance;
+        }
+
+        private bool HasTargetMoved()
+        {
+            return Vector3.SqrMagnitude(targetTf.position - targetPos) > SqrTargetRecalculationDistance;
+        }
+
+        private void LookAtTarget()
+        {
+            if (targetTf != null)
+            {
+                var pos = body.transform.position;
+                var distVector = targetTf.position - pos;
+                distVector.y = pos.y;
+                
+                const float rotationSpeed = 15;
+                var targetRot = Quaternion.LookRotation(distVector);
+                body.transform.rotation = Quaternion.Slerp(body.rotation, targetRot, Time.deltaTime * rotationSpeed);
+            }
         }
     }
 }
